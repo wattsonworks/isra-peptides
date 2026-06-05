@@ -13,7 +13,14 @@
 <meta property="og:description" content="Educational peptide research, library and updates. Research use only.">
 <meta property="og:image" content="img/banner.jpg">
 <meta property="og:type" content="website">
+<meta property="og:site_name" content="Isra.Peptides">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Isra.Peptides — Research · Science · Results">
+<meta name="twitter:description" content="Educational peptide research, library and updates. Research use only.">
+<meta name="twitter:image" content="img/banner.jpg">
+<link rel="canonical" id="canonicalLink" href="">
+<meta property="og:url" id="ogUrl" content="">
+<script type="application/ld+json" id="ldOrg">{"@context":"https://schema.org","@type":"Organization","name":"Isra.Peptides","alternateName":"Amino Chains Solutions","description":"Research-use-only peptide reference, library and catalog. Educational content only; not for human consumption.","areaServed":"Worldwide","sameAs":["https://instagram.com/isra.peptides"]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Heebo:wght@300;400;500;700;800&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
@@ -767,6 +774,9 @@ table.chem .rk{width:160px;font-size:12.5px}
   </div></section>
 </div>
 
+<!-- ============ RESEARCH STACK ============ -->
+<div class="view" id="view-stack"><section class="blk"><div class="wrap" id="stackHost"></div></section></div>
+
 <!-- ============ PRICING ============ -->
 <div class="view" id="view-pricing">
   <div class="wrap page-head center">
@@ -852,6 +862,8 @@ table.chem .rk{width:160px;font-size:12.5px}
 </div></div>
 
 <div id="qvModal" class="modal"><div class="qv" id="qvBody"></div></div>
+<div id="coaModal" class="modal"><div class="qv" id="coaBody"></div></div>
+<div id="arModal" class="modal"><div class="qv" id="arBody"></div></div>
 
 <div id="cookie" class="cookie">
   <span data-he="האתר משתמש בעוגיות חיוניות בלבד לשמירת העדפות (שפה, רשימת פנייה). אין מעקב פרסומי." data-en="This site uses essential cookies only to remember preferences (language, inquiry list). No advertising tracking."></span>
@@ -1450,6 +1462,8 @@ function renderProduct(id){var p=PRODUCTS.filter(function(x){return x.id===id;})
   (CID[p.id]?'<div id="mol3d" class="mol3d"><div class="mol-load">'+L('לחצו לטעינת המבנה התלת-ממדי','Tap to load the 3D structure')+'</div></div><div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-o" id="mol3dBtn">'+svg('cell')+' '+L('טען מבנה תלת-ממדי','Load 3D structure')+'</button><a class="btn btn-o" href="https://pubchem.ncbi.nlm.nih.gov/compound/'+CID[p.id]+'" target="_blank" rel="noopener">PubChem CID '+CID[p.id]+'</a></div><p style="font-size:12px;color:var(--muted-2);margin-top:8px">'+L('מבנה תלת-ממדי אינטראקטיבי מ-PubChem · דורש חיבור לאינטרנט.','Interactive 3D structure from PubChem · requires an internet connection.')+'</p>'
    :'<div style="margin-top:10px"><a class="btn btn-o" href="https://pubchem.ncbi.nlm.nih.gov/#query='+encodeURIComponent((CHEM[p.id]&&CHEM[p.id].pm)||p.name)+'" target="_blank" rel="noopener">'+svg('book')+' '+L('עיון ב-PubChem','Explore on PubChem')+'</a></div>')+'</div>'+
  (p.cat!=='ancillary'?'<div class="sec"><h4>'+L('פרופיל דגש מחקרי','Research-emphasis profile')+'</h4><p style="font-size:13px;color:var(--muted)">'+L('מפת דגש איכותית לפי תחומי מחקר — להמחשה בלבד, אינה מדד ליעילות.','A qualitative map of research emphasis by domain — illustrative only, not a measure of efficacy.')+'</p>'+radarSVG(p)+'</div>':'')+
+ analogSVG(p)+
+ '<div class="sec"><h4>'+L('כלים','Tools')+'</h4><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-o" id="arBtn">'+svg('cell')+' '+L('הצג במרחב (AR)','View in your space (AR)')+'</button><button class="btn btn-o" id="coaBtn">'+svg('shield')+' '+L('תעודת אנליזה + QR','Batch COA + QR')+'</button></div></div>'+
  (p.cat!=='ancillary'?'<div class="sec"><h4>'+L('מחשבון שחזור (ריכוז)','Reconstitution calculator (concentration)')+'</h4>'+
    '<p style="font-size:13px;color:var(--muted)">'+L('חישוב ריכוז מעבדתי בלבד (מ"ג/מ"ל). אינו הנחיית מינון לבני אדם.','Laboratory concentration only (mg/ml). Not human dosing guidance.')+'</p>'+
    '<div class="recon"><label>'+L('כמות בוויאל (מ"ג)','Vial amount (mg)')+'<input id="recMg" type="number" min="0" step="0.1" value="'+(parseFloat(p.mg)||'')+'"></label>'+
@@ -1481,6 +1495,9 @@ function renderProduct(id){var p=PRODUCTS.filter(function(x){return x.id===id;})
  })();
  var m3=document.getElementById('mol3dBtn');if(m3&&CID[p.id]){m3.onclick=function(){load3D(CID[p.id],document.getElementById('mol3d'));};}
  var pm=document.getElementById('pmFeed');if(pm)pubmedFeed(p,pm);
+ var ab=document.getElementById('arBtn');if(ab)ab.onclick=function(){openAR(p);};
+ var cb=document.getElementById('coaBtn');if(cb)cb.onclick=function(){openCOA(p);};
+ updateSEO('product',p);
  glossify(document.getElementById('pdHost'));
 }
 
@@ -1544,8 +1561,8 @@ function pushRecent(id){RECENT=RECENT.filter(function(x){return x!==id;});RECENT
 function renderFavs(){var el=document.getElementById('favWrap');if(!el)return;
  var L=function(he,en){return lang==='he'?he:en;};
  if(!FAVS.length){el.innerHTML='';return;}
- el.innerHTML='<div class="favwrap"><h3>'+L('המועדפים שלי','My favorites')+'</h3><div class="prod-grid">'+FAVS.map(function(id){var p=PRODUCTS.filter(function(x){return x.id===id;})[0];return p?prodCard(p):'';}).join('')+'</div></div>';
- bindProds();}
+ el.innerHTML='<div class="favwrap"><h3>'+L('המועדפים שלי','My favorites')+'</h3><div class="prod-grid">'+FAVS.map(function(id){var p=PRODUCTS.filter(function(x){return x.id===id;})[0];return p?prodCard(p):'';}).join('')+'</div><div style="margin-top:16px"><button class="btn btn-o" data-go="stack">'+svg('cell')+' '+L('פתח כמחסנית מחקר (שיתוף + מסלולים)','Open as research stack (share + pathways)')+'</button></div></div>';
+ bindProds();bindGo();}
 function renderRecent(){var el=document.getElementById('recentWrap');if(!el)return;
  var L=function(he,en){return lang==='he'?he:en;};
  var ids=RECENT.filter(function(id){return PRODUCTS.some(function(p){return p.id===id;});});
@@ -1597,7 +1614,7 @@ function renderPage(key){var pg=PAGES[key];if(!pg){location.hash='';return;}var 
 var CMDS=[
  {ti:{he:'מוצרים',en:'Products'},go:'products'},{ti:{he:'ערכות מחקר',en:'Bundles'},go:'bundles'},
  {ti:{he:'מצא פפטיד',en:'Find a peptide'},go:'quiz'},{ti:{he:'השוואה',en:'Compare'},go:'compare'},
- {ti:{he:'מפת ידע',en:'Knowledge map'},go:'explore'},{ti:{he:'ספריית פפטידים',en:'Library'},go:'library'},
+ {ti:{he:'מפת ידע',en:'Knowledge map'},go:'explore'},{ti:{he:'מחסנית מחקר',en:'Research stack'},go:'stack'},{ti:{he:'ספריית פפטידים',en:'Library'},go:'library'},
  {ti:{he:'מילון מונחים',en:'Glossary'},go:'glossary'},{ti:{he:'מרכז ידע',en:'Learn'},go:'learn'},
  {ti:{he:'מחקרים',en:'Research'},go:'blog'},{ti:{he:'תמחור',en:'Pricing'},go:'pricing'},
  {ti:{he:'אודות',en:'About'},go:'about'},{ti:{he:'צור קשר',en:'Contact'},go:'contact'}
@@ -1703,6 +1720,66 @@ function glossify(root){if(!root||!window.GLOSSARY)return;var terms=GLOSSARY.fil
 
 
 function prodById(id){return PRODUCTS.filter(function(x){return x.id===id;})[0];}
+function prodById(id){return PRODUCTS.filter(function(x){return x.id===id;})[0];}
+var BASE=(location.origin+location.pathname).replace(/index\.html$/,'').replace(/\/?$/,'/');
+function setMeta(sel,attr,val){var el=document.querySelector(sel);if(el)el.setAttribute(attr,val);}
+function updateSEO(view,p){
+ var url=BASE+(location.hash||'');
+ setMeta('#canonicalLink','href',url);setMeta('#ogUrl','content',url);
+ var desc,title;
+ if(p){title=p.name+' — Isra.Peptides';desc=(t(p.sum)||'').slice(0,180);}
+ else{title=document.title;desc='Research-use-only peptide reference, library and catalog. Educational content only.';}
+ setMeta('meta[name=description]','content',desc);
+ setMeta('meta[property="og:title"]','content',title);setMeta('meta[name="twitter:title"]','content',title);
+ setMeta('meta[property="og:description"]','content',desc);setMeta('meta[name="twitter:description"]','content',desc);
+ var old=document.getElementById('ldProd');if(old)old.remove();
+ if(p){var c=CHEM[p.id]||{};var ld={"@context":"https://schema.org","@type":"Product","name":p.name,"category":"Research chemical (RUO)","description":desc,"url":url};
+  if(c.cas)ld.additionalProperty=[{"@type":"PropertyValue","name":"CAS","value":c.cas}];
+  if(c.formula)ld.material=c.formula;
+  var s=document.createElement('script');s.type='application/ld+json';s.id='ldProd';s.textContent=JSON.stringify(ld);document.head.appendChild(s);}
+}
+/* analog of native */
+var ANALOG={tesamorelin:{he:'GHRH (1-44)',en:'GHRH (1-44)'},cjc1295:{he:'GHRH',en:'GHRH'},mt2:{he:'α-MSH',en:'α-MSH'},mt1:{he:'α-MSH',en:'α-MSH'},pt141:{he:'α-MSH (דרך Melanotan II)',en:'α-MSH (via Melanotan II)'},semax:{he:'ACTH (4-10)',en:'ACTH (4-10)'},selank:{he:'טאפטסין (tuftsin)',en:'Tuftsin'},igf1:{he:'IGF-1 אנושי',en:'human IGF-1'},hgh:{he:'הורמון גדילה אנדוגני',en:'endogenous growth hormone'},kisspeptin:{he:'Kisspeptin-54 (metastin)',en:'Kisspeptin-54 (metastin)'},epitalon:{he:'אפיתלמין (בלוטת האצטרובל)',en:'epithalamin (pineal)'},glutathione:{he:'גלוטתיון אנדוגני',en:'endogenous glutathione'},ghrp2:{he:'גרלין',en:'ghrelin'},ghrp6:{he:'גרלין',en:'ghrelin'},ipamorelin:{he:'גרלין',en:'ghrelin'},kpv:{he:'α-MSH (11-13)',en:'α-MSH (11-13)'}};
+function analogSVG(p){if(!ANALOG[p.id])return '';var L=function(he,en){return lang==='he'?he:en;};var nat=t(ANALOG[p.id]);
+ return '<div class="sec"><h4>'+L('אנלוג של','Analog of')+'</h4><p style="font-size:13px;color:var(--muted)">'+L('הפפטיד נחקר כאנלוג סינתטי של מולקולה טבעית.','Researched as a synthetic analog of a naturally occurring molecule.')+'</p>'+
+ '<div class="mech-d"><svg viewBox="0 0 340 90"><defs><marker id="ah2" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="var(--gold-2)"/></marker></defs>'+
+ '<rect x="14" y="26" width="130" height="40" rx="10" fill="rgba(95,168,211,.12)" stroke="var(--cyan)"/><text x="79" y="50" font-size="12.5" fill="var(--ink)" text-anchor="middle">'+nat+'</text>'+
+ '<line x1="148" y1="46" x2="192" y2="46" stroke="var(--gold-2)" stroke-width="2" marker-end="url(#ah2)"/>'+
+ '<rect x="196" y="26" width="130" height="40" rx="10" fill="rgba(201,162,75,.12)" stroke="var(--gold-2)"/><text x="261" y="50" font-size="12.5" fill="var(--ink)" text-anchor="middle">'+p.name.replace(/\s*\(.*\)/,'')+'</text>'+
+ '<text x="79" y="84" font-size="9.5" fill="var(--muted-2)" text-anchor="middle">'+L('טבעי','NATURAL')+'</text><text x="261" y="84" font-size="9.5" fill="var(--muted-2)" text-anchor="middle">'+L('אנלוג סינתטי','SYNTHETIC ANALOG')+'</text></svg></div></div>';}
+/* AR (model-viewer, lazy) */
+function ensureMV(cb){if(window.customElements&&customElements.get('model-viewer')){cb(true);return;}var s=document.createElement('script');s.type='module';s.src='https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js';s.onload=function(){cb(true);};s.onerror=function(){cb(false);};document.head.appendChild(s);}
+function openAR(p){var L=function(he,en){return lang==='he'?he:en;};var m=document.getElementById('arModal'),b=document.getElementById('arBody');
+ b.innerHTML='<button class="qx" id="arClose">&times;</button><div class="qvb"><span class="ruo">'+L('דגם להמחשה','ILLUSTRATIVE MODEL')+'</span><h3>'+L('הצג במרחב שלך','View in your space')+'</h3><p style="font-size:13px;color:var(--muted)">'+L('דגם ויאל מותג להמחשה. בנייד לחצו על סמל ה-AR כדי להציב במרחב.','A branded vial model for illustration. On mobile, tap the AR icon to place it in your space.')+'</p><div class="mol-load" id="arLoad" style="height:300px">'+L('טוען דגם...','Loading model...')+'</div></div>';
+ m.classList.add('show');document.getElementById('arClose').onclick=closeAR;
+ ensureMV(function(ok){var host=document.getElementById('arLoad');if(!host)return;if(!ok){host.textContent=L('לא ניתן לטעון את הצופה (נדרש אינטרנט).','Viewer could not load (internet required).');return;}
+  var mv=document.createElement('model-viewer');mv.setAttribute('src','models/vial.glb');mv.setAttribute('alt','Isra.Peptides vial');mv.setAttribute('camera-controls','');mv.setAttribute('auto-rotate','');mv.setAttribute('ar','');mv.setAttribute('ar-modes','webxr scene-viewer quick-look');mv.setAttribute('shadow-intensity','1');mv.setAttribute('exposure','0.9');mv.style.cssText='width:100%;height:340px;background:#0a0f1d;border-radius:14px';
+  var btn=document.createElement('button');btn.setAttribute('slot','ar-button');btn.className='btn btn-g';btn.style.cssText='position:absolute;bottom:14px;inset-inline-end:14px';btn.textContent=L('הצב במרחב (AR)','Place in space (AR)');mv.appendChild(btn);
+  host.replaceWith(mv);});}
+function closeAR(){document.getElementById('arModal').classList.remove('show');}
+/* QR-coded batch COA (lazy qr lib) */
+function ensureQR(cb){if(window.QRCode){cb(true);return;}var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@master/qrcode.min.js';s.onload=function(){cb(!!window.QRCode);};s.onerror=function(){cb(false);};document.head.appendChild(s);}
+function batchNo(p){var n=0,id=p.id;for(var i=0;i<id.length;i++)n=(n*31+id.charCodeAt(i))%100000;return 'IP-'+String(n).padStart(5,'0');}
+function openCOA(p){var L=function(he,en){return lang==='he'?he:en;};var m=document.getElementById('coaModal'),b=document.getElementById('coaBody');var c=CHEM[p.id]||{};var url=BASE+'#product/'+p.id;
+ var row=function(k,v){return v?'<div class="row"><span>'+k+'</span><b>'+v+'</b></div>':'';};
+ b.innerHTML='<button class="qx" id="coaClose">&times;</button><div class="qvb"><span class="ruo">'+L('תעודת אנליזה לדוגמה','SPECIMEN COA')+'</span><h3>'+p.name+'</h3>'+
+ '<div class="coa" style="margin-top:6px">'+row(L('מס׳ אצווה','Batch no.'),batchNo(p))+row(L('תאריך','Date'),new Date().toISOString().slice(0,10))+row(L('טוהר (HPLC)','Purity (HPLC)'),p.purity)+row(L('זהות (MS)','Identity (MS)'),L('אומת','Confirmed'))+row('CAS',c.cas)+row(L('נוסחה','Formula'),c.formula)+row(L('סטטוס','Status'),L('עבר','PASS'))+'</div>'+
+ '<div id="qrBox" style="display:flex;justify-content:center;margin-top:16px;background:#fff;padding:14px;border-radius:12px;width:max-content;margin-inline:auto"></div>'+
+ '<p style="font-size:11.5px;color:var(--muted-2);text-align:center;margin-top:10px">'+L('סריקת הקוד פותחת את עמוד המוצר לאימות. תעודה לדוגמה — אצווה אמיתית מסופקת לפי בקשה.','Scanning opens this product page for verification. Specimen document — a real batch COA is provided on request.')+'</p></div>';
+ m.classList.add('show');document.getElementById('coaClose').onclick=closeCOA;
+ ensureQR(function(ok){var box=document.getElementById('qrBox');if(!box)return;if(!ok){box.style.display='none';return;}box.innerHTML='';new QRCode(box,{text:url,width:148,height:148,colorDark:'#05070f',colorLight:'#ffffff'});});}
+function closeCOA(){document.getElementById('coaModal').classList.remove('show');}
+/* research stack: shared-pathway synergy + share link */
+function stackSynergy(ids){var hits=[];Object.keys(TARGETS).forEach(function(k){var mem=TARGETS[k].filter(function(id){return ids.indexOf(id)>-1;});if(mem.length>=2)hits.push({pathway:k,members:mem});});return hits;}
+function renderStack(ids){var L=function(he,en){return lang==='he'?he:en;};var host=document.getElementById('stackHost');if(!host)return;
+ ids=(ids||[]).filter(function(id){return prodById(id);});
+ if(!ids.length){host.innerHTML='<div class="cmp-hint">'+L('הוסיפו פפטידים למועדפים כדי לבנות מחסנית מחקר.','Add peptides to favorites to build a research stack.')+'</div>';return;}
+ var cards=ids.map(function(id){var p=prodById(id);return '<div class="lib-card" data-go-prod="'+id+'" style="cursor:pointer"><h4 style="color:var(--gold-2);margin:0 0 4px">'+p.name+'</h4><div style="font-size:12px;color:var(--muted)">'+p.mg+' · '+t(p.sum)+'</div></div>';}).join('');
+ var syn=stackSynergy(ids);var synHtml=syn.length?('<div class="sec"><h4>'+L('מסלולים משותפים','Shared pathways')+'</h4><p style="font-size:13px;color:var(--muted)">'+L('פפטידים במחסנית שלכם החולקים קולטן או מסלול — להמחשה מחקרית בלבד.','Peptides in your stack that share a receptor or pathway — research illustration only.')+'</p>'+syn.map(function(h){return '<div class="row" style="padding:8px 0;border-bottom:1px solid var(--line)"><span style="color:var(--cyan)">'+h.pathway+'</span> &nbsp; '+h.members.map(function(id){return prodById(id).name.replace(/\s*\(.*\)/,'');}).join(' · ')+'</div>';}).join('')+'</div>'):('<p style="font-size:13px;color:var(--muted-2);margin-top:14px">'+L('לא נמצאו מסלולים משותפים בין הפריטים שנבחרו.','No shared pathways among the selected items.')+'</p>');
+ host.innerHTML='<div class="page-head center"><div class="tag">RESEARCH STACK · RUO</div><h2 style="font-family:\'Playfair Display\',serif">'+L('מחסנית המחקר שלי','My Research Stack')+'</h2></div><div class="lib-grid" style="margin-top:10px">'+cards+'</div>'+(ids.length>=2?'<div class="sec"><h4>'+L('שכבת פרופיל','Profile overlay')+'</h4>'+radarOverlaySVG(ids.slice(0,3))+'</div>':'')+synHtml+'<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:20px"><button class="btn btn-g" id="stackShare">'+svg('check')+' '+L('שיתוף המחסנית','Share this stack')+'</button><button class="btn btn-o" id="stackAdd">'+L('הוסף הכל לפנייה','Add all to inquiry')+'</button></div><p id="stackMsg" style="font-size:12.5px;color:var(--cyan);margin-top:10px;display:none"></p>';
+ bindGoProd();
+ document.getElementById('stackShare').onclick=function(){var link=BASE+'#stack/'+ids.join(',');try{navigator.clipboard.writeText(link);}catch(e){}var msg=document.getElementById('stackMsg');msg.textContent=L('הקישור הועתק: ','Link copied: ')+link;msg.style.display='block';};
+ document.getElementById('stackAdd').onclick=function(){ids.forEach(function(id){if(!inCart(id))addToCart(id);});var msg=document.getElementById('stackMsg');msg.textContent=L('נוסף לרשימת הפנייה.','Added to your inquiry list.');msg.style.display='block';};}
 var CATCOL={recovery:'#7fd6a0',gh:'#5fa8d3',metabolic:'#e6c977',immune:'#c98bd0',cognitive:'#7aa2ff',longevity:'#d3a15f',skin:'#e69ab0',melano:'#e69ab0',ancillary:'#8893a8'};
 var TARGETS={
  'ghrelin / GHS-R':['ghrp2','ghrp6','ipamorelin'],
@@ -1850,8 +1927,8 @@ function setIcons(){
 }
 
 /* ---------- router ---------- */
-var VIEWS=['home','products','bundles','quiz','compare','explore','pricing','glossary','library','learn','blog','post','about','contact'];
-var TITLES={home:'Isra.Peptides',products:'Products',bundles:'Bundles',quiz:'Find a Peptide',compare:'Compare',explore:'Knowledge Map',pricing:'Pricing',glossary:'Glossary',library:'Library',learn:'Learn',blog:'Research',about:'About',contact:'Contact'};
+var VIEWS=['home','products','bundles','quiz','compare','explore','stack','pricing','glossary','library','learn','blog','post','about','contact'];
+var TITLES={home:'Isra.Peptides',products:'Products',bundles:'Bundles',quiz:'Find a Peptide',compare:'Compare',explore:'Knowledge Map',stack:'Research Stack',pricing:'Pricing',glossary:'Glossary',library:'Library',learn:'Learn',blog:'Research',about:'About',contact:'Contact'};
 function showView(n){document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active');});var el=document.getElementById('view-'+n);if(el)el.classList.add('active');window.scrollTo(0,0);
  document.querySelectorAll('nav.links a').forEach(function(a){a.classList.toggle('cur',a.getAttribute('data-go')===n);});
  document.title='Isra.Peptides'+(n!=='home'&&TITLES[n]?' — '+TITLES[n]:' — Research · Science · Results');
@@ -1859,10 +1936,12 @@ function showView(n){document.querySelectorAll('.view').forEach(function(v){v.cl
  if(n==='explore')setTimeout(renderExplore,80);}
 function route(){var h=location.hash.replace('#','');
  if(h.indexOf('product/')===0){renderProduct(h.split('/')[1]);showView('product');}
- else if(h.indexOf('post/')===0){renderPost(h.split('/')[1]);showView('post');}
- else if(h.indexOf('page/')===0){renderPage(h.split('/')[1]);showView('page');}
- else if(VIEWS.indexOf(h)>-1){showView(h);}
- else{showView('home');}
+ else if(h.indexOf('post/')===0){renderPost(h.split('/')[1]);showView('post');updateSEO('post');}
+ else if(h.indexOf('page/')===0){renderPage(h.split('/')[1]);showView('page');updateSEO('page');}
+ else if(h==='stack'){renderStack(FAVS.slice());showView('stack');updateSEO('stack');}
+ else if(h.indexOf('stack/')===0){renderStack(h.split('/')[1].split(','));showView('stack');updateSEO('stack');}
+ else if(VIEWS.indexOf(h)>-1){showView(h);updateSEO(h);}
+ else{showView('home');updateSEO('home');}
  revealNow();}
 window.addEventListener('hashchange',route);
 
@@ -1916,8 +1995,10 @@ document.getElementById('globalSearch').addEventListener('keydown',function(e){v
  btns.forEach(function(b,i){b.classList.toggle('active',i===_srchActive);});btns[_srchActive].scrollIntoView({block:'nearest'});});
 document.getElementById('glsSearch').oninput=function(){renderGlossary(this.value);};
 document.getElementById('qvModal').onclick=function(e){if(e.target===this)closeQv();};
+document.getElementById('coaModal').onclick=function(e){if(e.target===this)closeCOA();};
+document.getElementById('arModal').onclick=function(e){if(e.target===this)closeAR();};
 document.getElementById('shopSort').onchange=function(){prodSort=this.value;renderProds();};
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeSearch();closeQv();closeCart();var lb=document.getElementById('lightbox');lb.classList.remove('show');}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeSearch();closeQv();closeCart();closeCOA();closeAR();var lb=document.getElementById('lightbox');lb.classList.remove('show');}
  if((e.metaKey||e.ctrlKey)&&(e.key==='k'||e.key==='K')){e.preventDefault();openSearch();}});
 var _exrt;window.addEventListener('resize',function(){if(document.getElementById('view-explore').classList.contains('active')){clearTimeout(_exrt);_exrt=setTimeout(renderExplore,250);}},{passive:true});
 document.addEventListener('click',function(e){

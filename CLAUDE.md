@@ -55,3 +55,14 @@ reference and catalog website. Single brand, static site.
 ## Placeholders to confirm with the owner
 - Email `info@israpeptides.com` is a placeholder. WhatsApp 972506787586,
   Instagram @isra.peptides.
+
+## Added features (AR / QR / SEO / stack)
+- AR: `models/vial.glb` (branded vial). Loaded on demand via Google `<model-viewer>`
+  (CDN module). The AR button appears on product pages.
+- QR batch COA: per-product modal with a QR (qrcodejs CDN) encoding the product's
+  live URL. Specimen document only.
+- SEO: `updateSEO()` sets canonical, Open Graph and a per-product Product JSON-LD on
+  every route. Organization JSON-LD is static in the head.
+- Research stack: route `#stack` (from favorites) or `#stack/<id,id,...>` (shareable).
+  Shows shared-pathway hints (from TARGETS) and a radar overlay.
+- New runtime-only externals (degrade offline): model-viewer, qrcodejs.
