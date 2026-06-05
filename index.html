@@ -35,7 +35,8 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:hidden}
 html,body{overscroll-behavior-x:none;max-width:100%;width:100%}
-body{background:var(--bg);color:var(--ink);font-family:"Heebo",sans-serif;line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;position:relative;min-height:100vh;min-height:100svh}
+body{background:var(--bg);color:var(--ink);font-family:"Heebo",system-ui,"Segoe UI","Noto Sans","Noto Sans Arabic","Noto Naskh Arabic",Arial,sans-serif;line-height:1.7;overflow-x:hidden;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent;position:relative;min-height:100vh;min-height:100svh}
+html[lang="ar"] .eyebrow,html[lang="ar"] .tag,html[lang="ar"] .ruo,html[lang="ar"] .kbd-hint{letter-spacing:0}
 @supports(overflow:clip){html,body{overflow-x:clip}}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}
 body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
@@ -76,9 +77,9 @@ nav.links a:hover,nav.links a.cur{color:var(--ink)}nav.links a:hover::after,nav.
 
 /* hero */
 .hero{position:relative;padding:70px 0 54px;overflow:hidden}
-.helix{position:absolute;top:-40px;inset-inline-start:-6%;width:60%;max-width:740px;opacity:.5;filter:drop-shadow(0 0 40px rgba(95,168,211,.25));
-  mask-image:linear-gradient(to var(--fade,left),#000 55%,transparent);-webkit-mask-image:linear-gradient(to var(--fade,left),#000 55%,transparent);
-  animation:floaty 9s ease-in-out infinite;z-index:1;pointer-events:none}
+.helix{position:absolute;top:-80px;inset-inline-start:-8%;width:42%;max-width:560px;opacity:.28;filter:drop-shadow(0 0 40px rgba(95,168,211,.2));
+  mask-image:linear-gradient(to var(--fade,left),#000 18%,transparent 62%);-webkit-mask-image:linear-gradient(to var(--fade,left),#000 18%,transparent 62%);
+  animation:floaty 9s ease-in-out infinite;z-index:0;pointer-events:none}
 @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
 .hero-grid{position:relative;z-index:3;display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}
 .hero-logo{width:80px;height:80px;border-radius:50%;box-shadow:0 0 0 1px var(--line),0 18px 50px rgba(0,0,0,.6);margin-bottom:20px}
@@ -94,7 +95,10 @@ nav.links a:hover,nav.links a.cur{color:var(--ink)}nav.links a:hover::after,nav.
 .btn-o{border:1px solid var(--line);color:var(--ink);background:rgba(255,255,255,.02)}
 .btn-o:hover{border-color:var(--gold);transform:translateY(-3px)}
 .hero-art{position:relative}
-.hero-art img{width:100%;border-radius:20px;border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.hero-art .herogl{position:absolute;inset:0;width:100%;height:100%;z-index:2;opacity:0;transition:opacity .8s;pointer-events:none}
+.hero-art.gl-on .herogl{opacity:1}
+.hero-art.gl-on img{opacity:0}
+.hero-art img{width:100%;border-radius:20px;border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.6);transition:opacity .8s}
 .hero-art .glow{position:absolute;inset:-2px;border-radius:22px;background:linear-gradient(120deg,rgba(201,162,75,.35),rgba(95,168,211,.25));filter:blur(26px);z-index:-1;opacity:.6}
 
 /* trust */
@@ -524,7 +528,7 @@ table.chem .rk{width:160px;font-size:12.5px}
           <button class="btn btn-o" data-go="learn" data-he="גלו את המחקר" data-en="Explore Research"></button>
         </div>
       </div>
-      <div class="hero-art"><span class="glow"></span><img src="img/hero.jpg" alt="Isra.Peptides research vials"></div>
+      <div class="hero-art"><span class="glow"></span><canvas class="herogl" id="heroGL"></canvas><img id="heroPhoto" src="img/hero.jpg" alt="Isra.Peptides research vials"></div>
     </div>
     <div class="trust"><div class="trust-in">
       <div><div class="k" data-he="איכות גבוהה" data-en="High Quality"></div><div class="v" data-he="High Quality" data-en="Lab Verified"></div></div>
@@ -1406,9 +1410,45 @@ var FAQ=[
 
 /* ---------- state + render ---------- */
 var lang='he';
-var t=function(o){return o?o[lang]:'';};
+var LANGS=['he','en','ru','ar'];
+var TR={
+ ru:{
+  "Home":"Главная","Products":"Продукты","Bundles":"Наборы","Compare":"Сравнить","Explore":"Карта знаний","Library":"Библиотека","Find a peptide":"Подобрать пептид","Learn":"База знаний","Research":"Исследования","About":"О нас","Contact":"Контакты",
+  "View Products":"Смотреть продукты","Explore Research":"Изучить исследования",
+  "RESEARCH · SCIENCE · UPDATES":"ИССЛЕДОВАНИЯ · НАУКА · ОБНОВЛЕНИЯ",
+  "The future of peptide research is beginning to reveal itself. Professional information, research summaries and regulatory updates — in one place.":"Будущее исследований пептидов уже начинает раскрываться. Профессиональная информация, обзоры исследований и регуляторные обновления — в одном месте.",
+  "Exploring the future of peptide research.":"Исследуем будущее пептидных исследований.",
+  "High Quality":"Высокое качество","Lab Verified":"Проверено в лаборатории","Advanced Research":"Передовые исследования","Evidence Based":"На основе доказательств","Advanced Technology":"Передовые технологии","Modern Methods":"Современные методы","Intl. Standards":"Межд. стандарты","Worldwide Reach":"Глобальный охват",
+  "Send by email":"Отправить по эл. почте","Clear list":"Очистить список","Export research log (PDF)":"Экспорт журнала (PDF)","Send your selected items as a research inquiry:":"Отправьте выбранные позиции как исследовательский запрос:",
+  "All products are intended for research use only. Information is for education and research and is not medical advice.":"Все продукты предназначены только для исследований. Информация — для образования и исследований и не является медицинской консультацией.",
+  "The information on this site is for education and research only and does not constitute medical advice, recommendation or guidance. It is not a substitute for professional examination, diagnosis or treatment. All products are intended for research use only.":"Информация на этом сайте предназначена только для образования и исследований и не является медицинской консультацией, рекомендацией или руководством. Она не заменяет профессиональный осмотр, диагностику или лечение. Все продукты предназначены только для исследовательских целей.",
+  "All products are for research use only, ≥98% purity, supplied with supporting documentation.":"Все продукты только для исследований, чистота ≥98%, с сопроводительной документацией.",
+  "© <span id='yr2'></span> Isra.Peptides · Educational & research content only · not medical advice":"© <span id='yr2'></span> Isra.Peptides · Только образовательный и исследовательский контент · не медицинская консультация",
+  "Search a peptide...":"Поиск пептида...","Search a term...":"Поиск термина...","Search or jump: peptide, term, page...":"Поиск или переход: пептид, термин, страница...",
+  "What are <span class=\"g\">peptides?</span>":"Что такое <span class=\"g\">пептиды?</span>",
+  "Peptides are <strong>short chains of amino acids</strong> that act as building blocks and signaling molecules in the body. In recent years they have become one of the fastest-developing fields in life sciences.":"Пептиды — это <strong>короткие цепочки аминокислот</strong>, которые служат строительными блоками и сигнальными молекулами в организме. В последние годы они стали одной из самых быстроразвивающихся областей наук о жизни."
+ },
+ ar:{
+  "Home":"الرئيسية","Products":"المنتجات","Bundles":"الحزم","Compare":"مقارنة","Explore":"خريطة المعرفة","Library":"المكتبة","Find a peptide":"ابحث عن ببتيد","Learn":"مركز المعرفة","Research":"الأبحاث","About":"من نحن","Contact":"اتصل بنا",
+  "View Products":"عرض المنتجات","Explore Research":"استكشف الأبحاث",
+  "RESEARCH · SCIENCE · UPDATES":"أبحاث · علم · تحديثات",
+  "The future of peptide research is beginning to reveal itself. Professional information, research summaries and regulatory updates — in one place.":"بدأ مستقبل أبحاث الببتيدات يتكشّف. معلومات احترافية وملخّصات بحثية وتحديثات تنظيمية — في مكان واحد.",
+  "Exploring the future of peptide research.":"نستكشف مستقبل أبحاث الببتيدات.",
+  "High Quality":"جودة عالية","Lab Verified":"موثّق مخبريًا","Advanced Research":"أبحاث متقدمة","Evidence Based":"قائم على الأدلة","Advanced Technology":"تقنية متقدمة","Modern Methods":"أساليب حديثة","Intl. Standards":"معايير دولية","Worldwide Reach":"وصول عالمي",
+  "Send by email":"إرسال بالبريد الإلكتروني","Clear list":"مسح القائمة","Export research log (PDF)":"تصدير سجل البحث (PDF)","Send your selected items as a research inquiry:":"أرسل العناصر المختارة كاستفسار بحثي:",
+  "All products are intended for research use only. Information is for education and research and is not medical advice.":"جميع المنتجات مخصّصة للاستخدام البحثي فقط. المعلومات لأغراض تعليمية وبحثية وليست استشارة طبية.",
+  "The information on this site is for education and research only and does not constitute medical advice, recommendation or guidance. It is not a substitute for professional examination, diagnosis or treatment. All products are intended for research use only.":"المعلومات في هذا الموقع للأغراض التعليمية والبحثية فقط ولا تُعدّ استشارة أو توصية أو إرشادًا طبيًا. وهي ليست بديلاً عن الفحص أو التشخيص أو العلاج المهني. جميع المنتجات مخصّصة للاستخدام البحثي فقط.",
+  "All products are for research use only, ≥98% purity, supplied with supporting documentation.":"جميع المنتجات للاستخدام البحثي فقط، بنقاء ≥98٪، وتُورَّد مع وثائق داعمة.",
+  "© <span id='yr2'></span> Isra.Peptides · Educational & research content only · not medical advice":"© <span id='yr2'></span> Isra.Peptides · محتوى تعليمي وبحثي فقط · ليس استشارة طبية",
+  "Search a peptide...":"ابحث عن ببتيد...","Search a term...":"ابحث عن مصطلح...","Search or jump: peptide, term, page...":"ابحث أو انتقل: ببتيد، مصطلح، صفحة...",
+  "What are <span class=\"g\">peptides?</span>":"ما هي <span class=\"g\">الببتيدات؟</span>",
+  "Peptides are <strong>short chains of amino acids</strong> that act as building blocks and signaling molecules in the body. In recent years they have become one of the fastest-developing fields in life sciences.":"الببتيدات هي <strong>سلاسل قصيرة من الأحماض الأمينية</strong> تعمل كوحدات بناء وجزيئات إشارة في الجسم. وقد أصبحت في السنوات الأخيرة من أسرع المجالات تطوّرًا في علوم الحياة."
+ }
+};
+function tr(en){if((lang==='ru'||lang==='ar')&&TR[lang]&&TR[lang][en]!=null)return TR[lang][en];return en;}
+var t=function(o){if(!o)return '';if(o[lang]!=null)return o[lang];if(lang==='ru'||lang==='ar')return tr(o.en!=null?o.en:o.he);return o.en!=null?o.en:(o.he||'');};
 
-function renderSys(){document.getElementById('sysCards').innerHTML=SYS.map(function(s){var d=s[lang];return '<div class="card"><div class="ico">'+svg(s.ic)+'</div><h3>'+d[0]+'</h3><p>'+d[1]+'</p></div>';}).join('');}
+function renderSys(){document.getElementById('sysCards').innerHTML=SYS.map(function(s){var d=s[lang]||s.en;return '<div class="card"><div class="ico">'+svg(s.ic)+'</div><h3>'+d[0]+'</h3><p>'+d[1]+'</p></div>';}).join('');}
 
 function objPos(p){return p.pos==='left'?'left center':p.pos==='right'?'right center':'center';}
 function prodCard(p){var L=function(he,en){return lang==='he'?he:en;};
@@ -1425,7 +1465,7 @@ function renderProds(){
  var all=document.getElementById('allProds');if(all)all.innerHTML=sortList(PRODUCTS.filter(function(p){return prodFilter==='all'||p.cat===prodFilter;})).map(prodCard).join('');
  bindProds();renderRecent();renderFavs();}
 function renderProdPills(){var el=document.getElementById('prodPills');if(!el)return;
- el.innerHTML=PROD_CATS.map(function(c){return '<button class="pill'+(c.id===prodFilter?' on':'')+'" data-pcat="'+c.id+'">'+c[lang]+'</button>';}).join('');
+ el.innerHTML=PROD_CATS.map(function(c){return '<button class="pill'+(c.id===prodFilter?' on':'')+'" data-pcat="'+c.id+'">'+(c[lang]||c.en)+'</button>';}).join('');
  el.querySelectorAll('.pill').forEach(function(b){b.onclick=function(){prodFilter=b.getAttribute('data-pcat');renderProds();renderProdPills();};});}
 function bindProds(){
  document.querySelectorAll('.prod[data-prod]').forEach(function(el){el.onclick=function(e){if(e.target.closest('[data-add],[data-fav],[data-qv],[data-tag]'))return;location.hash='product/'+el.getAttribute('data-prod');};});
@@ -1509,7 +1549,7 @@ function renderCmpPick(){var el=document.getElementById('cmpPick');if(!el)return
 function renderCmpTable(){var el=document.getElementById('cmpTable');if(!el)return;var L=function(he,en){return lang==='he'?he:en;};
  if(cmpSel.length<1){el.innerHTML='<div class="cmp-hint">'+L('בחרו 2–3 פפטידים מלמעלה.','Select 2–3 peptides above.')+'</div>';return;}
  var ps=cmpSel.map(function(id){return PRODUCTS.filter(function(x){return x.id===id;})[0];});
- var catName=function(c){var o=PROD_CATS.filter(function(z){return z.id===c;})[0];return o?o[lang]:c;};
+ var catName=function(c){var o=PROD_CATS.filter(function(z){return z.id===c;})[0];return o?(o[lang]||o.en):c;};
  var r='';
  r+='<tr><td class="rk"></td>'+ps.map(function(p){return '<th><span class="pn">'+p.name+'</span></th>';}).join('')+'</tr>';
  r+='<tr><td class="rk">'+L('קטגוריה','Category')+'</td>'+ps.map(function(p){return '<td>'+catName(p.cat)+'</td>';}).join('')+'</tr>';
@@ -1582,12 +1622,12 @@ function mechDiagram(p){var fn=DIAGRAMS[p.diagram]||DIAGRAMS.repair;return fn(p)
 
 /* ---------- bundles / quiz / pricing / glossary / pages ---------- */
 function renderBundles(){var el=document.getElementById('bundleGrid');if(!el)return;var L=function(he,en){return lang==='he'?he:en;};
- el.innerHTML=BUNDLES.map(function(b){var d=b[lang];var items=b.items.map(function(id){var p=PRODUCTS.filter(function(x){return x.id===id;})[0];return p?'<span>'+p.name+'</span>':'';}).join('');
+ el.innerHTML=BUNDLES.map(function(b){var d=b[lang]||b.en;var items=b.items.map(function(id){var p=PRODUCTS.filter(function(x){return x.id===id;})[0];return p?'<span>'+p.name+'</span>':'';}).join('');
   return '<div class="bundle"><div class="bh"><span class="ico">'+svg(b.ic)+'</span><h3>'+d[0]+'</h3></div><p>'+d[1]+'</p><div class="bitems">'+items+'</div><button class="btn btn-g" data-bundle="'+b.id+'">'+svg('wa')+' '+L('הוסף ערכה לפנייה','Add kit to inquiry')+'</button></div>';}).join('');
  el.querySelectorAll('[data-bundle]').forEach(function(btn){btn.onclick=function(){var b=BUNDLES.filter(function(x){return x.id===btn.getAttribute('data-bundle');})[0];addBundle(b.items);};});}
 var quizSel=null;
 function renderQuiz(){var el=document.getElementById('quizOpts');if(!el)return;var L=function(he,en){return lang==='he'?he:en;};
- el.innerHTML=QUIZ.map(function(q){return '<div class="quizopt'+(quizSel===q.cat?' on':'')+'" data-quiz="'+q.cat+'"><div class="ico">'+svg(q.ic)+'</div><h3>'+q[lang]+'</h3></div>';}).join('');
+ el.innerHTML=QUIZ.map(function(q){return '<div class="quizopt'+(quizSel===q.cat?' on':'')+'" data-quiz="'+q.cat+'"><div class="ico">'+svg(q.ic)+'</div><h3>'+(q[lang]||q.en)+'</h3></div>';}).join('');
  el.querySelectorAll('[data-quiz]').forEach(function(o){o.onclick=function(){quizSel=o.getAttribute('data-quiz');renderQuiz();renderQuizResult();};});
  renderQuizResult();}
 function renderQuizResult(){var el=document.getElementById('quizResult');if(!el)return;var L=function(he,en){return lang==='he'?he:en;};
@@ -1597,14 +1637,14 @@ function renderQuizResult(){var el=document.getElementById('quizResult');if(!el)
  el.innerHTML='<div class="center" style="margin-bottom:18px"><div class="tag">'+L('מומלץ עבורך','Recommended')+'</div></div><div class="prod-grid">'+ps.map(prodCard).join('')+'</div>';
  bindProds();}
 function renderPricing(){var el=document.getElementById('pricingGrid');if(!el)return;var L=function(he,en){return lang==='he'?he:en;};
- el.innerHTML=TIERS.map(function(t){var d=t[lang];return '<div class="tier'+(t.feat?' feat':'')+'"><div class="ico" style="font-size:30px;color:var(--gold-2);margin-bottom:8px">'+svg(t.ic)+'</div><h3>'+d[0]+'</h3><div class="pr">'+L('צרו קשר להצעה','Contact for a quote')+'</div><p style="color:var(--muted);font-size:14px;margin-bottom:14px">'+d[1]+'</p><ul>'+d[2].map(function(li){return '<li><span class="ic">'+svg('check')+'</span>'+li+'</li>';}).join('')+'</ul><button class="btn '+(t.feat?'btn-g':'btn-o')+'" data-go="contact" style="width:100%;justify-content:center">'+L('פנייה','Inquire')+'</button></div>';}).join('');
+ el.innerHTML=TIERS.map(function(t){var d=t[lang]||t.en;return '<div class="tier'+(t.feat?' feat':'')+'"><div class="ico" style="font-size:30px;color:var(--gold-2);margin-bottom:8px">'+svg(t.ic)+'</div><h3>'+d[0]+'</h3><div class="pr">'+L('צרו קשר להצעה','Contact for a quote')+'</div><p style="color:var(--muted);font-size:14px;margin-bottom:14px">'+d[1]+'</p><ul>'+d[2].map(function(li){return '<li><span class="ic">'+svg('check')+'</span>'+li+'</li>';}).join('')+'</ul><button class="btn '+(t.feat?'btn-g':'btn-o')+'" data-go="contact" style="width:100%;justify-content:center">'+L('פנייה','Inquire')+'</button></div>';}).join('');
  bindGo();}
 function renderGlossary(q){var el=document.getElementById('glsGrid');if(!el)return;q=(q||'').toLowerCase();
- var rows=GLOSSARY.filter(function(g){return !q||g.t.toLowerCase().indexOf(q)>-1||g[lang].toLowerCase().indexOf(q)>-1;});
- el.innerHTML=rows.length?rows.map(function(g){return '<div class="libcard"><h3 style="color:var(--gold-2)">'+g.t+'</h3><p>'+g[lang]+'</p></div>';}).join(''):'<p class="body-txt">'+(lang==='he'?'לא נמצאו תוצאות.':'No results.')+'</p>';}
+ var rows=GLOSSARY.filter(function(g){return !q||g.t.toLowerCase().indexOf(q)>-1||(g[lang]||g.en).toLowerCase().indexOf(q)>-1;});
+ el.innerHTML=rows.length?rows.map(function(g){return '<div class="libcard"><h3 style="color:var(--gold-2)">'+g.t+'</h3><p>'+(g[lang]||g.en)+'</p></div>';}).join(''):'<p class="body-txt">'+(lang==='he'?'לא נמצאו תוצאות.':'No results.')+'</p>';}
 function renderPage(key){var pg=PAGES[key];if(!pg){location.hash='';return;}var L=function(he,en){return lang==='he'?he:en;};
  var batch=pg.batch?'<div class="batch"><input id="batchIn" placeholder="'+L('מספר אצווה, למשל IP-2406-A','Batch no., e.g. IP-2406-A')+'"><button class="btn btn-g" id="batchGo">'+L('חיפוש','Look up')+'</button></div><div id="batchOut"></div>':'';
- document.getElementById('pageHost').innerHTML='<div class="page"><span class="back" data-go="home">'+svg('check')+' '+L('חזרה לבית','Back home')+'</span><div class="ico" style="font-size:30px;color:var(--gold-2);margin:6px 0">'+svg(pg.ic)+'</div><h1>'+t(pg.t)+'</h1>'+pg.body[lang]+batch+'</div>';
+ document.getElementById('pageHost').innerHTML='<div class="page"><span class="back" data-go="home">'+svg('check')+' '+L('חזרה לבית','Back home')+'</span><div class="ico" style="font-size:30px;color:var(--gold-2);margin:6px 0">'+svg(pg.ic)+'</div><h1>'+t(pg.t)+'</h1>'+(pg.body[lang]||pg.body.en)+batch+'</div>';
  bindGo();
  if(pg.batch){var b=document.getElementById('batchGo');b.onclick=function(){var v=(document.getElementById('batchIn').value||'').trim();if(!v){return;}
    var pur=(97.8+(v.length%20)/10).toFixed(1);
@@ -1631,9 +1671,9 @@ function runSearch(q){var L=function(he,en){return lang==='he'?he:en;};q=(q||'')
  var res=[];
  CMDS.forEach(function(c){if(t(c.ti).toLowerCase().indexOf(q)>-1)res.push({k:pageK,ti:t(c.ti),go:c.go});});
  PRODUCTS.forEach(function(p){if((p.name+' '+t(p.sum)+' '+t(p.tags).join(' ')).toLowerCase().indexOf(q)>-1)res.push({k:L('מוצר','Product'),ti:p.name,ds:t(p.sum),go:'product/'+p.id});});
- LIBRARY.forEach(function(x){if((x.n+' '+x[lang]).toLowerCase().indexOf(q)>-1)res.push({k:L('ספרייה','Library'),ti:x.n,ds:x[lang],go:LIB2PROD[x.n]?'product/'+LIB2PROD[x.n]:'library'});});
+ LIBRARY.forEach(function(x){if((x.n+' '+x[lang]).toLowerCase().indexOf(q)>-1)res.push({k:L('ספרייה','Library'),ti:x.n,ds:(x[lang]||x.en),go:LIB2PROD[x.n]?'product/'+LIB2PROD[x.n]:'library'});});
  POSTS.forEach(function(p){if((t(p.t)+' '+t(p.ex)).toLowerCase().indexOf(q)>-1)res.push({k:L('מאמר','Article'),ti:t(p.t),ds:t(p.ex),go:'post/'+p.slug});});
- GLOSSARY.forEach(function(g){if((g.t+' '+g[lang]).toLowerCase().indexOf(q)>-1)res.push({k:L('מונח','Term'),ti:g.t,ds:g[lang],go:'glossary'});});
+ GLOSSARY.forEach(function(g){if((g.t+' '+g[lang]).toLowerCase().indexOf(q)>-1)res.push({k:L('מונח','Term'),ti:g.t,ds:(g[lang]||g.en),go:'glossary'});});
  srchRender(res);}
 function openSearch(){document.getElementById('searchModal').classList.add('show');var i=document.getElementById('globalSearch');i.value='';runSearch('');setTimeout(function(){i.focus();},50);}
 function closeSearch(){document.getElementById('searchModal').classList.remove('show');}
@@ -1714,7 +1754,7 @@ function glossify(root){if(!root||!window.GLOSSARY)return;var terms=GLOSSARY.fil
   var idx=m.index+m[1].length,word=node.nodeValue.substr(idx,m[2].length);
   var before=node.nodeValue.slice(0,idx),after=node.nodeValue.slice(idx+word.length);
   var span=document.createElement('span');span.className='gloss';span.appendChild(document.createTextNode(word));
-  var bub=document.createElement('span');bub.className='gbub';bub.textContent=g[lang];span.appendChild(bub);
+  var bub=document.createElement('span');bub.className='gbub';bub.textContent=(g[lang]||g.en);span.appendChild(bub);
   var frag=document.createDocumentFragment();if(before)frag.appendChild(document.createTextNode(before));frag.appendChild(span);if(after)frag.appendChild(document.createTextNode(after));
   node.parentNode.replaceChild(frag,node);used[g.t]=1;break;}});}
 
@@ -1804,7 +1844,7 @@ function buildGraph(){var ids={};Object.keys(TARGETS).forEach(function(k){TARGET
  var links=[];Object.keys(TARGETS).forEach(function(k){var a=TARGETS[k];for(var i=0;i<a.length;i++)for(var j=i+1;j<a.length;j++){if(idx[a[i]]!=null&&idx[a[j]]!=null)links.push([idx[a[i]],idx[a[j]]]);}});
  return {nodes:nodes,links:links};}
 function renderGraphLegend(){var el=document.getElementById('graphLegend');if(!el)return;var seen={};var html='';
- PRODUCTS.forEach(function(p){if(p.cat==='ancillary'||seen[p.cat])return;seen[p.cat]=1;var o=PROD_CATS.filter(function(z){return z.id===p.cat;})[0];html+='<span><i style="background:'+(CATCOL[p.cat]||'#888')+'"></i>'+(o?o[lang]:p.cat)+'</span>';});
+ PRODUCTS.forEach(function(p){if(p.cat==='ancillary'||seen[p.cat])return;seen[p.cat]=1;var o=PROD_CATS.filter(function(z){return z.id===p.cat;})[0];html+='<span><i style="background:'+(CATCOL[p.cat]||'#888')+'"></i>'+(o?(o[lang]||o.en):p.cat)+'</span>';});
  el.innerHTML=html;}
 function renderGraph(){var cv=document.getElementById('graphCanvas'),wrap=document.getElementById('graphWrap');if(!cv||!wrap)return;
  var DPR=Math.min(devicePixelRatio||1,2),W=wrap.clientWidth,H=wrap.clientHeight;if(W<10){return;}
@@ -1835,7 +1875,7 @@ function renderMap(){var host=document.getElementById('mapWrap');if(!host)return
  var s='<svg viewBox="0 0 '+W+' '+H+'">';
  [300,1000,3000,10000,22000].forEach(function(tk){var x=xOf(tk);s+='<line x1="'+x.toFixed(1)+'" y1="34" x2="'+x.toFixed(1)+'" y2="'+(H-34)+'" stroke="rgba(201,162,75,.1)"/><text x="'+x.toFixed(1)+'" y="22" fill="var(--muted)" font-size="10" text-anchor="middle">'+(tk>=1000?(tk/1000)+'k':tk)+'</text>';});
  s+='<text x="'+padL+'" y="'+(H-12)+'" fill="var(--muted-2)" font-size="10">'+L('משקל מולקולרי (Da, סקאלה לוגריתמית) →','Molecular weight (Da, log scale) →')+'</text>';
- cats.forEach(function(c,i){var y=54+i*rowH;var o=PROD_CATS.filter(function(z){return z.id===c;})[0];s+='<text x="'+(padL-10)+'" y="'+(y+4)+'" fill="var(--muted)" font-size="11" text-anchor="end">'+(o?o[lang]:c)+'</text><line x1="'+padL+'" y1="'+y+'" x2="'+(W-padR)+'" y2="'+y+'" stroke="rgba(255,255,255,.05)"/>';});
+ cats.forEach(function(c,i){var y=54+i*rowH;var o=PROD_CATS.filter(function(z){return z.id===c;})[0];s+='<text x="'+(padL-10)+'" y="'+(y+4)+'" fill="var(--muted)" font-size="11" text-anchor="end">'+(o?(o[lang]||o.en):c)+'</text><line x1="'+padL+'" y1="'+y+'" x2="'+(W-padR)+'" y2="'+y+'" stroke="rgba(255,255,255,.05)"/>';});
  items.forEach(function(it){var ci=cats.indexOf(it.p.cat);if(ci<0)ci=0;var y=54+ci*rowH,x=xOf(it.mw);s+='<circle class="map-dot" data-go-prod="'+it.p.id+'" cx="'+x.toFixed(1)+'" cy="'+y+'" r="6.5" fill="'+(CATCOL[it.p.cat]||'#888')+'" stroke="rgba(255,255,255,.25)"><title>'+it.p.name+' · '+Math.round(it.mw)+' Da</title></circle>';});
  s+='</svg>';host.innerHTML=s;
  host.querySelectorAll('[data-go-prod]').forEach(function(el){el.onclick=function(){location.hash='product/'+el.getAttribute('data-go-prod');};});}
@@ -1873,16 +1913,16 @@ function exportResearchLog(){var L=function(he,en){return lang==='he'?he:en;};
 var LIB2PROD={'BPC-157':'bpc157','TB-500 (Thymosin β4)':'tb500','GHK-Cu':'ghkcu','CJC-1295':'cjc1295','Tesamorelin':'tesamorelin','Epitalon':'epitalon','MOTS-c':'motsc','Thymosin Alpha-1':'thymosina1','Semax':'semax','KPV':'kpv','LL37':'ll37','Retatrutide':'retatrutide','Ipamorelin':'ipamorelin','Selank':'selank','PT-141':'pt141','Kisspeptin':'kisspeptin','MT-2 (Melanotan II)':'mt2','MT-1 (Melanotan I)':'mt1','GHRP-2':'ghrp2','GHRP-6':'ghrp6','HGH 191AA (Somatropin)':'hgh','IGF-1 LR3':'igf1','Glutathione':'glutathione'};
 function renderLib(filter,q){var f=filter||'all';q=(q||'').toLowerCase();
  var rows=LIBRARY.filter(function(x){var okC=f==='all'||x.c===f;var okQ=!q||x.n.toLowerCase().indexOf(q)>-1||(x[lang]&&x[lang].toLowerCase().indexOf(q)>-1);return okC&&okQ;});
- var cat=function(c){var o=LIB_CATS.filter(function(z){return z.id===c;})[0];return o?o[lang]:c;};
- document.getElementById('libGrid').innerHTML=rows.length?rows.map(function(x){var pid=LIB2PROD[x.n];return '<div class="libcard"><div class="cat">'+cat(x.c)+'</div><h3>'+x.n+'</h3><p>'+x[lang]+'</p>'+(pid?'<a class="more" data-go-prod="'+pid+'" style="cursor:pointer;margin-top:12px">'+(lang==='he'?'במלאי — לעמוד המוצר':'In catalog — view product')+' '+svg('check')+'</a>':'')+'</div>';}).join(''):'<p class="body-txt">'+(lang==='he'?'לא נמצאו תוצאות.':'No results found.')+'</p>';
+ var cat=function(c){var o=LIB_CATS.filter(function(z){return z.id===c;})[0];return o?(o[lang]||o.en):c;};
+ document.getElementById('libGrid').innerHTML=rows.length?rows.map(function(x){var pid=LIB2PROD[x.n];return '<div class="libcard"><div class="cat">'+cat(x.c)+'</div><h3>'+x.n+'</h3><p>'+(x[lang]||x.en)+'</p>'+(pid?'<a class="more" data-go-prod="'+pid+'" style="cursor:pointer;margin-top:12px">'+(lang==='he'?'במלאי — לעמוד המוצר':'In catalog — view product')+' '+svg('check')+'</a>':'')+'</div>';}).join(''):'<p class="body-txt">'+(lang==='he'?'לא נמצאו תוצאות.':'No results found.')+'</p>';
  bindGoProd();}
-function renderLibPills(){var cur='all';document.getElementById('libPills').innerHTML=LIB_CATS.map(function(c,i){return '<button class="pill'+(i===0?' on':'')+'" data-cat="'+c.id+'">'+c[lang]+'</button>';}).join('');
+function renderLibPills(){var cur='all';document.getElementById('libPills').innerHTML=LIB_CATS.map(function(c,i){return '<button class="pill'+(i===0?' on':'')+'" data-cat="'+c.id+'">'+(c[lang]||c.en)+'</button>';}).join('');
  document.querySelectorAll('#libPills .pill').forEach(function(b){b.onclick=function(){document.querySelectorAll('#libPills .pill').forEach(function(x){x.classList.remove('on');});b.classList.add('on');renderLib(b.getAttribute('data-cat'),document.getElementById('libSearch').value);};});}
 
 var step=0;
 function renderStepsNav(){document.getElementById('stepsNav').innerHTML=LEARN.map(function(_,i){return '<button class="stepn'+(i===step?' on':'')+'" data-step="'+i+'">'+(i+1)+'</button>';}).join('');
  document.querySelectorAll('.stepn').forEach(function(b){b.onclick=function(){step=+b.getAttribute('data-step');renderStep();};});}
-function renderStep(){var s=LEARN[step],d=s[lang];
+function renderStep(){var s=LEARN[step],d=s[lang]||s.en;
  document.getElementById('stepHost').innerHTML='<div class="cnt">'+(lang==='he'?'חלק':'Part')+' '+(step+1)+' / '+LEARN.length+'</div><div class="ico" style="font-size:34px;color:var(--gold-2);margin:6px 0">'+svg(s.ic)+'</div><h3>'+d[0]+'</h3><p>'+d[1]+'</p>'+(s.img?'<img data-lb src="'+IMG[s.img]+'" alt="">':'');
  renderStepsNav();bindLb();glossify(document.getElementById('stepHost'));}
 
@@ -1891,17 +1931,18 @@ function renderBlog(){document.getElementById('blogGrid').innerHTML=POSTS.map(fu
 function renderPost(slug){var p=POSTS.filter(function(x){return x.slug===slug;})[0];if(!p){location.hash='blog';return;}
  document.getElementById('postHost').innerHTML='<div class="article"><span class="back" data-go="blog">'+svg('check')+' '+(lang==='he'?'חזרה למחקרים':'Back to research')+'</span><div class="dt">'+t(p.dt)+'</div><h1>'+t(p.t)+'</h1><p>'+t(p.body)+'</p><div style="margin-top:26px"><span class="ruo">RESEARCH & EDUCATIONAL CONTENT ONLY</span></div></div>';bindGo();glossify(document.getElementById('postHost'));}
 
-function renderValues(){document.getElementById('valueCards').innerHTML=VALUES.map(function(v){var d=v[lang];return '<div class="card"><div class="ico">'+svg(v.ic)+'</div><h3>'+d[0]+'</h3><p>'+d[1]+'</p></div>';}).join('');}
+function renderValues(){document.getElementById('valueCards').innerHTML=VALUES.map(function(v){var d=v[lang]||v.en;return '<div class="card"><div class="ico">'+svg(v.ic)+'</div><h3>'+d[0]+'</h3><p>'+d[1]+'</p></div>';}).join('');}
 function renderFaq(){document.getElementById('faqHost').innerHTML=FAQ.map(function(f){return '<div class="qa"><button>'+t(f.q)+'<span class="pm">+</span></button><div class="a"><p>'+t(f.a)+'</p></div></div>';}).join('');
  document.querySelectorAll('.qa button').forEach(function(b){b.onclick=function(){b.parentElement.classList.toggle('open');};});}
 
 /* ---------- language ---------- */
 function applyLang(l){lang=l;
- document.documentElement.lang=l;document.documentElement.dir=l==='he'?'rtl':'ltr';
- document.documentElement.style.setProperty('--fade',l==='he'?'left':'right');
- document.getElementById('langBtn').textContent=l==='he'?'EN':'עב';
- document.querySelectorAll('[data-he]').forEach(function(el){var v=l==='he'?el.getAttribute('data-he'):el.getAttribute('data-en');if(v===null)return;if(el.hasAttribute('data-html'))el.innerHTML=v;else el.textContent=v;});
- document.querySelectorAll('[data-he-ph]').forEach(function(el){el.setAttribute('placeholder',l==='he'?el.getAttribute('data-he-ph'):el.getAttribute('data-en-ph'));});
+ var rtl=(l==='he'||l==='ar');
+ document.documentElement.lang=l;document.documentElement.dir=rtl?'rtl':'ltr';
+ document.documentElement.style.setProperty('--fade',rtl?'left':'right');
+ var lbl={he:'עב',en:'EN',ru:'RU',ar:'ع'};document.getElementById('langBtn').textContent=lbl[l]||'EN';
+ document.querySelectorAll('[data-he]').forEach(function(el){var v;if(l==='he')v=el.getAttribute('data-he');else{var en=el.getAttribute('data-en');v=(l==='en')?en:tr(en);}if(v===null||v===undefined)return;if(el.hasAttribute('data-html'))el.innerHTML=v;else el.textContent=v;});
+ document.querySelectorAll('[data-he-ph]').forEach(function(el){var v;if(l==='he')v=el.getAttribute('data-he-ph');else{var en=el.getAttribute('data-en-ph');v=(l==='en')?en:tr(en);}el.setAttribute('placeholder',v);});
  var y=new Date().getFullYear();var a=document.getElementById('yr'),b=document.getElementById('yr2');if(a)a.textContent=y;if(b)b.textContent=y;
  renderSys();renderProds();renderProdPills();renderValues();renderFaq();renderBlog();renderLibPills();renderLib('all','');renderStepsNav();renderStep();renderCmpPick();renderCmpTable();
  renderBundles();renderQuiz();renderPricing();renderGlossary('');renderSocial();renderRecent();renderFavs();
@@ -1932,7 +1973,7 @@ var TITLES={home:'Isra.Peptides',products:'Products',bundles:'Bundles',quiz:'Fin
 function showView(n){document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active');});var el=document.getElementById('view-'+n);if(el)el.classList.add('active');window.scrollTo(0,0);
  document.querySelectorAll('nav.links a').forEach(function(a){a.classList.toggle('cur',a.getAttribute('data-go')===n);});
  document.title='Isra.Peptides'+(n!=='home'&&TITLES[n]?' — '+TITLES[n]:' — Research · Science · Results');
- if(n==='home')setTimeout(animateStats,200);
+ if(n==='home')setTimeout(function(){animateStats();initHeroGL();},200);
  if(n==='explore')setTimeout(renderExplore,80);}
 function route(){var h=location.hash.replace('#','');
  if(h.indexOf('product/')===0){renderProduct(h.split('/')[1]);showView('product');}
@@ -1950,7 +1991,7 @@ function bindGo(){document.querySelectorAll('[data-go]').forEach(function(el){el
  document.querySelectorAll('[data-page]').forEach(function(el){el.onclick=function(){location.hash='page/'+el.getAttribute('data-page');};});}
 function bindLb(){document.querySelectorAll('[data-lb]').forEach(function(img){img.onclick=function(){var lb=document.getElementById('lightbox');lb.querySelector('img').src=img.src;lb.classList.add('show');};});}
 document.getElementById('lightbox').onclick=function(){this.classList.remove('show');};
-document.getElementById('langBtn').onclick=function(){applyLang(lang==='he'?'en':'he');};
+document.getElementById('langBtn').onclick=function(){var i=LANGS.indexOf(lang);var nx=LANGS[(i+1)%LANGS.length];applyLang(nx);try{localStorage.setItem('ip_lang',nx);}catch(e){}};
 document.getElementById('mbtn').onclick=function(){document.getElementById('nav').classList.toggle('open');};
 document.querySelectorAll('#nav a').forEach(function(a){a.addEventListener('click',function(){document.getElementById('nav').classList.remove('open');});});
 document.getElementById('stepPrev').onclick=function(){step=(step-1+LEARN.length)%LEARN.length;renderStep();};
@@ -2013,6 +2054,40 @@ document.addEventListener('click',function(e){
  document.getElementById('cookieOk').onclick=function(){document.getElementById('cookie').classList.remove('show');try{localStorage.setItem('ip_cookie','1');}catch(e){}};})();
 /* PWA */
 if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}
+/* WebGL hero double-helix (Three.js, lazy) */
+function ensureThree(cb){if(window.THREE){cb(true);return;}var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';s.onload=function(){cb(!!window.THREE);};s.onerror=function(){cb(false);};document.head.appendChild(s);}
+var _hero={init:false,raf:0,grp:null,render:null,reduce:false};
+function heroFrame(){if(!_hero.render)return;if(!_hero.reduce&&_hero.grp)_hero.grp.rotation.y+=0.006;_hero.render();
+ if(!_hero.reduce&&!document.hidden&&document.getElementById('view-home')&&document.getElementById('view-home').classList.contains('active'))_hero.raf=requestAnimationFrame(heroFrame);}
+function heroResume(){if(_hero.init&&!_hero.reduce){cancelAnimationFrame(_hero.raf);heroFrame();}}
+function initHeroGL(){if(_hero.init){heroResume();return;}
+ var art=document.querySelector('.hero-art'),cv=document.getElementById('heroGL');if(!art||!cv)return;
+ _hero.reduce=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches);
+ ensureThree(function(ok){if(!ok||!window.THREE)return;
+  var W=art.clientWidth||420,H=art.clientHeight||340;
+  var renderer;try{renderer=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:true});}catch(e){return;}
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.setSize(W,H,false);
+  var scene=new THREE.Scene(),cam=new THREE.PerspectiveCamera(45,W/H,0.1,100);cam.position.set(0,0,14);
+  var grp=new THREE.Group();scene.add(grp);
+  var gold=new THREE.MeshStandardMaterial({color:0xe6c977,metalness:.6,roughness:.3,emissive:0x2a2008}),
+      cyan=new THREE.MeshStandardMaterial({color:0x5fa8d3,metalness:.45,roughness:.35,emissive:0x07202c}),
+      rung=new THREE.MeshStandardMaterial({color:0x9aa3b5,metalness:.3,roughness:.5});
+  var N=24,turns=2.6,radius=2.15,hgt=9.4,sph=new THREE.SphereGeometry(0.32,18,18);
+  for(var i=0;i<N;i++){var tt=i/(N-1),ang=tt*turns*Math.PI*2,y=(tt-0.5)*hgt;
+   var a=new THREE.Mesh(sph,i%2?gold:cyan);a.position.set(Math.cos(ang)*radius,y,Math.sin(ang)*radius);grp.add(a);
+   var b=new THREE.Mesh(sph,i%2?cyan:gold);b.position.set(Math.cos(ang+Math.PI)*radius,y,Math.sin(ang+Math.PI)*radius);grp.add(b);
+   if(i%2===0){var r=new THREE.Mesh(new THREE.CylinderGeometry(0.05,0.05,radius*2,8),rung);r.position.set(0,y,0);r.rotation.x=Math.PI/2;r.rotation.y=-ang;grp.add(r);}}
+  scene.add(new THREE.AmbientLight(0xffffff,0.6));
+  var p1=new THREE.PointLight(0xffffff,0.9);p1.position.set(6,8,10);scene.add(p1);
+  var p2=new THREE.PointLight(0x5fa8d3,0.6);p2.position.set(-8,-4,5);scene.add(p2);
+  grp.rotation.x=0.22;
+  _hero.grp=grp;_hero.render=function(){renderer.render(scene,cam);};_hero.init=true;
+  art.classList.add('gl-on');
+  if(_hero.reduce){grp.rotation.y=0.5;_hero.render();}else heroFrame();
+  window.addEventListener('resize',function(){var w=art.clientWidth,h=art.clientHeight;if(w&&h){cam.aspect=w/h;cam.updateProjectionMatrix();renderer.setSize(w,h,false);_hero.render();}},{passive:true});
+ });}
+document.addEventListener('visibilitychange',function(){if(!document.hidden)heroResume();});
+
 /* animated molecular network background */
 (function(){var cv=document.getElementById('molcanvas');if(!cv)return;
  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
@@ -2031,7 +2106,8 @@ if('serviceWorker' in navigator){window.addEventListener('load',function(){navig
  var rt;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){init();},200);},{passive:true});
  document.addEventListener('visibilitychange',function(){vis=!document.hidden;if(vis&&!reduce){frame();}else{cancelAnimationFrame(raf);}});
 })();
-applyLang('he');bindGo();bindLb();route();revealNow();
+var _savedLang;try{_savedLang=localStorage.getItem('ip_lang');}catch(e){}
+applyLang(_savedLang&&LANGS.indexOf(_savedLang)>-1?_savedLang:'he');bindGo();bindLb();route();revealNow();
 </script>
 </body>
 </html>

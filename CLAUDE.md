@@ -66,3 +66,16 @@ reference and catalog website. Single brand, static site.
 - Research stack: route `#stack` (from favorites) or `#stack/<id,id,...>` (shareable).
   Shows shared-pathway hints (from TARGETS) and a radar overlay.
 - New runtime-only externals (degrade offline): model-viewer, qrcodejs.
+
+## Languages (HE / EN / RU / AR)
+- `lang` is one of he/en/ru/ar. `applyLang()` sets dir (he+ar = rtl) and swaps text.
+- Static markup uses data-he/data-en. For ru/ar, `applyLang` looks up the English
+  string in the `TR` dictionary (TR.ru / TR.ar); if missing it falls back to English.
+- Content objects use `t({he,en})`; for ru/ar `t()` returns `TR[lang][en]` or English.
+- To localize more: add `"English string":"translation"` pairs to TR.ru / TR.ar.
+  Untranslated strings safely fall back to English. Keep Arabic accurate (RTL).
+
+## WebGL hero
+- `models/vial.glb` is the AR model. The homepage hero also renders a Three.js
+  double-helix into `#heroGL` (loaded from CDN, lazy). Falls back to the hero photo
+  if Three.js is unavailable. Respects prefers-reduced-motion.
