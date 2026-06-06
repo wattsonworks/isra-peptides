@@ -393,9 +393,10 @@ table.chem .rk{width:160px;font-size:12.5px}
 @media(max-width:780px){.rmap-wrap{grid-template-columns:1fr}}
 .rmap-svg{width:100%;border:1px solid var(--line);border-radius:18px;background:radial-gradient(circle at 50% 30%,rgba(95,168,211,.07),transparent 70%),var(--bg2);padding:10px}
 .rmap-svg svg{width:100%;height:auto;display:block}
-.rgn{fill:rgba(201,162,75,.16);stroke:var(--gold);stroke-width:.8;cursor:pointer;transition:fill .15s}
+.rgn{fill:rgba(201,162,75,.18);stroke:var(--gold);stroke-width:1;stroke-linejoin:round;cursor:pointer;transition:fill .15s}
 .rgn:hover{fill:rgba(230,201,119,.42)}
-.rgn.on{fill:var(--cyan);stroke:var(--gold-2)}
+.rgn.home{fill:rgba(230,201,119,.32)}
+.rgn.on{fill:var(--cyan);stroke:var(--gold-2);stroke-width:1.6}
 .rmap-panel{border:1px solid var(--line);border-radius:18px;background:var(--panel);padding:20px;min-height:200px}
 .rmap-panel h3{font-family:'Playfair Display',serif;color:var(--gold-2);margin-bottom:6px}
 .rmap-panel .rtag{font-size:11px;letter-spacing:2px;color:var(--cyan);font-weight:700}
@@ -989,7 +990,7 @@ table.chem .rk{width:160px;font-size:12.5px}
 </aside>
 
 <div id="searchModal" class="srch"><div class="srch-box">
-  <div class="srch-top"><span id="srchIc2"></span><input id="globalSearch" data-he-ph="חיפוש או מעבר מהיר: פפטיד, מונח, עמוד..." data-en-ph="Search or jump: peptide, term, page..."><kbd class="kbd-hint">⌘K</kbd><button id="srchClose" aria-label="close">&times;</button></div>
+  <div class="srch-top"><span id="srchIc2"></span><input id="globalSearch" data-he-ph="חיפוש חכם: נסו &quot;שריפת שומן&quot;, &quot;גידים&quot;, &quot;שינה&quot;..." data-en-ph="Smart search: try &quot;fat loss&quot;, &quot;tendons&quot;, &quot;sleep&quot;..."><kbd class="kbd-hint">⌘K</kbd><button id="srchClose" aria-label="close">&times;</button></div>
   <div id="srchResults"></div>
 </div></div>
 
@@ -2192,7 +2193,7 @@ function renderProduct(id){var p=PRODUCTS.filter(function(x){return x.id===id;})
    '<button class="btn btn-g" data-add="'+p.id+'">'+svg('wa')+' '+(inCart(p.id)?L('נוסף לפנייה','Added'):L('הוסף לפנייה','Add to inquiry'))+'</button>'+
    '<a class="btn btn-o" href="https://wa.me/'+WA+'?text='+waMsg+'" target="_blank" rel="noopener">'+svg('wa')+' WhatsApp</a>'+
    '<button class="btn btn-o" data-go="contact">'+L('טופס פנייה','Inquiry form')+'</button>'+
-   '<button class="btn btn-o" onclick="window.print()">'+svg('book')+' '+L('דף מפרט (PDF)','Spec sheet (PDF)')+'</button></div>'+
+   '<button class="btn btn-o" id="specBtn">'+svg('book')+' '+L('דף מפרט (PDF)','Spec sheet (PDF)')+'</button></div>'+
  '</div></div>';
  bindGo();bindLb();bindProds();bindShare(document.getElementById('pdHost'));
  (function(){var mg=document.getElementById('recMg'),ml=document.getElementById('recMl'),out=document.getElementById('recOut');if(!mg||!out)return;
@@ -2207,6 +2208,7 @@ function renderProduct(id){var p=PRODUCTS.filter(function(x){return x.id===id;})
  })();
  var m3=document.getElementById('mol3dBtn');if(m3&&CID[p.id]){m3.onclick=function(){load3D(CID[p.id],document.getElementById('mol3d'));};}
  var sc3=document.getElementById('schem3dBtn');if(sc3){sc3.onclick=function(){loadSchematic(p,document.getElementById('mol3d'));};}
+ var spb=document.getElementById('specBtn');if(spb){spb.onclick=function(){specSheet(p);};}
  var pm=document.getElementById('pmFeed');if(pm)pubmedFeed(p,pm);
  var pmb=document.getElementById('pmBadge');if(pmb)pubmedBadge(p,pmb);
  var ab=document.getElementById('arBtn');if(ab)ab.onclick=function(){openAR(p);};
@@ -2339,12 +2341,38 @@ function srchRender(items){var el=document.getElementById('srchResults');var L=f
  el.innerHTML=items.slice(0,14).map(function(r,i){return '<button class="sr'+(i===0?' active':'')+'" data-sgo="'+r.go+'"><div class="k">'+r.k+'</div><div class="ti">'+r.ti+'</div>'+(r.ds?'<div class="ds">'+r.ds+'</div>':'')+'</button>';}).join('');
  _srchActive=0;
  el.querySelectorAll('[data-sgo]').forEach(function(b){b.onclick=function(){closeSearch();location.hash=b.getAttribute('data-sgo');};});}
+/* intent / concept map: natural-language query -> relevant products (bilingual cues) */
+var SEM=[
+ {re:/tendon|ligament|joint|cartilage|גיד|רצוע|מפרק|סחוס/,he:'גידים, מפרקים ורקמת חיבור',en:'Tendons, joints & connective tissue',ids:['bpc157','tb500','ghkcu']},
+ {re:/recover|repair|heal|injur|wound|התאוששות|תיקון|ריפוי|פציע|החלמה|פצע/,he:'התאוששות וריפוי רקמות',en:'Recovery & tissue repair',ids:['bpc157','tb500','ghkcu','kpv']},
+ {re:/gut|stomach|intestin|digest|colitis|ibd|מעי|קיב|עיכול|כיב/,he:'מערכת העיכול',en:'Digestive system',ids:['bpc157','kpv','ll37']},
+ {re:/fat|weight|slim|obes|appetite|metabol|glp|שומן|הרזיה|משקל|תיאבון|מטבול|השמנה|רזיה/,he:'הרזיה, שומן ומטבוליזם',en:'Fat loss, weight & metabolism',ids:['retatrutide','semaglutide','tirzepatide','cagrilintide','survodutide','mazdutide','aod9604','adipotide','amino1mq','tesamorelin']},
+ {re:/sleep|insomnia|circadian|rest|שינה|נדודי|מנוחה|צירקד/,he:'שינה ומקצב יממה',en:'Sleep & circadian rhythm',ids:['dsip','melatonin','epitalon']},
+ {re:/tan|tanning|pigment|melanin|sun|שיזוף|פיגמנט|מלנין|שמש/,he:'פיגמנטציה ושיזוף',en:'Pigmentation & tanning',ids:['mt1','mt2']},
+ {re:/libido|sex|erectile|arousal|זקפה|מיני|חשק|עורר/,he:'תפקוד מיני (מסלול מרכזי)',en:'Sexual function (central pathway)',ids:['pt141']},
+ {re:/muscle|mass|strength|hypertroph|myostat|שריר|מסה|כוח|היפרטרופ/,he:'שריר, מסה וכוח',en:'Muscle, mass & strength',ids:['ace031','igf1','mgf','pegmgf','hgh','cjc1295','ipamorelin','hexarelin']},
+ {re:/skin|collagen|wrinkle|elast|anti-?aging|cosmet|עור|קולגן|קמט|אלסטין|קוסמט|הזדקנות העור/,he:'עור, קולגן ואסתטיקה',en:'Skin, collagen & aesthetics',ids:['ghkcu','snap8','ahkcu','hyaluronic','ll37']},
+ {re:/hair|balding|alopecia|שיער|קרחת|התקרחות/,he:'שיער',en:'Hair',ids:['ahkcu','ghkcu']},
+ {re:/memory|cognit|focus|brain|nootropic|learn|neuro|זיכרון|קוגניט|מיקוד|מוח|נואוטרופ|למיד|עצב/,he:'קוגניציה ומוח',en:'Cognition & brain',ids:['semax','selank','dihexa','pe2228','cerebrolysin','vip','dsip']},
+ {re:/anxiet|stress|mood|depress|חרדה|מתח|מצב רוח|דיכא/,he:'חרדה, מתח ומצב רוח',en:'Anxiety, stress & mood',ids:['selank','semax']},
+ {re:/longev|aging|senolytic|telomer|lifespan|אריכות|הזדקנות|סנול|טלומר|תוחלת/,he:'אריכות ימים והזדקנות',en:'Longevity & aging',ids:['epitalon','foxo4','nadplus','ss31','pinealon','vilon']},
+ {re:/immune|inflam|thymus|infection|חיסון|דלקת|תימוס|זיהום/,he:'חיסון ודלקת',en:'Immune & inflammation',ids:['thymosina1','thymalin','kpv','ll37','bpc157']},
+ {re:/growth hormone|^gh$|secretagog|igf|הורמון גדילה|הפרשת/,he:'הורמון גדילה וציר IGF',en:'Growth hormone & IGF axis',ids:['cjc1295','tesamorelin','ipamorelin','ghrp2','ghrp6','sermorelin','hexarelin','hgh','igf1','mgf','cjc1295dac']},
+ {re:/mitochond|energy|atp|ampk|מיטוכונדר|אנרגיה|תא/,he:'מיטוכונדריה ואנרגיה תאית',en:'Mitochondria & cellular energy',ids:['motsc','ss31','nadplus','aicar','slupp332']},
+ {re:/fertil|testosterone|gonad|lh|fsh|פוריות|טסטוסטרון|גונד|ביוץ/,he:'פוריות וציר ההורמונים',en:'Fertility & hormonal axis',ids:['gonadorelin','kisspeptin','hcg','hmg']}
+];
 function runSearch(q){var L=function(he,en){return lang==='he'?he:en;};q=(q||'').toLowerCase().trim();
  var pageK=L('עמוד','Page');
  if(q.length<2){srchRender(CMDS.map(function(c){return {k:pageK,ti:t(c.ti),go:c.go};}));return;}
  var res=[];
  CMDS.forEach(function(c){if(t(c.ti).toLowerCase().indexOf(q)>-1)res.push({k:pageK,ti:t(c.ti),go:c.go});});
- PRODUCTS.forEach(function(p){if((p.name+' '+t(p.sum)+' '+t(p.tags).join(' ')).toLowerCase().indexOf(q)>-1)res.push({k:L('מוצר','Product'),ti:p.name,ds:t(p.sum),go:'product/'+p.id});});
+ /* product scoring: direct text match + concept/intent match */
+ var score={},why={};
+ function addP(id,sc,lbl){if(!prodById(id))return;if((score[id]||0)<sc){score[id]=sc;if(lbl)why[id]=lbl;}else if((score[id]||0)===sc&&lbl&&!why[id])why[id]=lbl;}
+ PRODUCTS.forEach(function(p){var hay=(p.name+' '+t(p.sum)+' '+t(p.over)+' '+t(p.tags).join(' ')+' '+p.areas.map(function(a){return t(a.h)+' '+t(a.d);}).join(' ')).toLowerCase();
+  if(p.name.toLowerCase().indexOf(q)>-1)addP(p.id,100);else if(hay.indexOf(q)>-1)addP(p.id,60);});
+ SEM.forEach(function(s){if(s.re.test(q)){var lbl=L(s.he,s.en);s.ids.forEach(function(id,i){addP(id,55-i,lbl);});}});
+ Object.keys(score).sort(function(a,b){return score[b]-score[a];}).forEach(function(id){var p=prodById(id);res.push({k:L('מוצר','Product'),ti:p.name,ds:why[id]||t(p.sum),go:'product/'+id});});
  LIBRARY.forEach(function(x){if((x.n+' '+x[lang]).toLowerCase().indexOf(q)>-1)res.push({k:L('ספרייה','Library'),ti:x.n,ds:(x[lang]||x.en),go:LIB2PROD[x.n]?'product/'+LIB2PROD[x.n]:'library'});});
  POSTS.forEach(function(p){if((t(p.t)+' '+t(p.ex)).toLowerCase().indexOf(q)>-1)res.push({k:L('מאמר','Article'),ti:t(p.t),ds:t(p.ex),go:'post/'+p.slug});});
  GLOSSARY.forEach(function(g){if((g.t+' '+g[lang]).toLowerCase().indexOf(q)>-1)res.push({k:L('מונח','Term'),ti:g.t,ds:(g[lang]||g.en),go:'glossary'});});
@@ -2747,39 +2775,40 @@ function pubmedFeed(p,el){if(!el)return;var L=function(he,en){return lang==='he'
 
 /* ---------- regulatory map (interactive, general framing only) ---------- */
 var REGIONS=[
- {id:'na',he:'צפון אמריקה',en:'North America',pts:'60,90 250,78 272,150 205,210 120,205 70,150',cx:158,cy:142,
+ {id:'na',he:'צפון אמריקה',en:'North America',pts:'33,67 96,55 167,50 230,52 300,57 347,111 322,128 292,150 278,176 248,188 236,206 214,196 200,170 178,150 158,140 150,118 120,112 92,96 60,84',cx:198,cy:108,
   nhe:'שוק מחקר מרכזי. תרכובות מחקר מסופקות בדרך כלל בתנאי "למחקר בלבד" (RUO). אמתו ייבוא, סימון ורגולציה מקומית עדכנית לפני טיפול בתרכובת.',
   nen:'A major research market. Research compounds are generally supplied under Research Use Only (RUO) terms. Verify current import, labeling and local regulation before handling any compound.'},
- {id:'latam',he:'אמריקה הלטינית',en:'Latin America',pts:'150,250 255,238 285,360 232,475 182,432 158,330',cx:212,cy:350,
+ {id:'latam',he:'אמריקה הלטינית',en:'Latin America',pts:'250,196 278,200 300,210 332,232 360,262 372,300 360,322 344,350 322,378 311,400 300,408 294,388 290,356 286,318 280,288 272,262 268,236 256,216',cx:330,cy:300,
   nhe:'הרגולציה משתנה בין מדינות. כל המוצרים מיועדים למחקר בלבד; בדקו את הדרישות המקומיות לייבוא ולשימוש מעבדתי.',
   nen:'Regulation varies by country. All products are research-use-only; check local requirements for import and laboratory use.'},
- {id:'eur',he:'אירופה',en:'Europe',pts:'460,90 565,82 580,150 500,168 455,135',cx:512,cy:124,
+ {id:'eur',he:'אירופה',en:'Europe',pts:'472,128 486,108 478,96 500,84 520,66 540,58 556,68 548,82 566,86 580,98 600,104 596,120 572,128 556,140 540,134 522,142 506,138 490,140 478,136',cx:520,cy:108,
   nhe:'מסגרות לשימוש מחקרי קיימות לצד פיקוח על חומרים. אמתו את הסטטוס העדכני במדינה הספציפית ואת דרישות הסימון.',
   nen:'Research-use frameworks exist alongside substance oversight. Verify the current status in the specific country and labeling requirements.'},
- {id:'rus',he:'רוסיה ומדינות חבר העמים',en:'Russia & CIS',pts:'590,55 905,52 915,135 640,142 598,100',cx:760,cy:98,
+ {id:'rus',he:'רוסיה ומדינות חבר העמים',en:'Russia & CIS',pts:'600,104 612,86 640,72 690,60 740,52 800,50 860,52 905,56 935,72 944,90 915,96 880,90 840,98 820,112 788,108 760,112 724,108 690,116 660,120 632,124 612,116',cx:782,cy:84,
   nhe:'אזור עם היסטוריה ארוכה של מחקר פפטידים. הסטטוס הרגולטורי משתנה; פעלו לפי הכללים המקומיים העדכניים.',
   nen:'A region with a long history of peptide research. Regulatory status varies; follow current local rules.'},
- {id:'me',he:'המזרח התיכון',en:'Middle East',pts:'602,172 678,166 695,238 628,256 600,210',cx:646,cy:212,home:1,
+ {id:'me',he:'המזרח התיכון',en:'Middle East',pts:'596,150 612,142 632,138 654,142 672,154 684,172 678,190 662,200 648,216 634,210 624,196 612,184 600,172 596,160',cx:638,cy:176,home:1,
   nhe:'שוק הבית של Isra.Peptides (בסיס בישראל). תוכן חינוכי-מחקרי בלבד; אמתו תמיד את הרגולציה המקומית העדכנית.',
   nen:'Home market of Isra.Peptides (based in Israel). Educational-research content only; always verify current local regulation.'},
- {id:'afr',he:'אפריקה',en:'Africa',pts:'470,210 595,202 625,335 545,440 472,368 456,268',cx:535,cy:318,
+ {id:'afr',he:'אפריקה',en:'Africa',pts:'472,176 510,168 548,166 584,172 600,186 612,206 606,232 596,258 588,286 576,312 560,336 544,352 528,344 522,318 512,294 500,272 488,252 472,234 460,212 462,192',cx:540,cy:248,
   nhe:'הרגולציה והזמינות משתנות מאוד בין מדינות. כל המוצרים מיועדים למחקר בלבד; בדקו את הדרישות המקומיות.',
   nen:'Regulation and availability vary widely by country. All products are research-use-only; check local requirements.'},
- {id:'sas',he:'דרום אסיה',en:'South Asia',pts:'690,238 762,232 784,305 712,316 686,270',cx:730,cy:276,
+ {id:'sas',he:'דרום אסיה',en:'South Asia',pts:'690,158 712,160 736,168 752,180 760,196 748,212 736,228 722,244 712,228 706,210 700,194 694,178',cx:724,cy:194,
   nhe:'אזור מחקר וייצור גדל. הסטטוס משתנה בין שווקים; אמתו ייבוא ורגולציה מקומית עדכנית.',
   nen:'A growing research and manufacturing region. Status varies between markets; verify current import and local regulation.'},
- {id:'eas',he:'מזרח אסיה',en:'East Asia',pts:'802,150 912,150 928,252 822,262 796,202',cx:862,cy:202,
+ {id:'eas',he:'מזרח אסיה',en:'East Asia',pts:'760,128 800,124 840,128 880,132 905,142 920,156 905,170 884,176 866,186 844,196 820,192 800,182 784,170 770,156 762,142',cx:838,cy:154,
   nhe:'מרכזי מחקר וייצור מובילים. כל המוצרים מיועדים למחקר בלבד; פעלו לפי הרגולציה המקומית העדכנית.',
   nen:'Leading research and manufacturing hubs. All products are research-use-only; follow current local regulation.'},
- {id:'sea',he:'דרום-מזרח אסיה ואוקיאניה',en:'SE Asia & Oceania',pts:'800,300 902,294 918,408 822,440 800,358',cx:856,cy:362,
+ {id:'sea',he:'דרום-מזרח אסיה ואוקיאניה',en:'SE Asia & Oceania',pts:'778,206 800,202 818,212 836,222 858,232 880,248 900,262 916,284 912,308 896,330 872,346 844,352 820,344 812,322 826,304 844,292 858,278 840,268 818,266 800,256 786,242 778,224',cx:864,cy:300,
   nhe:'הרגולציה משתנה בין מדינות וכוללת לעיתים פיקוח ייבוא הדוק. אמתו את הכללים המקומיים העדכניים.',
   nen:'Regulation varies by country and sometimes includes strict import controls. Verify current local rules.'}
 ];
 var regSel=null;
 function renderRegmap(){var host=document.getElementById('rmapSvg');if(!host)return;var L=function(he,en){return lang==='he'?he:en;};
  var rs=document.getElementById('regShieldIc');if(rs)rs.innerHTML=svg('shield');
- var polys=REGIONS.map(function(r){return '<polygon class="rgn'+(r.home?' home':'')+(regSel===r.id?' on':'')+'" data-rgn="'+r.id+'" points="'+r.pts+'"></polygon><text x="'+r.cx+'" y="'+r.cy+'" font-size="13" fill="#eaedf6" text-anchor="middle" dominant-baseline="middle" pointer-events="none" style="font-family:Heebo,sans-serif;font-weight:600">'+(lang==='he'?r.he:r.en)+'</text>';}).join('');
- host.innerHTML='<svg viewBox="0 0 1000 520" role="img" aria-label="'+L('מפת רגולציה','Regulatory map')+'">'+polys+'</svg>';
+ var grid='';for(var gx=100;gx<1000;gx+=100)grid+='<line x1="'+gx+'" y1="0" x2="'+gx+'" y2="440" stroke="rgba(95,168,211,.06)"/>';for(var gy=80;gy<440;gy+=80)grid+='<line x1="0" y1="'+gy+'" x2="1000" y2="'+gy+'" stroke="rgba(95,168,211,.06)"/>';
+ var polys=REGIONS.map(function(r){var nm=(lang==='he'?r.he:r.en);return '<polygon class="rgn'+(r.home?' home':'')+(regSel===r.id?' on':'')+'" data-rgn="'+r.id+'" points="'+r.pts+'"></polygon><text x="'+r.cx+'" y="'+r.cy+'" font-size="12.5" fill="#eaedf6" text-anchor="middle" dominant-baseline="middle" pointer-events="none" style="font-family:Heebo,sans-serif;font-weight:600;paint-order:stroke;stroke:rgba(5,7,15,.85);stroke-width:3px">'+nm+'</text>';}).join('');
+ host.innerHTML='<svg viewBox="0 0 1000 440" role="img" aria-label="'+L('מפת רגולציה','Regulatory map')+'"><rect x="0" y="0" width="1000" height="440" fill="rgba(10,15,29,.4)"/>'+grid+polys+'</svg>';
  host.querySelectorAll('.rgn').forEach(function(el){el.onclick=function(){regSel=el.getAttribute('data-rgn');renderRegmap();};});
  var panel=document.getElementById('rmapPanel');if(!panel)return;
  var r=REGIONS.filter(function(x){return x.id===regSel;})[0];
@@ -2794,6 +2823,45 @@ function radarOverlaySVG(ids){var keys=['recovery','metabolic','cognitive','immu
  for(i=0;i<N;i++){var a=-Math.PI/2+i*2*Math.PI/N,x=cx+R*Math.cos(a),y=cy+R*Math.sin(a);axes+='<line x1="'+cx+'" y1="'+cy+'" x2="'+x.toFixed(1)+'" y2="'+y.toFixed(1)+'" stroke="rgba(201,162,75,.1)"/>';var lx=cx+(R+18)*Math.cos(a),ly=cy+(R+18)*Math.sin(a);labs+='<text x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" font-size="10" fill="var(--muted)" text-anchor="middle" dominant-baseline="middle">'+labels[i]+'</text>';}
  ids.forEach(function(id,k){var p=prodById(id);if(!p)return;var D=radarProfile(p);var pts=[];for(var i=0;i<N;i++){var a=-Math.PI/2+i*2*Math.PI/N,v=D[keys[i]]/5;pts.push((cx+R*v*Math.cos(a)).toFixed(1)+','+(cy+R*v*Math.sin(a)).toFixed(1));}var c=cols[k%3];polys+='<polygon points="'+pts.join(' ')+'" fill="'+c+'22" stroke="'+c+'" stroke-width="2"/>';leg+='<span style="display:inline-flex;align-items:center;gap:6px;margin:0 10px"><i style="width:10px;height:10px;border-radius:2px;background:'+c+';display:inline-block"></i>'+p.name+'</span>';});
  return '<div class="mech-d" style="text-align:center"><svg viewBox="0 0 340 320" style="max-width:360px">'+grid+axes+polys+labs+'</svg><div style="font-size:12px;color:var(--muted);margin-top:8px">'+leg+'</div></div>';}
+
+/* ---------- branded per-peptide spec sheet (print -> PDF) ---------- */
+function specSheet(p){var L=function(he,en){return lang==='he'?he:en;};var c=CHEM[p.id]||{};
+ var rtl=(lang==='he'||lang==='ar');var logo=new URL('img/logo.jpg',location.href).href;
+ var esc=function(s){return (''+(s==null?'':s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');};
+ var row=function(k,v){return v?'<tr><th>'+k+'</th><td>'+esc(v)+'</td></tr>':'';};
+ var res=seqParse(p);var seqLine=c.seq?esc(c.seq):(res?res.length+' '+L('שאריות','residues'):'');
+ var an=ANALOG[p.id]?esc(t(ANALOG[p.id])):'';
+ var areas=p.areas.map(function(a){return '<li><b>'+esc(t(a.h))+'</b> — '+esc(t(a.d))+'</li>';}).join('');
+ var chem=row(L('רצף','Sequence'),seqLine)+row(L('נוסחה','Formula'),c.formula)+row(L('משקל מולקולרי','Molecular weight'),c.mw?c.mw+' g/mol':'')+row('CAS',c.cas)+row(L('אחסון','Storage'),c.store)+row(L('אנלוג של','Analog of'),an);
+ var w=window.open('','_blank');if(!w){alert(L('חלון קופץ נחסם.','Popup was blocked.'));return;}
+ var css='@page{margin:16mm}body{font-family:Arial,Helvetica,sans-serif;color:#16202e;margin:0;padding:30px}'+
+  '.hd{display:flex;align-items:center;gap:14px;border-bottom:3px solid #c9a24b;padding-bottom:14px;margin-bottom:6px}'+
+  '.hd img{width:52px;height:52px;border-radius:50%;object-fit:cover}'+
+  '.hd .bn{font-size:22px;font-weight:800;letter-spacing:1px}.hd .bn b{color:#c9a24b}'+
+  '.hd .bs{font-size:10px;letter-spacing:4px;color:#6b7585}'+
+  '.spec{font-size:10px;letter-spacing:3px;color:#9a7a32;font-weight:700;margin-top:14px}'+
+  'h1{font-size:26px;margin:4px 0 2px}.mg{font-size:15px;color:#6b7585;font-weight:600}'+
+  '.chips span{display:inline-block;border:1px solid #d8c89a;background:#faf5e7;color:#7a6326;border-radius:999px;padding:3px 11px;font-size:11px;margin:6px 6px 0 0}'+
+  'h2{font-size:13px;letter-spacing:1px;color:#9a7a32;border-bottom:1px solid #e7e0cc;padding-bottom:5px;margin:20px 0 8px}'+
+  'p{font-size:13px;line-height:1.55;margin:0 0 8px}ul{margin:0;padding-inline-start:18px;font-size:13px;line-height:1.5}'+
+  'table{width:100%;border-collapse:collapse;margin-top:6px}th,td{border:1px solid #e0dccd;padding:7px 10px;text-align:start;font-size:12.5px}th{background:#f4efe0;width:38%;color:#5a4a22}'+
+  '.ruo{display:inline-block;margin-top:8px;border:1px solid #d8c89a;background:#faf5e7;color:#7a6326;border-radius:6px;padding:5px 10px;font-size:10.5px;letter-spacing:1.5px;font-weight:700}'+
+  '.ft{margin-top:22px;border-top:1px solid #e7e0cc;padding-top:10px;font-size:10.5px;color:#8a93a3;line-height:1.5}';
+ var html='<!DOCTYPE html><html dir="'+(rtl?'rtl':'ltr')+'" lang="'+lang+'"><head><meta charset="utf-8"><title>Isra.Peptides — '+esc(p.name)+'</title><style>'+css+'</style></head><body>'+
+  '<div class="hd"><img src="'+logo+'" alt=""><div><div class="bn">Isra<b>.</b>Peptides</div><div class="bs">RESEARCH · SCIENCE · RESULTS</div></div></div>'+
+  '<div class="spec">'+L('דף מפרט — לדוגמה','SPECIMEN SPEC SHEET')+'</div>'+
+  '<h1>'+esc(p.name)+' <span class="mg">'+esc(p.mg)+' · '+esc(p.purity)+'</span></h1>'+
+  '<div class="chips">'+t(p.tags).map(function(x){return '<span>'+esc(x)+'</span>';}).join('')+'</div>'+
+  '<h2>'+L('סקירה','Overview')+'</h2><p>'+esc(t(p.over))+'</p>'+
+  '<h2>'+L('רקע ומקור','Background & origin')+'</h2><p>'+esc(t(p.origin))+'</p>'+
+  '<h2>'+L('מנגנון נחקר','Researched mechanism')+'</h2><p>'+esc(t(p.mech))+'</p>'+
+  '<h2>'+L('תחומי מחקר','Research areas')+'</h2><ul>'+areas+'</ul>'+
+  (chem?'<h2>'+L('נתונים כימיים','Chemical data')+'</h2><table>'+chem+'</table>':'')+
+  '<div class="ruo">RESEARCH USE ONLY · NOT FOR HUMAN CONSUMPTION · NOT MEDICAL ADVICE</div>'+
+  '<div class="ft">'+L('מסמך לדוגמה. נתונים כימיים מאומתים מול מקורות ציבוריים; אצווה אמיתית מלווה ב-COA לפי בקשה. ','Specimen document. Chemical data verified against public sources; a real batch is supplied with a COA on request. ')+
+   esc(new Date().toISOString().slice(0,10))+' · israpeptides.com · WhatsApp 972506787586</div>'+
+  '</body></html>';
+ w.document.write(html);w.document.close();setTimeout(function(){try{w.focus();w.print();}catch(e){}},350);}
 
 /* ---------- research log export (print) ---------- */
 function exportResearchLog(){var L=function(he,en){return lang==='he'?he:en;};

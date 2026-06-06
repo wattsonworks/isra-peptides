@@ -127,3 +127,23 @@ reference and catalog website. Single brand, static site.
   IMPORTANT: never assert specific per-country legal status (no "legal"/"banned" claims) —
   this is general, non-legal framing only, by design. Middle East is flagged `home:1`.
   Linked from main nav and footer. CSS prefix `.rmap-`/`.rgn`.
+- Continent polygons in `REGIONS[].pts` are equirectangular-projected (lon->x on 0..1000,
+  lat->y on 0..440) so they read as real continents. `renderRegmap()` draws an ocean rect +
+  graticule behind them. To move/reshape a region, edit its `pts` (and `cx`/`cy` label).
+
+## Branded spec sheet (print -> PDF)
+- `specSheet(p)` opens a branded printable window (logo, chem table, sequence, analog, RUO
+  disclaimer) and calls print. Bound to the product page "Spec sheet (PDF)" button
+  (`#specBtn`). Replaced the old raw `window.print()`. Bilingual; RTL-aware.
+
+## Smart search (intent/concept layer)
+- `SEM` array maps natural-language regexes (EN+HE cues: "fat loss", "tendons", "sleep",
+  "tanning", "memory"...) to product id lists with a bilingual concept label. `runSearch()`
+  scores products: exact name 100, text match 60, concept 55-. Concept-only hits show the
+  concept label as the result subtitle. Extend by adding `{re,he,en,ids}` to `SEM`.
+
+## NOTE on the service worker while developing
+- `sw.js` cache-first means a hosted/preview client keeps serving the OLD cached
+  `index.html` until cache `C` is bumped (currently `isra-peptides-v6`). ALWAYS bump `C`
+  when shipping index.html/asset changes, or returning users won't see them. In a local
+  preview, unregister the SW + clear caches and hard-reload to see edits.
