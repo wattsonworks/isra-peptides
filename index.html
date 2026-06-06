@@ -410,6 +410,15 @@ table.chem .rk{width:160px;font-size:12.5px}
 .graph-legend{position:absolute;top:14px;inset-inline-start:14px;display:flex;flex-direction:column;gap:5px;font-size:11.5px;color:var(--muted);background:rgba(8,12,22,.6);padding:10px 12px;border:1px solid var(--line);border-radius:10px;backdrop-filter:blur(6px)}
 .graph-legend span{display:flex;align-items:center;gap:7px}
 .graph-legend i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.explist{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.elgroup{border:1px solid var(--line);border-radius:14px;background:var(--panel);padding:14px 16px}
+.elgroup h4{font-size:12.5px;letter-spacing:.5px;color:var(--cyan);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.elgroup h4 span{margin-inline-start:auto;color:var(--muted-2);font-size:11px;background:rgba(201,162,75,.12);border-radius:999px;padding:1px 8px}
+.elitems{display:flex;flex-direction:column;gap:2px}
+.elitem{display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:8px;color:var(--ink);text-decoration:none;font-size:13.5px;transition:background .12s}
+.elitem i{width:11px;height:11px;border-radius:50%;flex:0 0 auto}
+.elitem:hover,.elitem:focus-visible{background:rgba(95,168,211,.12);outline:none}
+.elitem:focus-visible{box-shadow:inset 0 0 0 2px var(--gold-2)}
 #mapWrap{width:100%;border:1px solid var(--line);border-radius:18px;background:var(--bg2);padding:10px}
 #mapWrap svg{width:100%;height:auto;display:block}
 .map-dot{cursor:pointer;transition:r .15s}
@@ -897,12 +906,14 @@ table.chem .rk{width:160px;font-size:12.5px}
     <div class="pills" id="exploreTabs" style="justify-content:center;margin-top:18px">
       <button class="pill on" data-ex="graph" data-he="רשת קולטנים" data-en="Receptor network"></button>
       <button class="pill" data-ex="map" data-he="מפת משקל מולקולרי" data-en="Molecular-weight map"></button>
+      <button class="pill" data-ex="list" data-he="רשימה נגישה" data-en="Accessible list"></button>
     </div>
   </div>
   <section class="blk" style="padding-top:18px"><div class="wrap">
-    <div id="graphWrap"><canvas id="graphCanvas"></canvas><div class="graph-legend" id="graphLegend"></div></div>
+    <div id="graphWrap" role="img" aria-label=""><canvas id="graphCanvas"></canvas><div class="graph-legend" id="graphLegend"></div></div>
     <div id="mapWrap" style="display:none"></div>
-    <p class="body-txt" style="text-align:center;font-size:13px;color:var(--muted-2);margin-top:14px" data-he="לחצו על צומת כדי לפתוח את עמוד הפפטיד. קווים = קולטן/מסלול משותף." data-en="Tap a node to open its peptide page. Lines = a shared receptor/pathway."></p>
+    <div id="exploreList" style="display:none"></div>
+    <p class="body-txt" id="graphHint" style="text-align:center;font-size:13px;color:var(--muted-2);margin-top:14px" data-he="ריחוף מדגיש פפטיד ושכניו · גרירה מסדרת · לחיצה פותחת · לגרסה נגישה לחצו ״רשימה נגישה״." data-en="Hover highlights a peptide and its neighbors · drag to arrange · click to open · for an accessible version use the List tab."></p>
   </div></section>
 </div>
 
@@ -1842,10 +1853,14 @@ var CHEM={
  glutathione:{seq:'γ-Glu-Cys-Gly (GSH)',formula:'C10H17N3O6S',mw:'307.32',cas:'70-18-8',store:'2–8°C',pm:'Glutathione'}
 };
 var CID={bpc157:9941957,ipamorelin:20754357,semax:122178,mt2:92432,pt141:9941379,epitalon:219042,ghkcu:342538,glutathione:124886,motsc:146675088,tb500:62707662,kpv:125672};
-CHEM.sermorelin={seq:'GHRH(1-29)-NH2, 29 aa',formula:'C149H246N44O42S',mw:'3357.9',cas:'86168-78-7',store:'-20C',pm:'Sermorelin GHRH'};CHEM.hexarelin={seq:'His-D-2-Me-Trp-Ala-Trp-D-Phe-Lys-NH2 (6 aa)',formula:'C47H58N12O6',mw:'887.0',cas:'140703-51-1',store:'-20C',pm:'Hexarelin GHRP'};CHEM.cjc1295dac={seq:'mod GHRH(1-29) + DAC (albumin-binding)',formula:'C165H269N51O50',mw:'3647.1',cas:'863288-34-0',store:'-20C',pm:'CJC-1295 DAC GHRH'};CHEM.mgf={seq:'IGF-1Ec C-terminal peptide',store:'-20C',pm:'Mechano growth factor MGF IGF-1Ec'};CHEM.pegmgf={seq:'pegylated MGF',store:'-20C',pm:'PEG-MGF mechano growth factor'};CHEM.igfdes={seq:'IGF-1 des(1-3) variant',store:'-20C',pm:'IGF-1 DES des(1-3)'};CHEM.hghfrag={seq:'hGH(176-191) fragment',mw:'1817.1',cas:'66004-57-7',store:'-20C',pm:'HGH fragment 176-191'};CHEM.nadplus={seq:'nicotinamide adenine dinucleotide',formula:'C21H27N7O14P2',mw:'663.43',cas:'53-84-9',store:'-20C',pm:'NAD+ nicotinamide adenine dinucleotide',d2:'NAD'};CHEM.ss31={seq:'D-Arg-2,6-dimethylTyr-Lys-Phe-NH2',formula:'C32H49N9O5',mw:'639.8',cas:'736992-21-5',store:'-20C',pm:'Elamipretide SS-31 mitochondrial',d2:'Elamipretide'};CHEM.foxo4={seq:'retro-inverso FOXO4 peptide',store:'-20C',pm:'FOXO4-DRI senolytic p53'};CHEM.thymalin={seq:'thymic peptide complex',store:'-20C',pm:'Thymalin thymus peptide'};CHEM.pinealon={seq:'Glu-Asp-Arg (tripeptide)',store:'-20C',pm:'Pinealon peptide bioregulator'};CHEM.vilon={seq:'Lys-Glu (dipeptide)',store:'-20C',pm:'Vilon peptide bioregulator'};CHEM.melatonin={seq:'N-acetyl-5-methoxytryptamine',formula:'C13H16N2O2',mw:'232.28',cas:'73-31-4',store:'-20C',pm:'Melatonin circadian',d2:'Melatonin'};CHEM.dsip={seq:'Trp-Ala-Gly-Gly-Asp-Ala-Ser-Gly-Glu (9 aa)',formula:'C35H48N10O15',mw:'848.8',cas:'62568-57-4',store:'-20C',pm:'Delta sleep inducing peptide DSIP'};CHEM.dihexa={seq:'N-hexanoic-Tyr-Ile-(6)aminohexanoic amide',store:'-20C',pm:'Dihexa angiotensin IV HGF cognition'};CHEM.pe2228={seq:'spadin-derived peptide (PE 22-28)',store:'-20C',pm:'PE-22-28 spadin TREK-1'};CHEM.vip={seq:'28-aa neuropeptide',mw:'3326.8',cas:'37221-79-7',store:'-20C',pm:'Vasoactive intestinal peptide VIP'};CHEM.oxytocin={seq:'Cys-Tyr-Ile-Gln-Asn-Cys-Pro-Leu-Gly-NH2',formula:'C43H66N12O12S2',mw:'1007.19',cas:'50-56-6',store:'-20C',pm:'Oxytocin neuropeptide',d2:'Oxytocin'};CHEM.cerebrolysin={seq:'brain-derived peptide/amino-acid complex',store:'-20C',pm:'Cerebrolysin neurotrophic'};CHEM.ara290={seq:'11-aa EPO-derived peptide',store:'-20C',pm:'ARA-290 cibinetide EPO'};CHEM.ace031={seq:'ActRIIB-Fc fusion protein',store:'-20C',pm:'ACE-031 myostatin ActRIIB'};CHEM.gonadorelin={seq:'pGlu-His-Trp-Ser-Tyr-Gly-Leu-Arg-Pro-Gly-NH2',formula:'C55H75N17O13',mw:'1182.3',cas:'33515-09-2',store:'-20C',pm:'Gonadorelin GnRH'};CHEM.hcg={seq:'glycoprotein hormone (alpha/beta)',mw:'approx 36700',cas:'9002-61-3',store:'-20C',pm:'Human chorionic gonadotropin HCG'};CHEM.hmg={seq:'FSH + LH gonadotropin preparation',store:'-20C',pm:'Human menopausal gonadotropin HMG'};CHEM.snap8={seq:'acetyl octapeptide-3 (8 aa)',formula:'C49H73N13O18',mw:'1075.2',cas:'868844-74-0',store:'-20C',pm:'SNAP-8 acetyl octapeptide-3'};CHEM.ahkcu={seq:'Ala-His-Lys . Cu(II)',store:'-20C',pm:'AHK-Cu copper peptide hair'};CHEM.hyaluronic={seq:'glycosaminoglycan polymer',cas:'9004-61-9',store:'2-8C',pm:'Hyaluronic acid hyaluronan'};CHEM.aicar={seq:'5-aminoimidazole-4-carboxamide ribonucleotide',formula:'C9H14N4O5',mw:'258.23',cas:'2627-69-2',store:'-20C',pm:'AICAR AMPK',d2:'Acadesine'};CHEM.slupp332={seq:'synthetic ERR agonist',store:'-20C',pm:'SLU-PP-332 ERR agonist'};CHEM.amino1mq={seq:'5-amino-1-methylquinolinium derivative',store:'-20C',pm:'5-Amino-1MQ NNMT inhibitor'};
+CHEM.sermorelin={seq:'GHRH(1-29)-NH2, 29 aa',formula:'C149H246N44O42S',mw:'3357.9',cas:'86168-78-7',store:'-20C',pm:'Sermorelin GHRH'};CHEM.hexarelin={seq:'His-D-2-Me-Trp-Ala-Trp-D-Phe-Lys-NH2 (6 aa)',formula:'C47H58N12O6',mw:'887.0',cas:'140703-51-1',store:'-20C',pm:'Hexarelin GHRP'};CHEM.cjc1295dac={seq:'mod GHRH(1-29) + DAC (albumin-binding)',formula:'C165H269N51O50',mw:'3647.1',cas:'863288-34-0',store:'-20C',pm:'CJC-1295 DAC GHRH'};CHEM.mgf={seq:'IGF-1Ec C-terminal peptide',store:'-20C',pm:'Mechano growth factor MGF IGF-1Ec'};CHEM.pegmgf={seq:'pegylated MGF',store:'-20C',pm:'PEG-MGF mechano growth factor'};CHEM.igfdes={seq:'IGF-1 des(1-3) variant',store:'-20C',pm:'IGF-1 DES des(1-3)'};CHEM.hghfrag={seq:'hGH(176-191) fragment',mw:'1817.1',cas:'66004-57-7',store:'-20C',pm:'HGH fragment 176-191'};CHEM.nadplus={seq:'nicotinamide adenine dinucleotide',formula:'C21H27N7O14P2',mw:'663.43',cas:'53-84-9',store:'-20C',pm:'NAD+ nicotinamide adenine dinucleotide',d2:'NAD'};CHEM.ss31={seq:'D-Arg-2,6-dimethylTyr-Lys-Phe-NH2',formula:'C32H49N9O5',mw:'639.8',cas:'736992-21-5',store:'-20C',pm:'Elamipretide SS-31 mitochondrial',d2:'Elamipretide'};CHEM.foxo4={seq:'retro-inverso FOXO4 peptide',store:'-20C',pm:'FOXO4-DRI senolytic p53'};CHEM.thymalin={seq:'thymic peptide complex',store:'-20C',pm:'Thymalin thymus peptide'};CHEM.pinealon={seq:'Glu-Asp-Arg (tripeptide)',store:'-20C',pm:'Pinealon peptide bioregulator'};CHEM.vilon={seq:'Lys-Glu (dipeptide)',store:'-20C',pm:'Vilon peptide bioregulator'};CHEM.melatonin={seq:'N-acetyl-5-methoxytryptamine',formula:'C13H16N2O2',mw:'232.28',cas:'73-31-4',store:'-20C',pm:'Melatonin circadian',d2:'Melatonin'};CHEM.dsip={seq:'Trp-Ala-Gly-Gly-Asp-Ala-Ser-Gly-Glu (9 aa)',formula:'C35H48N10O15',mw:'848.8',cas:'62568-57-4',store:'-20C',pm:'Delta sleep inducing peptide DSIP'};CHEM.dihexa={seq:'N-hexanoic-Tyr-Ile-(6)aminohexanoic amide',store:'-20C',pm:'Dihexa angiotensin IV HGF cognition'};CHEM.pe2228={seq:'spadin-derived peptide (PE 22-28)',store:'-20C',pm:'PE-22-28 spadin TREK-1'};CHEM.vip={seq:'28-aa neuropeptide',mw:'3326.8',cas:'37221-79-7',store:'-20C',pm:'Vasoactive intestinal peptide VIP'};CHEM.oxytocin={seq:'Cys-Tyr-Ile-Gln-Asn-Cys-Pro-Leu-Gly-NH2',formula:'C43H66N12O12S2',mw:'1007.19',cas:'50-56-6',store:'-20C',pm:'Oxytocin neuropeptide',d2:'Oxytocin'};CHEM.cerebrolysin={seq:'brain-derived peptide/amino-acid complex',store:'-20C',pm:'Cerebrolysin neurotrophic'};CHEM.ara290={seq:'11-aa EPO-derived peptide',store:'-20C',pm:'ARA-290 cibinetide EPO'};CHEM.ace031={seq:'ActRIIB-Fc fusion protein',store:'-20C',pm:'ACE-031 myostatin ActRIIB'};CHEM.gonadorelin={seq:'pGlu-His-Trp-Ser-Tyr-Gly-Leu-Arg-Pro-Gly-NH2',formula:'C55H75N17O13',mw:'1182.3',cas:'33515-09-2',store:'-20C',pm:'Gonadorelin GnRH'};CHEM.hcg={seq:'glycoprotein hormone (alpha/beta)',mw:'approx 36700',cas:'9002-61-3',store:'-20C',pm:'Human chorionic gonadotropin HCG'};CHEM.hmg={seq:'FSH + LH gonadotropin preparation',store:'-20C',pm:'Human menopausal gonadotropin HMG'};CHEM.snap8={seq:'acetyl octapeptide-3 (8 aa)',formula:'C49H73N13O18',mw:'1075.2',cas:'868844-74-0',store:'-20C',pm:'SNAP-8 acetyl octapeptide-3'};CHEM.ahkcu={seq:'Ala-His-Lys . Cu(II)',store:'-20C',pm:'AHK-Cu copper peptide hair'};CHEM.hyaluronic={seq:'glycosaminoglycan polymer',cas:'9004-61-9',store:'2-8C',pm:'Hyaluronic acid hyaluronan'};CHEM.aicar={seq:'5-aminoimidazole-4-carboxamide ribonucleotide',formula:'C9H14N4O5',mw:'258.23',cas:'2627-69-2',store:'-20C',pm:'AICAR AMPK',d2:'Acadesine'};CHEM.slupp332={seq:'synthetic ERRα agonist',formula:'C18H14N2O2',mw:'290.32',store:'-20C',pm:'SLU-PP-332 ERR agonist',d2:'SLU-PP-332'};CHEM.amino1mq={seq:'5-amino-1-methylquinolinium (cation)',formula:'C10H11N2 (cation)',mw:'159.21',store:'-20C',pm:'5-Amino-1MQ NNMT inhibitor',d2:'5-Amino-1-methylquinolinium'};
 CID.nadplus=5892;CID.ss31=11764719;CID.melatonin=896;CID.oxytocin=439302;CID.aicar=17513;
 CHEM.semaglutide={seq:'31-aa GLP-1 analog, acylated',formula:'C187H291N45O59',mw:'4113.64',cas:'910463-68-2',store:'-20C',pm:'Semaglutide GLP-1',d2:'Semaglutide'};CHEM.tirzepatide={seq:'39-aa dual GIP/GLP-1 agonist, acylated',formula:'C225H348N48O68',mw:'4813.5',cas:'2023788-19-2',store:'-20C',pm:'Tirzepatide GIP GLP-1',d2:'Tirzepatide'};CHEM.cagrilintide={seq:'long-acting amylin analog, acylated',formula:'C194H312N54O59S2',mw:'4396',cas:'1415456-99-3',store:'-20C',pm:'Cagrilintide amylin',d2:'Cagrilintide'};CHEM.survodutide={seq:'glucagon/GLP-1 dual agonist, acylated',formula:'C192H289N47O61',mw:'4231.7',cas:'2805997-46-8',store:'-20C',pm:'Survodutide BI 456906',d2:'Survodutide'};CHEM.mazdutide={seq:'oxyntomodulin analog, GLP-1/glucagon dual agonist',store:'-20C',pm:'Mazdutide IBI362 oxyntomodulin'};CHEM.aod9604={seq:'Tyr-hGH(176-191) analog, cyclic disulfide',formula:'C78H123N23O23S2',mw:'1815.10',cas:'221231-10-3',store:'-20C',pm:'AOD-9604',d2:'AOD9604'};CHEM.adipotide={seq:'pro-apoptotic peptidomimetic (homing + KLAKLAK motif)',store:'-20C',pm:'Adipotide prohibitin FTPP'};
-CID.aod9604=71300630;
+CID.aod9604=71300630;CID.amino1mq=950107;CID.slupp332=5338394;
+/* verified PubChem CIDs WITHOUT a 3D conformer — used only for accurate 2D depiction + exact PubChem deep-links (3D stays on the schematic backbone) */
+var CID2D={selank:11765600,ghrp2:6918245,ghrp6:4345065,hexarelin:6918297,mt1:16197727,kisspeptin:25240297,tesamorelin:16137828,sermorelin:16132413,dsip:68816,thymosina1:16130571,dihexa:129010512};
+/* CIDs verified to HAVE a PubChem 3D conformer (only these get the all-atom AR fetch; others use the sequence backbone) */
+var CID3D={epitalon:1,ghkcu:1,glutathione:1,kpv:1,nadplus:1,melatonin:1,aicar:1,amino1mq:1,slupp332:1};
 var BUNDLES=[
  {id:'recovery',ic:'muscle',he:['ערכת שיקום והתאוששות','שילוב פפטידים הנחקרים יחד בהקשרי תיקון רקמות, גידים והתאוששות.'],en:['Recovery & Repair Kit','Peptides commonly researched together for tissue, tendon and recovery contexts.'],items:['bpc157','tb500','kpv']},
  {id:'gh',ic:'growth',he:['ערכת הורמון גדילה','פרוטוקולים הנחקרים לתמיכה בייצור הטבעי של הורמון הגדילה.'],en:['Growth Hormone Kit','Protocols researched for support of natural growth-hormone production.'],items:['cjc1295','tesamorelin']},
@@ -2175,8 +2190,8 @@ function renderProduct(id){var p=PRODUCTS.filter(function(x){return x.id===id;})
   ((p.cat!=='ancillary'&&CHEM[p.id])?struct2d(p):'')+
   seqViewer(p)+
   (CID[p.id]?'<div id="mol3d" class="mol3d"><div class="mol-load">'+L('לחצו לטעינת המבנה התלת-ממדי','Tap to load the 3D structure')+'</div></div><div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-o" id="mol3dBtn">'+svg('cell')+' '+L('טען מבנה תלת-ממדי','Load 3D structure')+'</button><a class="btn btn-o" href="https://pubchem.ncbi.nlm.nih.gov/compound/'+CID[p.id]+'" target="_blank" rel="noopener">PubChem CID '+CID[p.id]+'</a></div><p style="font-size:12px;color:var(--muted-2);margin-top:8px">'+L('מבנה תלת-ממדי אינטראקטיבי מ-PubChem · דורש חיבור לאינטרנט.','Interactive 3D structure from PubChem · requires an internet connection.')+'</p>'
-   :(seqParse(p)?'<div id="mol3d" class="mol3d"><div class="mol-load">'+L('לחצו לבניית מודל סכמטי של שלד הפפטיד','Tap to build a schematic peptide-backbone model')+'</div></div><div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-o" id="schem3dBtn">'+svg('cell')+' '+L('בנה מודל שלד תלת-ממדי','Build 3D backbone model')+'</button><a class="btn btn-o" href="https://pubchem.ncbi.nlm.nih.gov/#query='+encodeURIComponent((CHEM[p.id]&&CHEM[p.id].pm)||p.name)+'" target="_blank" rel="noopener">'+svg('book')+' PubChem</a></div><p style="font-size:12px;color:var(--muted-2);margin-top:8px">'+L('מודל סכמטי להמחשה בלבד — שלד אידיאלי שנבנה מהרצף, אינו מבנה מנובא או ניסיוני.','Schematic model for illustration only — an idealized backbone built from the sequence, not a predicted or experimental structure.')+'</p>'
-   :'<div style="margin-top:10px"><a class="btn btn-o" href="https://pubchem.ncbi.nlm.nih.gov/#query='+encodeURIComponent((CHEM[p.id]&&CHEM[p.id].pm)||p.name)+'" target="_blank" rel="noopener">'+svg('book')+' '+L('עיון ב-PubChem','Explore on PubChem')+'</a></div>'))+'</div>'+
+   :(seqParse(p)?'<div id="mol3d" class="mol3d"><div class="mol-load">'+L('לחצו לבניית מודל סכמטי של שלד הפפטיד','Tap to build a schematic peptide-backbone model')+'</div></div><div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-o" id="schem3dBtn">'+svg('cell')+' '+L('בנה מודל שלד תלת-ממדי','Build 3D backbone model')+'</button><a class="btn btn-o" href="'+(CID2D[p.id]?'https://pubchem.ncbi.nlm.nih.gov/compound/'+CID2D[p.id]:'https://pubchem.ncbi.nlm.nih.gov/#query='+encodeURIComponent((CHEM[p.id]&&CHEM[p.id].pm)||p.name))+'" target="_blank" rel="noopener">'+svg('book')+' PubChem</a></div><p style="font-size:12px;color:var(--muted-2);margin-top:8px">'+L('מודל סכמטי להמחשה בלבד — שלד אידיאלי שנבנה מהרצף, אינו מבנה מנובא או ניסיוני.','Schematic model for illustration only — an idealized backbone built from the sequence, not a predicted or experimental structure.')+'</p>'
+   :'<div style="margin-top:10px"><a class="btn btn-o" href="'+(CID2D[p.id]?'https://pubchem.ncbi.nlm.nih.gov/compound/'+CID2D[p.id]:'https://pubchem.ncbi.nlm.nih.gov/#query='+encodeURIComponent((CHEM[p.id]&&CHEM[p.id].pm)||p.name))+'" target="_blank" rel="noopener">'+svg('book')+' '+L('עיון ב-PubChem','Explore on PubChem')+'</a></div>'))+'</div>'+
  (p.cat!=='ancillary'?'<div class="sec"><h4>'+L('פרופיל דגש מחקרי','Research-emphasis profile')+'</h4><p style="font-size:13px;color:var(--muted)">'+L('מפת דגש איכותית לפי תחומי מחקר — להמחשה בלבד, אינה מדד ליעילות.','A qualitative map of research emphasis by domain — illustrative only, not a measure of efficacy.')+'</p>'+radarSVG(p)+'</div>':'')+
  analogSVG(p)+
  '<div class="sec"><h4>'+L('כלים','Tools')+'</h4><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-o" id="arBtn">'+svg('cell')+' '+L('מבנה תלת-ממדי / AR','3D structure / AR')+'</button><button class="btn btn-o" id="coaBtn">'+svg('shield')+' '+L('תעודת אנליזה + QR','Batch COA + QR')+'</button></div></div>'+
@@ -2549,8 +2564,8 @@ function loadSchematic(p,el){var L=function(he,en){return lang==='he'?he:en;};va
  });}
 
 /* ---------- 2D structure (PubChem depiction) ---------- */
-function struct2d(p){var src='';
- if(CID[p.id])src='https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/'+CID[p.id]+'/PNG?image_size=420x320';
+function struct2d(p){var src='';var c2=CID[p.id]||CID2D[p.id];
+ if(c2)src='https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/'+c2+'/PNG?image_size=420x320';
  else if(CHEM[p.id]&&CHEM[p.id].d2)src='https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/'+encodeURIComponent(CHEM[p.id].d2)+'/PNG?image_size=420x320';
  if(!src)return '';
  return '<div class="struct2d"><img loading="lazy" src="'+src+'" alt="2D structure" onerror="var s=this.closest(&quot;.struct2d&quot;);if(s)s.remove();"><span class="s2dl">2D · PubChem</span></div>';}
@@ -2716,7 +2731,7 @@ function molFromSeq(p){var res=seqParse(p);if(!res)return null;var r=2.6,rise=1.
 var _molCache={};
 function buildMolecule(p,cb){if(_molCache[p.id]){cb(_molCache[p.id]);return;}
  function fin(data,kind){if(!data){cb(null);return;}try{var opt=data.backbone?{half:0.16,atomR:0.026,bondR:0.012}:{half:0.15,atomR:0.02,bondR:0.0065};var o=moleculeMesh(data.atoms,data.bonds,opt);if(!o){cb(null);return;}var url=URL.createObjectURL(_glbFromMesh(o));var r={url:url,kind:kind,atoms:data.atoms.length};_molCache[p.id]=r;cb(r);}catch(e){cb(null);}}
- if(CID[p.id]){fetch('https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/'+CID[p.id]+'/SDF?record_type=3d').then(function(r){return r.ok?r.text():null;}).then(function(txt){var d=txt?parseSDF(txt):null;if(d)fin(d,'atomic');else fin(molFromSeq(p),'backbone');}).catch(function(){fin(molFromSeq(p),'backbone');});}
+ if(CID3D[p.id]){fetch('https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/'+CID[p.id]+'/SDF?record_type=3d').then(function(r){return r.ok?r.text():null;}).then(function(txt){var d=txt?parseSDF(txt):null;if(d)fin(d,'atomic');else fin(molFromSeq(p),'backbone');}).catch(function(){fin(molFromSeq(p),'backbone');});}
  else{fin(molFromSeq(p),'backbone');}}
 
 /* AR (model-viewer, lazy) */
@@ -2787,6 +2802,7 @@ var TARGETS={
 TARGETS['GLP-1 / GIP / GCGR']=(TARGETS['GLP-1 / GIP / GCGR']||[]).concat(['semaglutide','tirzepatide','survodutide','mazdutide']);TARGETS['GHRH receptor']=(TARGETS['GHRH receptor']||[]).concat(['sermorelin','cjc1295dac']);TARGETS['ghrelin / GHS-R']=(TARGETS['ghrelin / GHS-R']||[]).concat(['hexarelin']);TARGETS['IGF-1 axis']=(TARGETS['IGF-1 axis']||[]).concat(['mgf','pegmgf','igfdes','hghfrag','aod9604']);TARGETS['mitochondrial / AMPK']=(TARGETS['mitochondrial / AMPK']||[]).concat(['ss31','aicar','nadplus','slupp332','amino1mq']);TARGETS['thymic / immune']=(TARGETS['thymic / immune']||[]).concat(['thymalin']);TARGETS['neuro / BDNF']=(TARGETS['neuro / BDNF']||[]).concat(['dihexa','pe2228','cerebrolysin']);TARGETS['GnRH axis']=(TARGETS['GnRH axis']||[]).concat(['gonadorelin','hcg','hmg']);TARGETS['copper / collagen']=(TARGETS['copper / collagen']||[]).concat(['ahkcu']);TARGETS['amylin / calcitonin']=['cagrilintide'];TARGETS['peptide bioregulators']=['pinealon','vilon','thymalin','epitalon'];TARGETS['senescence / p53']=['foxo4'];TARGETS['sleep / circadian']=['dsip','melatonin','vip'];TARGETS['neuropeptide / social']=['oxytocin','vip'];TARGETS['EPO / tissue protection']=['ara290'];TARGETS['myostatin / muscle']=['ace031'];TARGETS['skin / cosmetic']=['snap8','ahkcu','hyaluronic'];TARGETS['fat metabolism']=['aod9604','adipotide','hghfrag','amino1mq'];
 
 var exploreMode='graph',graphRaf=0;
+var _G=null,_Gpos=false,_Ghover=-1,_Gdrag=-1,_Gheat=0,_GW=0,_GH=0,_Gctx=null,_Gbound=false,_GdownX=0,_GdownY=0,_GdownT=0,_Gmoved=false;
 function buildGraph(){var ids={};Object.keys(TARGETS).forEach(function(k){TARGETS[k].forEach(function(id){if(prodById(id))ids[id]=1;});});
  var nodes=Object.keys(ids).map(function(id){var p=prodById(id);return {id:id,name:p.name.replace(/\s*\(.*\)/,''),cat:p.cat,x:0,y:0,vx:0,vy:0};});
  var idx={};nodes.forEach(function(n,i){idx[n.id]=i;});
@@ -2795,26 +2811,51 @@ function buildGraph(){var ids={};Object.keys(TARGETS).forEach(function(k){TARGET
 function renderGraphLegend(){var el=document.getElementById('graphLegend');if(!el)return;var seen={};var html='';
  PRODUCTS.forEach(function(p){if(p.cat==='ancillary'||seen[p.cat])return;seen[p.cat]=1;var o=PROD_CATS.filter(function(z){return z.id===p.cat;})[0];html+='<span><i style="background:'+(CATCOL[p.cat]||'#888')+'"></i>'+(o?(o[lang]||o.en):p.cat)+'</span>';});
  el.innerHTML=html;}
+function buildGraphOnce(){if(_G)return _G;var g=buildGraph();var deg=g.nodes.map(function(){return 0;});var nb=g.nodes.map(function(){return {};});
+ g.links.forEach(function(l){deg[l[0]]++;deg[l[1]]++;nb[l[0]][l[1]]=1;nb[l[1]][l[0]]=1;});
+ _G={nodes:g.nodes,links:g.links,deg:deg,nb:nb};return _G;}
+function _gSeed(W,H){var N=_G.nodes,cx=W/2,cy=H/2,R=Math.min(W,H)*0.34;N.forEach(function(n,i){var a=i/N.length*6.283;n.x=cx+Math.cos(a)*R;n.y=cy+Math.sin(a)*R;n.vx=0;n.vy=0;});_Gpos=true;}
+function _gHit(mx,my){var N=_G.nodes,best=-1,bd=20*20;for(var i=0;i<N.length;i++){var dx=N[i].x-mx,dy=N[i].y-my,d=dx*dx+dy*dy;if(d<bd){bd=d;best=i;}}return best;}
+function _gPhysics(W,H){var N=_G.nodes,cx=W/2,cy=H/2,i,j;
+ for(i=0;i<N.length;i++){var a=N[i];if(i===_Gdrag)continue;a.vx*=.85;a.vy*=.85;
+   for(j=0;j<N.length;j++){if(i===j)continue;var b=N[j];var dx=a.x-b.x,dy=a.y-b.y,d2=dx*dx+dy*dy||.01;var f=3000/d2;a.vx+=dx*f*.0010;a.vy+=dy*f*.0010;}
+   a.vx+=(cx-a.x)*.0022;a.vy+=(cy-a.y)*.0022;}
+ _G.links.forEach(function(l){var a=N[l[0]],b=N[l[1]];var dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)||1,ux=dx/d,uy=dy/d,f=(d-92)*.013;if(l[0]!==_Gdrag){a.vx+=ux*f;a.vy+=uy*f;}if(l[1]!==_Gdrag){b.vx-=ux*f;b.vy-=uy*f;}});
+ for(i=0;i<N.length;i++){var n=N[i];if(i===_Gdrag)continue;n.x+=n.vx;n.y+=n.vy;n.x=Math.max(46,Math.min(W-46,n.x));n.y=Math.max(38,Math.min(H-30,n.y));}}
+function _gDraw(){var ctx=_Gctx,W=_GW,H=_GH;if(!ctx)return;var N=_G.nodes,hv=_Ghover,nb=hv>=0?_G.nb[hv]:null;ctx.clearRect(0,0,W,H);
+ _G.links.forEach(function(l){var a=N[l[0]],b=N[l[1]],on=hv>=0&&(l[0]===hv||l[1]===hv);ctx.strokeStyle=on?'rgba(230,201,119,.6)':(hv>=0?'rgba(201,162,75,.05)':'rgba(201,162,75,.15)');ctx.lineWidth=on?1.8:1;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();});
+ N.forEach(function(n,i){var near=(nb&&nb[i]),dim=hv>=0&&i!==hv&&!near,r=(i===hv)?10:7;
+  if(i===hv){ctx.beginPath();ctx.arc(n.x,n.y,r+7,0,6.283);ctx.fillStyle='rgba(230,201,119,.18)';ctx.fill();}
+  ctx.globalAlpha=dim?0.28:1;ctx.beginPath();ctx.arc(n.x,n.y,r,0,6.283);ctx.fillStyle=CATCOL[n.cat]||'#888';ctx.fill();ctx.lineWidth=1.2;ctx.strokeStyle='rgba(255,255,255,'+(dim?'.1':'.3')+')';ctx.stroke();ctx.globalAlpha=1;});
+ ctx.font='600 11px Heebo,sans-serif';ctx.textAlign='center';
+ N.forEach(function(n,i){var show=(_G.deg[i]>=5)||i===hv||(nb&&nb[i]);if(show){if(hv>=0&&!(i===hv||(nb&&nb[i])))return;var strong=(i===hv);ctx.globalAlpha=strong?1:(hv>=0?0.96:0.82);ctx.lineWidth=3;ctx.strokeStyle='rgba(5,7,15,.85)';ctx.strokeText(n.name,n.x,n.y-13);ctx.fillStyle=strong?'#e6c977':'rgba(234,237,246,.92)';ctx.fillText(n.name,n.x,n.y-13);ctx.globalAlpha=1;}});}
+function graphTick(){if(!_Gctx){graphRaf=0;return;}var active=exploreMode==='graph'&&document.getElementById('view-explore').classList.contains('active');if(!active){graphRaf=0;return;}
+ if(_Gdrag<0)_Gheat*=0.97;if(_Gheat>0.02||_Gdrag>=0)_gPhysics(_GW,_GH);_gDraw();
+ if(_Gheat>0.02||_Gdrag>=0){graphRaf=requestAnimationFrame(graphTick);}else{graphRaf=0;}}
+function _gKick(h){if(h)_Gheat=Math.max(_Gheat,h);if(!graphRaf)graphRaf=requestAnimationFrame(graphTick);}
+function _gBind(cv){if(_Gbound)return;_Gbound=true;
+ function pos(e){var r=cv.getBoundingClientRect();return [e.clientX-r.left,e.clientY-r.top];}
+ cv.addEventListener('pointermove',function(e){var p=pos(e);if(_Gdrag>=0){_G.nodes[_Gdrag].x=Math.max(20,Math.min(_GW-20,p[0]));_G.nodes[_Gdrag].y=Math.max(20,Math.min(_GH-20,p[1]));if(Math.abs(p[0]-_GdownX)+Math.abs(p[1]-_GdownY)>4)_Gmoved=true;_gKick(0.15);return;}var h=_gHit(p[0],p[1]);if(h!==_Ghover){_Ghover=h;cv.style.cursor=h>=0?'pointer':'grab';if(!graphRaf)_gDraw();}});
+ cv.addEventListener('pointerdown',function(e){var p=pos(e);var h=_gHit(p[0],p[1]);_GdownX=p[0];_GdownY=p[1];_GdownT=Date.now();_Gmoved=false;if(h>=0){_Gdrag=h;try{cv.setPointerCapture(e.pointerId);}catch(_){}_gKick(0.2);}});
+ function up(e){if(_Gdrag>=0){var node=_G.nodes[_Gdrag];_Gdrag=-1;if(!_Gmoved&&Date.now()-_GdownT<500){location.hash='product/'+node.id;}_gKick(0.25);}}
+ cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',function(){_Gdrag=-1;});
+ window.addEventListener('resize',function(){if(exploreMode==='graph'&&document.getElementById('view-explore').classList.contains('active')){_Gpos=false;renderGraph();}});}
 function renderGraph(){var cv=document.getElementById('graphCanvas'),wrap=document.getElementById('graphWrap');if(!cv||!wrap)return;
- var DPR=Math.min(devicePixelRatio||1,2),W=wrap.clientWidth,H=wrap.clientHeight;if(W<10){return;}
- cv.width=W*DPR;cv.height=H*DPR;var ctx=cv.getContext('2d');ctx.setTransform(DPR,0,0,DPR,0,0);
- var g=buildGraph(),N=g.nodes,cx=W/2,cy=H/2,R=Math.min(W,H)*0.32;
- N.forEach(function(n,i){var a=i/N.length*6.283;n.x=cx+Math.cos(a)*R;n.y=cy+Math.sin(a)*R;n.vx=0;n.vy=0;});
+ var DPR=Math.min(devicePixelRatio||1,2),W=wrap.clientWidth,H=wrap.clientHeight;if(W<10)return;
+ var sizeChanged=Math.abs(W-_GW)>4||Math.abs(H-_GH)>4;_GW=W;_GH=H;
+ cv.width=W*DPR;cv.height=H*DPR;var ctx=cv.getContext('2d');ctx.setTransform(DPR,0,0,DPR,0,0);_Gctx=ctx;
+ buildGraphOnce();var fresh=false;if(!_Gpos||sizeChanged){_gSeed(W,H);fresh=true;}
+ _gBind(cv);renderGraphLegend();cv.style.cursor='grab';
+ wrap.setAttribute('aria-label',(lang==='he'?'מפת רשת אינטראקטיבית של פפטידים מקושרים לפי קולטן או מסלול. גרסה נגישה זמינה בלשונית רשימה נגישה.':'Interactive network map of peptides linked by shared receptor or pathway. An accessible version is available in the Accessible list tab.'));
  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
- function physics(){for(var i=0;i<N.length;i++){var a=N[i];a.vx*=.86;a.vy*=.86;
-   for(var j=0;j<N.length;j++){if(i===j)continue;var b=N[j];var dx=a.x-b.x,dy=a.y-b.y,d2=dx*dx+dy*dy||.01;var f=2600/d2;a.vx+=dx*f*.0009;a.vy+=dy*f*.0009;}
-   a.vx+=(cx-a.x)*.0025;a.vy+=(cy-a.y)*.0025;}
-  g.links.forEach(function(l){var a=N[l[0]],b=N[l[1]];var dx=b.x-a.x,dy=b.y-a.y,d=Math.sqrt(dx*dx+dy*dy)||1;var f=(d-100)*.012;a.vx+=dx/d*f;a.vy+=dy/d*f;b.vx-=dx/d*f;b.vy-=dy/d*f;});
-  for(i=0;i<N.length;i++){var n=N[i];n.x+=n.vx;n.y+=n.vy;n.x=Math.max(46,Math.min(W-46,n.x));n.y=Math.max(40,Math.min(H-34,n.y));}}
- function draw(){ctx.clearRect(0,0,W,H);ctx.lineWidth=1;
-  g.links.forEach(function(l){var a=N[l[0]],b=N[l[1]];ctx.strokeStyle='rgba(201,162,75,.16)';ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();});
-  N.forEach(function(n){ctx.beginPath();ctx.arc(n.x,n.y,7,0,6.283);ctx.fillStyle=CATCOL[n.cat]||'#888';ctx.fill();ctx.strokeStyle='rgba(255,255,255,.28)';ctx.lineWidth=1.2;ctx.stroke();
-   ctx.fillStyle='rgba(234,237,246,.9)';ctx.font='600 11px Heebo,sans-serif';ctx.textAlign='center';ctx.fillText(n.name,n.x,n.y-12);});}
- var it=0;function loop(){physics();draw();it++;if(it<420&&exploreMode==='graph'&&document.getElementById('view-explore').classList.contains('active'))graphRaf=requestAnimationFrame(loop);}
- cancelAnimationFrame(graphRaf);
- if(reduce){for(var k=0;k<300;k++)physics();draw();}else loop();
- cv.onclick=function(e){var r=cv.getBoundingClientRect();var mx=e.clientX-r.left,my=e.clientY-r.top,best=null,bd=500;N.forEach(function(n){var dx=n.x-mx,dy=n.y-my,d=dx*dx+dy*dy;if(d<bd){bd=d;best=n;}});if(best)location.hash='product/'+best.id;};
- renderGraphLegend();}
+ if(reduce){if(fresh){for(var k=0;k<280;k++)_gPhysics(W,H);}_Ghover=-1;_gDraw();return;}
+ cancelAnimationFrame(graphRaf);graphRaf=0;_gKick(fresh?1:0.12);}
+function renderExploreList(){var host=document.getElementById('exploreList');if(!host)return;var L=function(he,en){return lang==='he'?he:en;};
+ var html='<p class="body-txt" style="font-size:13px;color:var(--muted);margin-bottom:14px">'+L('כל קבוצה היא קולטן או מסלול משותף. בחרו פפטיד כדי לפתוח את עמודו.','Each group is a shared receptor or pathway. Choose a peptide to open its page.')+'</p><div class="explist">';
+ Object.keys(TARGETS).forEach(function(k){var ids=TARGETS[k].filter(function(id){return prodById(id);});if(!ids.length)return;
+  html+='<div class="elgroup"><h4>'+k+' <span>'+ids.length+'</span></h4><div class="elitems">'+ids.map(function(id){var p=prodById(id);return '<a class="elitem" href="#product/'+id+'" data-go-prod="'+id+'"><i style="background:'+(CATCOL[p.cat]||'#888')+'"></i>'+p.name+'</a>';}).join('')+'</div></div>';});
+ html+='</div>';host.innerHTML=html;
+ host.querySelectorAll('[data-go-prod]').forEach(function(a){a.onclick=function(e){e.preventDefault();location.hash='product/'+a.getAttribute('data-go-prod');};});}
 function renderMap(){var host=document.getElementById('mapWrap');if(!host)return;var L=function(he,en){return lang==='he'?he:en;};
  var items=[];PRODUCTS.forEach(function(p){if(p.cat==='ancillary'||!CHEM[p.id]||!CHEM[p.id].mw)return;var mw=parseFloat((''+CHEM[p.id].mw).replace(/[^0-9.]/g,''));if(mw)items.push({p:p,mw:mw});});
  var cats=['recovery','gh','metabolic','immune','cognitive','longevity','skin','melano'];
@@ -2829,8 +2870,12 @@ function renderMap(){var host=document.getElementById('mapWrap');if(!host)return
  s+='</svg>';host.innerHTML=s;
  host.querySelectorAll('[data-go-prod]').forEach(function(el){el.onclick=function(){location.hash='product/'+el.getAttribute('data-go-prod');};});}
 function renderExplore(){var tabs=document.getElementById('exploreTabs');if(tabs){tabs.querySelectorAll('.pill').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-ex')===exploreMode);b.onclick=function(){exploreMode=b.getAttribute('data-ex');renderExplore();};});}
- var gw=document.getElementById('graphWrap'),mw=document.getElementById('mapWrap');
- if(exploreMode==='graph'){gw.style.display='';mw.style.display='none';renderGraph();}else{gw.style.display='none';mw.style.display='';cancelAnimationFrame(graphRaf);renderMap();}}
+ var gw=document.getElementById('graphWrap'),mw=document.getElementById('mapWrap'),lw=document.getElementById('exploreList'),hint=document.getElementById('graphHint');
+ gw.style.display='none';mw.style.display='none';if(lw)lw.style.display='none';
+ if(exploreMode==='graph'){gw.style.display='';if(hint)hint.style.display='';renderGraph();}
+ else{cancelAnimationFrame(graphRaf);graphRaf=0;if(hint)hint.style.display='none';
+  if(exploreMode==='map'){mw.style.display='';renderMap();}
+  else if(lw){lw.style.display='';renderExploreList();}}}
 
 /* ---------- live PubMed feed ---------- */
 /* live PubMed study-count badge (cached in localStorage, 7-day TTL) */

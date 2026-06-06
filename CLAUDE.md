@@ -160,6 +160,27 @@ reference and catalog website. Single brand, static site.
   as an experimental structure.
 - model-viewer needs the element on-screen (lazy) to fire `load`; for off-screen
   tests set `loading="eager"`.
+- `CID3D` whitelists the 9 CIDs verified to HAVE a PubChem 3D conformer; ONLY those
+  get the all-atom SDF fetch (others go straight to backbone, so no 404s/console
+  noise). Most peptide CIDs lack a 3D conformer. To add an all-atom compound: verify
+  `.../cid/<cid>/SDF?record_type=3d` returns 200, then add to `CID` + `CID3D`.
+- `CID2D` = verified CIDs WITHOUT 3D, used only for a clean 2D PubChem depiction +
+  exact compound deep-link (the on-page 3D stays the schematic backbone — do not
+  promote a no-3D CID into the `CID` map or it regresses the 3D button).
+
+## Explore knowledge graph (interactive, accessible)
+- Force layout cached in `_G` (nodes/links/degree/neighbors); positions persist
+  across re-renders (no restart on language/tab switch). `renderGraph` seeds only
+  when fresh or on resize.
+- `graphTick` runs while heated, then parks (`graphRaf=0`) so the CPU rests; any
+  hover/drag re-heats via `_gKick`. (Old code hard-stopped at 420 frames and died.)
+- Interaction: hover highlights a node + neighbors + edges and reveals only those
+  labels (plus hub labels, degree>=5) — kills the label clutter. Drag to arrange;
+  click (no drag, <500ms) opens the product. `prefers-reduced-motion` settles
+  synchronously, no idle motion.
+- Accessibility: third Explore tab "Accessible list" (`renderExploreList`) renders
+  pathways (TARGETS) -> peptides as real `<a href="#product/..">` links (keyboard +
+  screen-reader friendly); `#graphWrap` has an aria-label pointing there.
 
 ## NOTE on the service worker while developing
 - `sw.js` cache-first means a hosted/preview client keeps serving the OLD cached
