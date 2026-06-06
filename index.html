@@ -1265,6 +1265,95 @@ PRODUCTS.push(
 /* per-product extras */
 var _stock={};/* default in-stock; mark exceptions */ _stock.retatrutide='pre';
 var _diag={bpc157:'repair',tb500:'repair',kpv:'immune',ll37:'immune',ghkcu:'skin',cjc1295:'gh',tesamorelin:'gh',motsc:'metabolic',retatrutide:'triple',epitalon:'longevity',semax:'neuro',thymosina1:'immune',mt2:'melano',mt1:'melano',pt141:'melano',ghrp2:'gh',ghrp6:'gh',ipamorelin:'gh',hgh:'gh',igf1:'gh',kisspeptin:'gh',selank:'neuro',glutathione:'longevity',bacwater:'metabolic',lemonbottle:'metabolic'};
+/* --- Wave 1: metabolic / GLP-1 class --- */
+PRODUCTS.push(
+{id:'semaglutide',name:'Semaglutide',mg:'5 / 10 / 15 / 20 / 30 MG',sizes:['5 MG','10 MG','15 MG','20 MG','30 MG'],img:'sema',purity:'≥ 98%',cat:'metabolic',pos:'center',
+  sum:{he:'אנלוג ארוך-טווח של GLP-1, מהמולקולות הנחקרות ביותר בתחום המטבולי וויסות התיאבון.',en:'A long-acting GLP-1 analog, among the most-studied molecules in metabolic research and appetite regulation.'},
+  over:{he:'סמגלוטיד הוא אנלוג סינתטי של ההורמון GLP-1 בן 31 חומצות אמינו, עם שרשרת חומצת שומן המאריכה את זמן מחצית החיים. נחקר בהרחבה בהקשר של ויסות גלוקוז, תיאבון ומשקל.',en:'Semaglutide is a synthetic 31-amino-acid analog of the hormone GLP-1, with a fatty-acid chain that extends its half-life. It has been extensively researched in the context of glucose regulation, appetite and body weight.'},
+  origin:{he:'פותח כאנלוג של אינקרטין טבעי המופרש מהמעי לאחר אכילה, עם עמידות מוגברת לפירוק וקשירה לאלבומין.',en:'Developed as an analog of a natural incretin secreted from the gut after eating, with increased resistance to breakdown and albumin binding.'},
+  mech:{he:'נקשר ומפעיל את קולטן GLP-1 — מנגנון הקשור בהפרשת אינסולין תלוית-גלוקוז, האטת התרוקנות הקיבה ואיתות שובע במוח.',en:'Binds and activates the GLP-1 receptor, a mechanism associated with glucose-dependent insulin secretion, slowed gastric emptying and satiety signaling in the brain.'},
+  areas:[
+   {h:{he:'מטבוליזם',en:'Metabolism'},d:{he:'ויסות גלוקוז ורגישות לאינסולין.',en:'Glucose regulation and insulin sensitivity.'}},
+   {h:{he:'תיאבון ושובע',en:'Appetite & satiety'},d:{he:'איתות שובע והפחתת צריכת מזון.',en:'Satiety signaling and reduced food intake.'}},
+   {h:{he:'משקל גוף',en:'Body weight'},d:{he:'נחקר בהקשר של איזון משקל לאורך זמן.',en:'Studied in relation to long-term weight balance.'}},
+   {h:{he:'מערכת האינקרטין',en:'Incretin system'},d:{he:'מסלולי GLP-1 והשפעות מטבוליות נלוות.',en:'GLP-1 pathways and related metabolic effects.'}}
+  ],
+  tags:{he:['GLP-1','מטבולי','ויסות תיאבון','גלוקוז'],en:['GLP-1','Metabolic','Appetite regulation','Glucose']}},
+{id:'tirzepatide',name:'Tirzepatide',mg:'5 - 120 MG',sizes:['5 MG','10 MG','15 MG','20 MG','30 MG','40 MG','60 MG'],img:'tirzep',purity:'≥ 98%',cat:'metabolic',pos:'center',
+  sum:{he:'אגוניסט כפול לקולטני GIP ו-GLP-1 (טווינקרטין), בן 39 חומצות אמינו.',en:'A dual agonist of the GIP and GLP-1 receptors (a twincretin), 39 amino acids long.'},
+  over:{he:'טירזפטיד הוא פפטיד סינתטי בן 39 חומצות אמינו המפעיל בו-זמנית שני קולטני אינקרטין — GIP ו-GLP-1. השילוב נחקר בהרחבה בהקשר של בקרת גלוקוז ואיזון משקל.',en:'Tirzepatide is a synthetic 39-amino-acid peptide that simultaneously activates two incretin receptors, GIP and GLP-1. The combination has been widely researched in the context of glucose control and weight balance.'},
+  origin:{he:'מבוסס על רצף ה-GIP הטבעי, עם שינויים לקשירת אלבומין ולפעילות כפולה.',en:'Based on the natural GIP sequence, with modifications for albumin binding and dual activity.'},
+  mech:{he:'הפעלה משולבת של קולטני GIP ו-GLP-1 — מנגנון הקשור בתגובת אינסולין מוגברת ובאיתות מטבולי משולב.',en:'Combined activation of the GIP and GLP-1 receptors, a mechanism associated with enhanced insulin response and integrated metabolic signaling.'},
+  areas:[
+   {h:{he:'מטבוליזם',en:'Metabolism'},d:{he:'בקרת גלוקוז ורגישות לאינסולין.',en:'Glucose control and insulin sensitivity.'}},
+   {h:{he:'תיאבון ושובע',en:'Appetite & satiety'},d:{he:'איתות שובע והפחתת צריכה.',en:'Satiety signaling and reduced intake.'}},
+   {h:{he:'משקל גוף',en:'Body weight'},d:{he:'נחקר בהקשר של איזון משקל.',en:'Studied in relation to weight balance.'}},
+   {h:{he:'אינקרטין כפול',en:'Dual incretin'},d:{he:'הפעלת GIP ו-GLP-1 יחד.',en:'Combined GIP and GLP-1 activation.'}}
+  ],
+  tags:{he:['GIP/GLP-1','טווינקרטין','מטבולי','ויסות תיאבון'],en:['GIP/GLP-1','Twincretin','Metabolic','Appetite']}},
+{id:'cagrilintide',name:'Cagrilintide',mg:'5 / 10 MG',sizes:['5 MG','10 MG'],img:'cagri',purity:'≥ 98%',cat:'metabolic',pos:'center',
+  sum:{he:'אנלוג אמילין ארוך-טווח, נחקר בשילוב עם אגוניסטים של GLP-1.',en:'A long-acting amylin analog, researched in combination with GLP-1 agonists.'},
+  over:{he:'קגרילינטיד הוא אנלוג סינתטי ארוך-טווח של ההורמון אמילין, המופרש יחד עם אינסולין מתאי בטא בלבלב. נחקר בהקשר של שובע וויסות צריכת מזון, לעיתים בשילוב עם סמגלוטיד.',en:'Cagrilintide is a long-acting synthetic analog of the hormone amylin, which is co-secreted with insulin from pancreatic beta cells. It is researched in the context of satiety and food-intake regulation, sometimes alongside semaglutide.'},
+  origin:{he:'מבוסס על שלד האמילין האנושי, עם שינויים למניעת היווצרות סיבים ולהארכת הפעילות.',en:'Based on the human amylin backbone, modified to prevent fibril formation and to prolong activity.'},
+  mech:{he:'אגוניסט לא-סלקטיבי של קולטני אמילין וקלציטונין — מנגנון הקשור באיתות שובע במוח.',en:'A non-selective agonist of amylin and calcitonin receptors, a mechanism associated with satiety signaling in the brain.'},
+  areas:[
+   {h:{he:'תיאבון ושובע',en:'Appetite & satiety'},d:{he:'איתות שובע והפחתת צריכה.',en:'Satiety signaling and reduced intake.'}},
+   {h:{he:'מטבוליזם',en:'Metabolism'},d:{he:'איזון מטבולי וויסות צריכת מזון.',en:'Metabolic balance and food-intake regulation.'}},
+   {h:{he:'משקל גוף',en:'Body weight'},d:{he:'נחקר לבדו ובשילוב עם GLP-1.',en:'Studied alone and combined with GLP-1.'}},
+   {h:{he:'מערכת האמילין',en:'Amylin system'},d:{he:'קולטני אמילין וקלציטונין.',en:'Amylin and calcitonin receptors.'}}
+  ],
+  tags:{he:['אמילין','מטבולי','שובע','משקל'],en:['Amylin','Metabolic','Satiety','Weight']}},
+{id:'survodutide',name:'Survodutide',mg:'10 MG',img:'survo',purity:'≥ 98%',cat:'metabolic',pos:'center',
+  sum:{he:'אגוניסט כפול לקולטני גלוקגון ו-GLP-1, נחקר בהקשר מטבולי וכבדי.',en:'A dual glucagon and GLP-1 receptor agonist, researched in metabolic and hepatic contexts.'},
+  over:{he:'סורבודוטיד (BI 456906) הוא פפטיד סינתטי המפעיל בו-זמנית את קולטני הגלוקגון ו-GLP-1. נחקר בהקשר של איזון משקל, מטבוליזם ובריאות הכבד.',en:'Survodutide (BI 456906) is a synthetic peptide that simultaneously activates the glucagon and GLP-1 receptors. It is researched in the context of weight balance, metabolism and liver health.'},
+  origin:{he:'תוכנן כאגוניסט כפול, עם רכיב גלוקגון המעורב בהוצאה אנרגטית.',en:'Designed as a dual agonist, with a glucagon component involved in energy expenditure.'},
+  mech:{he:'הפעלה משולבת של קולטני גלוקגון ו-GLP-1 — מנגנון הקשור בהוצאה אנרגטית ובאיתות שובע.',en:'Combined activation of glucagon and GLP-1 receptors, a mechanism associated with energy expenditure and satiety signaling.'},
+  areas:[
+   {h:{he:'מטבוליזם',en:'Metabolism'},d:{he:'איזון גלוקוז והוצאה אנרגטית.',en:'Glucose balance and energy expenditure.'}},
+   {h:{he:'הוצאה אנרגטית',en:'Energy expenditure'},d:{he:'רכיב הגלוקגון ותרומתו לאנרגיה.',en:'The glucagon component and its energy contribution.'}},
+   {h:{he:'בריאות הכבד',en:'Liver'},d:{he:'נחקר בהקשר של שומן בכבד.',en:'Studied in relation to liver fat.'}},
+   {h:{he:'תיאבון',en:'Appetite'},d:{he:'איתות שובע דרך GLP-1.',en:'Satiety signaling via GLP-1.'}}
+  ],
+  tags:{he:['גלוקגון/GLP-1','מטבולי','כבד','אנרגיה'],en:['Glucagon/GLP-1','Metabolic','Liver','Energy']}},
+{id:'mazdutide',name:'Mazdutide',mg:'5 / 10 MG',sizes:['5 MG','10 MG'],img:'mazdu',purity:'≥ 98%',cat:'metabolic',pos:'center',
+  sum:{he:'אגוניסט כפול ל-GLP-1 וגלוקגון, מבוסס על אוקסינטומודולין.',en:'A dual GLP-1 and glucagon agonist based on oxyntomodulin.'},
+  over:{he:'מזדוטיד הוא אנלוג סינתטי של אוקסינטומודולין המפעיל את קולטני GLP-1 והגלוקגון. נחקר בהקשר של ויסות משקל ומטבוליזם.',en:'Mazdutide is a synthetic oxyntomodulin analog that activates the GLP-1 and glucagon receptors. It is researched in the context of weight regulation and metabolism.'},
+  origin:{he:'מבוסס על אוקסינטומודולין, הורמון מעי טבעי בעל פעילות כפולה.',en:'Based on oxyntomodulin, a natural gut hormone with dual activity.'},
+  mech:{he:'הפעלה משולבת של GLP-1 וגלוקגון — מנגנון הקשור באיזון אנרגטי ובוויסות תיאבון.',en:'Combined GLP-1 and glucagon activation, a mechanism associated with energy balance and appetite regulation.'},
+  areas:[
+   {h:{he:'מטבוליזם',en:'Metabolism'},d:{he:'איזון אנרגטי וויסות גלוקוז.',en:'Energy balance and glucose regulation.'}},
+   {h:{he:'הוצאה אנרגטית',en:'Energy expenditure'},d:{he:'רכיב הגלוקגון.',en:'The glucagon component.'}},
+   {h:{he:'תיאבון ושובע',en:'Appetite & satiety'},d:{he:'איתות שובע דרך GLP-1.',en:'Satiety signaling via GLP-1.'}},
+   {h:{he:'מערכת האינקרטין',en:'Incretin system'},d:{he:'מסלולי אוקסינטומודולין.',en:'Oxyntomodulin pathways.'}}
+  ],
+  tags:{he:['אוקסינטומודולין','GLP-1/גלוקגון','מטבולי','משקל'],en:['Oxyntomodulin','GLP-1/Glucagon','Metabolic','Weight']}},
+{id:'aod9604',name:'AOD-9604',mg:'2 / 5 / 10 MG',sizes:['2 MG','5 MG','10 MG'],img:'aod',purity:'≥ 98%',cat:'metabolic',pos:'center',
+  sum:{he:'פרגמנט מותאם של הורמון הגדילה (176-191), נחקר בהקשר של פירוק שומן.',en:'A modified fragment of growth hormone (176-191), researched in the context of fat breakdown.'},
+  over:{he:'AOD-9604 הוא אנלוג של אזור הקצה (176-191) במולקולת הורמון הגדילה האנושי, עם טירוזין נוסף. נחקר בהקשר של מטבוליזם של שומן, ללא השפעה מדווחת על גלוקוז או גדילת רקמה.',en:'AOD-9604 is an analog of the C-terminal region (176-191) of human growth hormone, with an added tyrosine. It is researched in the context of fat metabolism, with no reported effect on glucose or tissue growth.'},
+  origin:{he:'נגזר מהאזור של הורמון הגדילה הקשור לפעילות ליפוליטית.',en:'Derived from the region of growth hormone associated with lipolytic activity.'},
+  mech:{he:'נחקר בהקשר של ויסות קולטני בטא-3 אדרנרגיים ועידוד ליפוליזה (פירוק שומן).',en:'Researched in relation to regulation of beta-3 adrenergic receptors and promotion of lipolysis (fat breakdown).'},
+  areas:[
+   {h:{he:'מטבוליזם שומן',en:'Fat metabolism'},d:{he:'נחקר בהקשר של פירוק שומן.',en:'Studied in relation to fat breakdown.'}},
+   {h:{he:'ליפוליזה',en:'Lipolysis'},d:{he:'עידוד שחרור שומן מתאי שומן.',en:'Promotion of fat release from fat cells.'}},
+   {h:{he:'הרכב גוף',en:'Body composition'},d:{he:'מחקר על מאזן שומן.',en:'Research on fat balance.'}},
+   {h:{he:'מחקר מטבולי',en:'Metabolic research'},d:{he:'מנגנון בלתי תלוי בקולטן GH.',en:'A mechanism independent of the GH receptor.'}}
+  ],
+  tags:{he:['פרגמנט GH','ליפוליזה','מטבולי','שומן'],en:['GH fragment','Lipolysis','Metabolic','Fat']}},
+{id:'adipotide',name:'Adipotide (FTPP)',mg:'5 MG',img:'adipo',purity:'≥ 98%',cat:'metabolic',pos:'center',
+  sum:{he:'פפטידומימטיק נסיוני, נחקר בהקשר של כלי הדם המזינים רקמת שומן.',en:'An experimental peptidomimetic, researched in the context of the blood vessels that feed fat tissue.'},
+  over:{he:'אדיפוטיד (FTPP) הוא פפטידומימטיק נסיוני שתוכנן לכוון לכלי הדם המזינים רקמת שומן. נחקר במודלים פרה-קליניים בלבד.',en:'Adipotide (FTPP) is an experimental peptidomimetic designed to target the blood vessels that feed fat tissue. It has been studied in pre-clinical models only.'},
+  origin:{he:'תוכנן כפפטיד מכוון המשלב רצף קושר ורצף פרו-אפופטוטי.',en:'Designed as a targeting peptide combining a homing sequence and a pro-apoptotic sequence.'},
+  mech:{he:'נחקר בהקשר של פעולה על קולטן פרוהיביטין בכלי הדם של רקמת שומן.',en:'Researched in relation to action on the prohibitin receptor in the vasculature of fat tissue.'},
+  areas:[
+   {h:{he:'רקמת שומן',en:'Adipose tissue'},d:{he:'מחקר על מאגרי שומן.',en:'Research on fat depots.'}},
+   {h:{he:'כלי דם',en:'Vasculature'},d:{he:'כיוון לכלי דם של רקמת שומן.',en:'Targeting the vasculature of fat tissue.'}},
+   {h:{he:'הרכב גוף',en:'Body composition'},d:{he:'נבחן במודלים פרה-קליניים.',en:'Examined in pre-clinical models.'}},
+   {h:{he:'מחקר פרה-קליני',en:'Pre-clinical research'},d:{he:'נתונים ממודלים מוקדמים בלבד.',en:'Data from early models only.'}}
+  ],
+  tags:{he:['פפטידומימטיק','רקמת שומן','פרה-קליני','מטבולי'],en:['Peptidomimetic','Adipose','Pre-clinical','Metabolic']}}
+);
+_diag.semaglutide='metabolic';_diag.tirzepatide='metabolic';_diag.cagrilintide='metabolic';_diag.survodutide='metabolic';_diag.mazdutide='metabolic';_diag.aod9604='metabolic';_diag.adipotide='metabolic';
+IMG.sema='img/sema.jpg';IMG.tirzep='img/tirzep.jpg';IMG.cagri='img/cagri.jpg';IMG.survo='img/survo.jpg';IMG.mazdu='img/mazdu.jpg';IMG.aod='img/aod.jpg';IMG.adipo='img/adipo.jpg';
 PRODUCTS.forEach(function(p){
  p.stock=_stock[p.id]||'in'; p.diagram=_diag[p.id]||'repair'; p.nodiag=(p.cat==='ancillary');
  if(p.cat==='ancillary'){
@@ -1307,6 +1396,8 @@ var CHEM={
  glutathione:{seq:'γ-Glu-Cys-Gly (GSH)',formula:'C10H17N3O6S',mw:'307.32',cas:'70-18-8',store:'2–8°C',pm:'Glutathione'}
 };
 var CID={bpc157:9941957,ipamorelin:20754357,semax:122178,mt2:92432,pt141:9941379,epitalon:219042,ghkcu:342538,glutathione:124886,motsc:146675088,tb500:62707662,kpv:125672};
+CHEM.semaglutide={seq:'31-aa GLP-1 analog, acylated',formula:'C187H291N45O59',mw:'4113.64',cas:'910463-68-2',store:'-20C',pm:'Semaglutide GLP-1',d2:'Semaglutide'};CHEM.tirzepatide={seq:'39-aa dual GIP/GLP-1 agonist, acylated',formula:'C225H348N48O68',mw:'4813.5',cas:'2023788-19-2',store:'-20C',pm:'Tirzepatide GIP GLP-1',d2:'Tirzepatide'};CHEM.cagrilintide={seq:'long-acting amylin analog, acylated',formula:'C194H312N54O59S2',mw:'4396',cas:'1415456-99-3',store:'-20C',pm:'Cagrilintide amylin',d2:'Cagrilintide'};CHEM.survodutide={seq:'glucagon/GLP-1 dual agonist, acylated',formula:'C192H289N47O61',mw:'4231.7',cas:'2805997-46-8',store:'-20C',pm:'Survodutide BI 456906',d2:'Survodutide'};CHEM.mazdutide={seq:'oxyntomodulin analog, GLP-1/glucagon dual agonist',store:'-20C',pm:'Mazdutide IBI362 oxyntomodulin'};CHEM.aod9604={seq:'Tyr-hGH(176-191) analog, cyclic disulfide',formula:'C78H123N23O23S2',mw:'1815.10',cas:'221231-10-3',store:'-20C',pm:'AOD-9604',d2:'AOD9604'};CHEM.adipotide={seq:'pro-apoptotic peptidomimetic (homing + KLAKLAK motif)',store:'-20C',pm:'Adipotide prohibitin FTPP'};
+CID.aod9604=71300630;
 var BUNDLES=[
  {id:'recovery',ic:'muscle',he:['ערכת שיקום והתאוששות','שילוב פפטידים הנחקרים יחד בהקשרי תיקון רקמות, גידים והתאוששות.'],en:['Recovery & Repair Kit','Peptides commonly researched together for tissue, tendon and recovery contexts.'],items:['bpc157','tb500','kpv']},
  {id:'gh',ic:'growth',he:['ערכת הורמון גדילה','פרוטוקולים הנחקרים לתמיכה בייצור הטבעי של הורמון הגדילה.'],en:['Growth Hormone Kit','Protocols researched for support of natural growth-hormone production.'],items:['cjc1295','tesamorelin']},
