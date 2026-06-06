@@ -97,3 +97,33 @@ reference and catalog website. Single brand, static site.
 - Rendered at runtime via marked.js (CDN, lazy). Needs the hosted site (fetch); on
   file:// it shows a graceful "needs a connection" message. No rebuild needed to add posts.
 - FAQ JSON-LD (FAQPage) is injected from the `FAQ` array for Google rich results.
+
+## Knowledge Center (language-aware infographics)
+- `LEARN` chapters carry `imgHe`/`imgEn` (and `imgHe2` for the two-part "made of" chapter).
+  `renderStep()` picks per language and falls back gracefully. 24 `kc_*` images in `img/`
+  (11 EN, 13 HE). Header says 12 PARTS.
+- Homepage What/Shift/Systems figures are language-aware via `data-img-he`/`data-img-en`;
+  `applyLang()` swaps the `src`. EN shows `kc_*_en`, HE shows `kc_*_he`.
+
+## Structure features (client-side, no backend)
+- `seqParse(p)` parses `CHEM[id].seq` into residue objects (3-letter dash format, cyclic
+  brackets, D-/modified residues like Nle/Aib, or a 1-letter run inside parentheses).
+  Returns null if not parseable. Result cached in `SEQ_CACHE`.
+- `seqViewer(p)` renders colored residue tiles + composition legend (`.seqv`/`.aa` CSS).
+  Shows for ANY parseable sequence. `AA` map holds class + bilingual names; `SEQ_CLR` colors.
+- `loadSchematic(p,el)` builds an idealized alpha-helix CA-trace PDB (`seqToPDB`) and renders
+  it via 3Dmol, colored by residue class. ONLY for peptides without a real PubChem `CID`
+  (those keep the accurate PubChem 3D). Clearly labeled "schematic/illustrative — not a
+  predicted or experimental structure" (do not relabel as real structure).
+
+## Live PubMed badge
+- `pubmedBadge(p,el)` shows an NCBI study count near the product title. Cached in
+  localStorage (`ip_pm_<id>`, 7-day TTL). Degrades silently offline. Separate from the
+  existing `pubmedFeed` (latest-papers list lower on the page).
+
+## Regulatory map (`#regulatory` route)
+- `renderRegmap()` draws an inline stylized SVG world map from the `REGIONS` array
+  (9 regions, bilingual). Click a region -> side panel with a GENERAL RUO framing.
+  IMPORTANT: never assert specific per-country legal status (no "legal"/"banned" claims) —
+  this is general, non-legal framing only, by design. Middle East is flagged `home:1`.
+  Linked from main nav and footer. CSS prefix `.rmap-`/`.rgn`.
