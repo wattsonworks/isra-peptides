@@ -58,6 +58,7 @@ header.nav{position:sticky;top:0;z-index:60;backdrop-filter:blur(14px);-webkit-b
 .nav-in{max-width:1200px;margin:0 auto;padding:11px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .brand{display:flex;align-items:center;gap:11px;text-decoration:none;cursor:pointer}
 .brand img{width:44px;height:44px;border-radius:50%;box-shadow:0 0 0 1px var(--line),0 8px 24px rgba(0,0,0,.5)}
+.brand>span{display:flex;flex-direction:column;justify-content:center;line-height:1}
 .brand .bn{font-family:"Playfair Display",serif;font-size:20px;letter-spacing:.3px;line-height:1}
 .brand .bn b{color:var(--gold-2)}
 .brand .bs{font-size:9px;letter-spacing:3px;color:var(--muted);margin-top:3px}
@@ -77,8 +78,8 @@ nav.links a:hover,nav.links a.cur{color:var(--ink)}nav.links a:hover::after,nav.
 
 /* hero */
 .hero{position:relative;padding:70px 0 54px;overflow:hidden}
-.helix{position:absolute;top:-80px;inset-inline-start:-8%;width:42%;max-width:560px;opacity:.28;filter:drop-shadow(0 0 40px rgba(95,168,211,.2));
-  mask-image:linear-gradient(to var(--fade,left),#000 18%,transparent 62%);-webkit-mask-image:linear-gradient(to var(--fade,left),#000 18%,transparent 62%);
+.helix{position:absolute;top:-60px;inset-inline-end:-6%;width:34%;max-width:460px;opacity:.16;filter:drop-shadow(0 0 40px rgba(95,168,211,.18));
+  mask-image:linear-gradient(to var(--fade,left),transparent,#000 60%);-webkit-mask-image:linear-gradient(to var(--fade,left),transparent,#000 60%);
   animation:floaty 9s ease-in-out infinite;z-index:0;pointer-events:none}
 @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-16px)}}
 .hero-grid{position:relative;z-index:3;display:grid;grid-template-columns:1.05fr .95fr;gap:40px;align-items:center}
@@ -214,7 +215,7 @@ h3{font-family:"Frank Ruhl Libre",serif}
 table.chem{min-width:0}
 table.chem td{word-break:break-word;white-space:normal}
 .struct2d img{height:auto}
-.view,.wrap{min-width:0;max-width:100%}
+.view{min-width:0;max-width:100%}.wrap{min-width:0}
 .pd .pdimg img{width:100%;border-radius:20px;border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.6);cursor:zoom-in}
 .pd h1{font-family:"Playfair Display",serif;font-size:clamp(30px,5vw,46px);font-weight:700;margin:8px 0}
 .pd .sec{margin-top:26px;padding-top:22px;border-top:1px solid var(--line)}
