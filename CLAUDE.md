@@ -181,6 +181,14 @@ reference and catalog website. Single brand, static site.
 - Accessibility: third Explore tab "Accessible list" (`renderExploreList`) renders
   pathways (TARGETS) -> peptides as real `<a href="#product/..">` links (keyboard +
   screen-reader friendly); `#graphWrap` has an aria-label pointing there.
+- Labels: ALL node names render by default (10px, dark halo); on hover/grab the
+  focused node + neighbors stay bright and the rest dim to ~0.16 (focus + context).
+- Touch/mobile: `#graphCanvas` has `touch-action:none` (or the browser hijacks the
+  drag and it "glitches out"). pointerdown sets `_Ghover` to the grabbed node so
+  connections reveal on touch (no hover on mobile). During a drag, `graphTick` skips
+  global physics (only the dragged node moves, vx/vy zeroed) so there's no fling;
+  on release `_Gheat=0` leaves nodes where dropped. A no-move tap (<500ms) opens the
+  product; a drag does not navigate.
 
 ## NOTE on the service worker while developing
 - `sw.js` cache-first means a hosted/preview client keeps serving the OLD cached
