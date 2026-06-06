@@ -142,6 +142,25 @@ reference and catalog website. Single brand, static site.
   scores products: exact name 100, text match 60, concept 55-. Concept-only hits show the
   concept label as the result subtitle. Extend by adding `{re,he,en,ids}` to `SEM`.
 
+## AR: molecule in your space (runtime-generated glb)
+- `openAR(p)` is molecule-first. `buildMolecule(p,cb)` returns `{url,kind,atoms}`:
+  - CID with a PubChem 3D conformer -> fetch `.../cid/<cid>/SDF?record_type=3d`,
+    `parseSDF` -> all-atom (`kind:'atomic'`). NOTE only ~7 of our CIDs have a 3D
+    conformer; larger peptides 404 and fall back.
+  - else parseable `seqParse` -> CA-trace helix backbone (`kind:'backbone'`,
+    colored by residue class). else -> branded `models/vial.glb`.
+- The glb is built in-browser: `moleculeMesh()` makes vertex-colored spheres
+  (`_sphere`) + split two-color bond cylinders (`_cyl`); `_glbFromMesh()` writes a
+  valid binary GLB (POSITION/NORMAL/COLOR_0 + uint32 indices, JSON+BIN chunks,
+  4-byte padded) and returns a Blob -> object URL into `<model-viewer>`. Scaled to
+  ~0.3 m so AR placement is desk-sized. `ELEM` = CPK-ish colors/radii.
+- Modal has a Molecule/Vial toggle (`_arSetSrc`), studio lighting (tone-mapping
+  neutral, soft shadow), auto-rotate, and AR modes. Labels are honest: "All-atom
+  (PubChem)" vs "Schematic backbone — illustrative". Do not relabel the backbone
+  as an experimental structure.
+- model-viewer needs the element on-screen (lazy) to fire `load`; for off-screen
+  tests set `loading="eager"`.
+
 ## NOTE on the service worker while developing
 - `sw.js` cache-first means a hosted/preview client keeps serving the OLD cached
   `index.html` until cache `C` is bumped (currently `isra-peptides-v6`). ALWAYS bump `C`

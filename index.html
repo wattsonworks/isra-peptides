@@ -383,6 +383,9 @@ table.chem .rk{width:160px;font-size:12.5px}
 .aaleg{display:flex;flex-wrap:wrap;gap:12px;margin-top:11px;font-size:11.5px;color:var(--muted)}
 .aalg{display:inline-flex;align-items:center;gap:6px}
 .aalg i{width:11px;height:11px;border-radius:3px;display:inline-block}
+.artabs{display:flex;gap:8px;margin:4px 0 12px}
+.artab{padding:6px 16px;border-radius:999px;border:1px solid var(--line2);background:transparent;color:var(--muted);font:600 12.5px 'Heebo',sans-serif;cursor:pointer;transition:all .15s}
+.artab.on{background:var(--gold);color:#05070f;border-color:var(--gold)}
 .pmbadge{display:none;align-items:center;gap:7px;margin:2px 0 8px;padding:6px 12px;border:1px solid var(--line2);border-radius:999px;background:rgba(95,168,211,.08);font-size:12.5px;color:var(--muted);width:max-content;max-width:100%}
 .pmbadge b{color:var(--gold-2)}
 .pmbadge svg.ic{width:15px;height:15px;color:var(--cyan)}
@@ -2176,7 +2179,7 @@ function renderProduct(id){var p=PRODUCTS.filter(function(x){return x.id===id;})
    :'<div style="margin-top:10px"><a class="btn btn-o" href="https://pubchem.ncbi.nlm.nih.gov/#query='+encodeURIComponent((CHEM[p.id]&&CHEM[p.id].pm)||p.name)+'" target="_blank" rel="noopener">'+svg('book')+' '+L('עיון ב-PubChem','Explore on PubChem')+'</a></div>'))+'</div>'+
  (p.cat!=='ancillary'?'<div class="sec"><h4>'+L('פרופיל דגש מחקרי','Research-emphasis profile')+'</h4><p style="font-size:13px;color:var(--muted)">'+L('מפת דגש איכותית לפי תחומי מחקר — להמחשה בלבד, אינה מדד ליעילות.','A qualitative map of research emphasis by domain — illustrative only, not a measure of efficacy.')+'</p>'+radarSVG(p)+'</div>':'')+
  analogSVG(p)+
- '<div class="sec"><h4>'+L('כלים','Tools')+'</h4><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-o" id="arBtn">'+svg('cell')+' '+L('הצג במרחב (AR)','View in your space (AR)')+'</button><button class="btn btn-o" id="coaBtn">'+svg('shield')+' '+L('תעודת אנליזה + QR','Batch COA + QR')+'</button></div></div>'+
+ '<div class="sec"><h4>'+L('כלים','Tools')+'</h4><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn btn-o" id="arBtn">'+svg('cell')+' '+L('מבנה תלת-ממדי / AR','3D structure / AR')+'</button><button class="btn btn-o" id="coaBtn">'+svg('shield')+' '+L('תעודת אנליזה + QR','Batch COA + QR')+'</button></div></div>'+
  (p.cat!=='ancillary'?'<div class="sec"><h4>'+L('מחשבון שחזור (ריכוז)','Reconstitution calculator (concentration)')+'</h4>'+
    '<p style="font-size:13px;color:var(--muted)">'+L('חישוב ריכוז מעבדתי בלבד (מ"ג/מ"ל). אינו הנחיית מינון לבני אדם.','Laboratory concentration only (mg/ml). Not human dosing guidance.')+'</p>'+
    '<div class="recon"><label>'+L('כמות בוויאל (מ"ג)','Vial amount (mg)')+'<input id="recMg" type="number" min="0" step="0.1" value="'+(parseFloat(p.mg)||'')+'"></label>'+
@@ -2657,16 +2660,90 @@ function analogSVG(p){if(!ANALOG[p.id])return '';var L=function(he,en){return la
  '<line x1="148" y1="46" x2="192" y2="46" stroke="var(--gold-2)" stroke-width="2" marker-end="url(#ah2)"/>'+
  '<rect x="196" y="26" width="130" height="40" rx="10" fill="rgba(201,162,75,.12)" stroke="var(--gold-2)"/><text x="261" y="50" font-size="12.5" fill="var(--ink)" text-anchor="middle">'+p.name.replace(/\s*\(.*\)/,'')+'</text>'+
  '<text x="79" y="84" font-size="9.5" fill="var(--muted-2)" text-anchor="middle">'+L('טבעי','NATURAL')+'</text><text x="261" y="84" font-size="9.5" fill="var(--muted-2)" text-anchor="middle">'+L('אנלוג סינתטי','SYNTHETIC ANALOG')+'</text></svg></div></div>';}
+/* ---------- molecule -> glb (runtime, for AR "place in your space") ---------- */
+var ELEM={H:{r:0.34,c:0xd8dde6},C:{r:0.55,c:0x9aa6b8},N:{r:0.54,c:0x5fa8d3},O:{r:0.52,c:0xe06b6b},S:{r:0.70,c:0xe6c977},P:{r:0.70,c:0xe0934b},F:{r:0.45,c:0x7fd6a0},CL:{r:0.79,c:0x8fd6a0},BR:{r:0.85,c:0xc98bd0},I:{r:0.96,c:0xb060d0},CU:{r:0.80,c:0xd98a5b},NA:{r:0.90,c:0xa07aff},FE:{r:0.80,c:0xd98a5b},ZN:{r:0.74,c:0x9aa6b8}};
+function elemOf(s){return ELEM[(s||'').toUpperCase()]||{r:0.6,c:0x9aa3b8};}
+function _meshAcc(){return {pos:[],nor:[],col:[],idx:[],n:0};}
+function _sphere(o,cx,cy,cz,r,col,rings,sectors){var base=o.n,R=(col>>16&255)/255,G=(col>>8&255)/255,B=(col&255)/255,i,j;
+ for(i=0;i<=rings;i++){var lat=Math.PI*i/rings,sl=Math.sin(lat),cl=Math.cos(lat);
+  for(j=0;j<=sectors;j++){var lon=2*Math.PI*j/sectors,so=Math.sin(lon),co=Math.cos(lon);var nx=sl*co,ny=cl,nz=sl*so;
+   o.pos.push(cx+r*nx,cy+r*ny,cz+r*nz);o.nor.push(nx,ny,nz);o.col.push(R,G,B,1);o.n++;}}
+ for(i=0;i<rings;i++)for(j=0;j<sectors;j++){var a=base+i*(sectors+1)+j,bb=a+sectors+1;o.idx.push(a,bb,a+1,a+1,bb,bb+1);}}
+function _cyl(o,ax,ay,az,bx,by,bz,r,col,sectors){var dx=bx-ax,dy=by-ay,dz=bz-az,len=Math.sqrt(dx*dx+dy*dy+dz*dz)||1e-6;var ux=dx/len,uy=dy/len,uz=dz/len;
+ var tx=Math.abs(ux)<0.9?1:0,ty=Math.abs(ux)<0.9?0:1,tz=0;
+ var p1x=uy*tz-uz*ty,p1y=uz*tx-ux*tz,p1z=ux*ty-uy*tx,pl=Math.sqrt(p1x*p1x+p1y*p1y+p1z*p1z)||1;p1x/=pl;p1y/=pl;p1z/=pl;
+ var p2x=uy*p1z-uz*p1y,p2y=uz*p1x-ux*p1z,p2z=ux*p1y-uy*p1x;
+ var R=(col>>16&255)/255,G=(col>>8&255)/255,B=(col&255)/255,base=o.n,j;
+ for(j=0;j<=sectors;j++){var ang=2*Math.PI*j/sectors,cs=Math.cos(ang),sn=Math.sin(ang);var nx=p1x*cs+p2x*sn,ny=p1y*cs+p2y*sn,nz=p1z*cs+p2z*sn;
+  o.pos.push(ax+r*nx,ay+r*ny,az+r*nz);o.nor.push(nx,ny,nz);o.col.push(R,G,B,1);o.n++;
+  o.pos.push(bx+r*nx,by+r*ny,bz+r*nz);o.nor.push(nx,ny,nz);o.col.push(R,G,B,1);o.n++;}
+ for(j=0;j<sectors;j++){var a=base+j*2;o.idx.push(a,a+1,a+2,a+1,a+3,a+2);}}
+function moleculeMesh(atoms,bonds,opt){opt=opt||{};var n=atoms.length;if(!n)return null;
+ var cx=0,cy=0,cz=0;atoms.forEach(function(a){cx+=a.x;cy+=a.y;cz+=a.z;});cx/=n;cy/=n;cz/=n;
+ var ext=0.0001;atoms.forEach(function(a){ext=Math.max(ext,Math.abs(a.x-cx),Math.abs(a.y-cy),Math.abs(a.z-cz));});
+ var s=(opt.half||0.15)/ext;var aR=opt.atomR||0.02,bR=opt.bondR||0.0065;
+ var det=n>140?{ri:6,se:10}:(n>60?{ri:8,se:12}:{ri:10,se:16});
+ var o=_meshAcc();
+ var P=atoms.map(function(a){return [(a.x-cx)*s,(a.y-cy)*s,(a.z-cz)*s];});
+ atoms.forEach(function(a,i){var e=elemOf(a.el);var col=(a.col!=null)?a.col:e.c;var rad=aR*((a.col!=null)?1:(e.r/0.55));_sphere(o,P[i][0],P[i][1],P[i][2],rad,col,det.ri,det.se);});
+ (bonds||[]).forEach(function(bd){var i=bd[0],j=bd[1];if(P[i]&&P[j]){var ci=(atoms[i].col!=null)?atoms[i].col:elemOf(atoms[i].el).c,cj=(atoms[j].col!=null)?atoms[j].col:elemOf(atoms[j].el).c;
+   var mx=(P[i][0]+P[j][0])/2,my=(P[i][1]+P[j][1])/2,mz=(P[i][2]+P[j][2])/2;
+   _cyl(o,P[i][0],P[i][1],P[i][2],mx,my,mz,bR,ci,8);_cyl(o,mx,my,mz,P[j][0],P[j][1],P[j][2],bR,cj,8);}});
+ return o;}
+function _glbFromMesh(o){var pos=new Float32Array(o.pos),nor=new Float32Array(o.nor),col=new Float32Array(o.col),idx=new Uint32Array(o.idx);
+ var pB=pos.byteLength,nB=nor.byteLength,cB=col.byteLength,iB=idx.byteLength;var pO=0,nO=pB,cO=nO+nB,iO=cO+cB,binLen=iO+iB;
+ var bin=new ArrayBuffer(binLen);new Float32Array(bin,pO,pos.length).set(pos);new Float32Array(bin,nO,nor.length).set(nor);new Float32Array(bin,cO,col.length).set(col);new Uint32Array(bin,iO,idx.length).set(idx);
+ var mn=[1e9,1e9,1e9],mx=[-1e9,-1e9,-1e9];for(var i=0;i<pos.length;i+=3){for(var k=0;k<3;k++){var v=pos[i+k];if(v<mn[k])mn[k]=v;if(v>mx[k])mx[k]=v;}}
+ var g={asset:{version:'2.0',generator:'isra-peptides'},scene:0,scenes:[{nodes:[0]}],nodes:[{mesh:0}],
+  meshes:[{primitives:[{attributes:{POSITION:0,NORMAL:1,COLOR_0:2},indices:3,material:0}]}],
+  materials:[{pbrMetallicRoughness:{baseColorFactor:[1,1,1,1],metallicFactor:0.1,roughnessFactor:0.42},name:'mol'}],
+  buffers:[{byteLength:binLen}],
+  bufferViews:[{buffer:0,byteOffset:pO,byteLength:pB,target:34962},{buffer:0,byteOffset:nO,byteLength:nB,target:34962},{buffer:0,byteOffset:cO,byteLength:cB,target:34962},{buffer:0,byteOffset:iO,byteLength:iB,target:34963}],
+  accessors:[{bufferView:0,componentType:5126,count:pos.length/3,type:'VEC3',min:mn,max:mx},{bufferView:1,componentType:5126,count:nor.length/3,type:'VEC3'},{bufferView:2,componentType:5126,count:col.length/4,type:'VEC4'},{bufferView:3,componentType:5125,count:idx.length,type:'SCALAR'}]};
+ var enc=new TextEncoder().encode(JSON.stringify(g));var pad4=function(x){return (x+3)&~3;};var jL=pad4(enc.length),bL=pad4(binLen),total=12+8+jL+8+bL;
+ var ab=new ArrayBuffer(total),dv=new DataView(ab),u8=new Uint8Array(ab),off=0;
+ dv.setUint32(0,0x46546C67,true);dv.setUint32(4,2,true);dv.setUint32(8,total,true);off=12;
+ dv.setUint32(off,jL,true);dv.setUint32(off+4,0x4E4F534A,true);off+=8;u8.set(enc,off);for(var q=enc.length;q<jL;q++)u8[off+q]=0x20;off+=jL;
+ dv.setUint32(off,bL,true);dv.setUint32(off+4,0x004E4942,true);off+=8;u8.set(new Uint8Array(bin),off);
+ return new Blob([ab],{type:'model/gltf-binary'});}
+function parseSDF(txt){var lines=txt.split(/\r?\n/);if(lines.length<5)return null;var cl=lines[3];var na=parseInt(cl.substr(0,3),10),nb=parseInt(cl.substr(3,3),10);if(!(na>0))return null;
+ var atoms=[],bonds=[],i;for(i=0;i<na;i++){var t=(lines[4+i]||'').trim().split(/\s+/);if(t.length<4)continue;atoms.push({x:parseFloat(t[0]),y:parseFloat(t[1]),z:parseFloat(t[2]),el:t[3]});}
+ for(i=0;i<nb;i++){var bn=lines[4+na+i]||'';var a=parseInt(bn.substr(0,3),10),b=parseInt(bn.substr(3,3),10);if(a&&b)bonds.push([a-1,b-1]);}
+ return atoms.length?{atoms:atoms,bonds:bonds}:null;}
+function molFromSeq(p){var res=seqParse(p);if(!res)return null;var r=2.6,rise=1.5,ang=100*Math.PI/180,atoms=[],bonds=[],i;
+ for(i=0;i<res.length;i++){var th=i*ang;atoms.push({x:r*Math.cos(th),y:i*rise,z:r*Math.sin(th),col:SEQ_CLR[(AA[res[i].k]||{}).cls||'mod'],el:'C'});if(i>0)bonds.push([i-1,i]);}
+ return {atoms:atoms,bonds:bonds,backbone:true};}
+var _molCache={};
+function buildMolecule(p,cb){if(_molCache[p.id]){cb(_molCache[p.id]);return;}
+ function fin(data,kind){if(!data){cb(null);return;}try{var opt=data.backbone?{half:0.16,atomR:0.026,bondR:0.012}:{half:0.15,atomR:0.02,bondR:0.0065};var o=moleculeMesh(data.atoms,data.bonds,opt);if(!o){cb(null);return;}var url=URL.createObjectURL(_glbFromMesh(o));var r={url:url,kind:kind,atoms:data.atoms.length};_molCache[p.id]=r;cb(r);}catch(e){cb(null);}}
+ if(CID[p.id]){fetch('https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/'+CID[p.id]+'/SDF?record_type=3d').then(function(r){return r.ok?r.text():null;}).then(function(txt){var d=txt?parseSDF(txt):null;if(d)fin(d,'atomic');else fin(molFromSeq(p),'backbone');}).catch(function(){fin(molFromSeq(p),'backbone');});}
+ else{fin(molFromSeq(p),'backbone');}}
+
 /* AR (model-viewer, lazy) */
 function ensureMV(cb){if(window.customElements&&customElements.get('model-viewer')){cb(true);return;}var s=document.createElement('script');s.type='module';s.src='https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js';s.onload=function(){cb(true);};s.onerror=function(){cb(false);};document.head.appendChild(s);}
+var _arURL=null,_arMV=null,_arMode='mol';
+function _arSetSrc(mode,p){var L=function(he,en){return lang==='he'?he:en;};if(!_arMV)return;_arMode=mode;
+ var cap=document.getElementById('arCap'),mb=document.getElementById('arTabMol'),vb=document.getElementById('arTabVial');
+ if(mb)mb.classList.toggle('on',mode==='mol');if(vb)vb.classList.toggle('on',mode==='vial');
+ if(mode==='vial'){_arMV.setAttribute('src','models/vial.glb');_arMV.setAttribute('alt','Isra.Peptides vial');if(cap)cap.textContent=L('דגם ויאל מותג להמחשה. בנייד — לחצו AR להצבה במרחב.','Branded vial model for illustration. On mobile, tap AR to place it in your space.');return;}
+ if(cap)cap.textContent=L('בונה מבנה תלת-ממדי...','Building 3D structure...');
+ buildMolecule(p,function(r){if(!_arMV)return;if(!r){_arSetSrc('vial',p);return;}_arMV.setAttribute('src',r.url);_arMV.setAttribute('alt',p.name+' molecular structure');
+  if(cap)cap.innerHTML=p.name+' — '+(r.kind==='atomic'?L('מבנה אטומי (PubChem). בנייד — לחצו AR להצבה במרחב.','All-atom structure (PubChem). On mobile, tap AR to place it in your space.'):L('שלד סכמטי מהרצף — להמחשה. בנייד — לחצו AR להצבה במרחב.','Schematic backbone from the sequence — illustrative. On mobile, tap AR to place it in your space.'));});}
 function openAR(p){var L=function(he,en){return lang==='he'?he:en;};var m=document.getElementById('arModal'),b=document.getElementById('arBody');
- b.innerHTML='<button class="qx" id="arClose">&times;</button><div class="qvb"><span class="ruo">'+L('דגם להמחשה','ILLUSTRATIVE MODEL')+'</span><h3>'+L('הצג במרחב שלך','View in your space')+'</h3><p style="font-size:13px;color:var(--muted)">'+L('דגם ויאל מותג להמחשה. בנייד לחצו על סמל ה-AR כדי להציב במרחב.','A branded vial model for illustration. On mobile, tap the AR icon to place it in your space.')+'</p><div class="mol-load" id="arLoad" style="height:300px">'+L('טוען דגם...','Loading model...')+'</div></div>';
+ var hasMol=!!(CID[p.id]||seqParse(p));
+ b.innerHTML='<button class="qx" id="arClose">&times;</button><div class="qvb"><span class="ruo">'+L('דגם להמחשה · RUO','ILLUSTRATIVE MODEL · RUO')+'</span><h3>'+L('הצג במרחב שלך','View in your space')+'</h3>'+
+  '<div class="artabs">'+(hasMol?'<button id="arTabMol" class="artab on">'+L('מולקולה','Molecule')+'</button>':'')+'<button id="arTabVial" class="artab'+(hasMol?'':' on')+'">'+L('ויאל','Vial')+'</button></div>'+
+  '<div class="mol-load" id="arLoad" style="height:330px">'+L('טוען צופה...','Loading viewer...')+'</div>'+
+  '<p id="arCap" style="font-size:12.5px;color:var(--muted);margin-top:10px">'+L('טוען...','Loading...')+'</p></div>';
  m.classList.add('show');document.getElementById('arClose').onclick=closeAR;
  ensureMV(function(ok){var host=document.getElementById('arLoad');if(!host)return;if(!ok){host.textContent=L('לא ניתן לטעון את הצופה (נדרש אינטרנט).','Viewer could not load (internet required).');return;}
-  var mv=document.createElement('model-viewer');mv.setAttribute('src','models/vial.glb');mv.setAttribute('alt','Isra.Peptides vial');mv.setAttribute('camera-controls','');mv.setAttribute('auto-rotate','');mv.setAttribute('ar','');mv.setAttribute('ar-modes','webxr scene-viewer quick-look');mv.setAttribute('shadow-intensity','1');mv.setAttribute('exposure','0.9');mv.style.cssText='width:100%;height:340px;background:#0a0f1d;border-radius:14px';
+  var mv=document.createElement('model-viewer');mv.setAttribute('camera-controls','');mv.setAttribute('auto-rotate','');mv.setAttribute('auto-rotate-delay','0');mv.setAttribute('rotation-per-second','24deg');mv.setAttribute('ar','');mv.setAttribute('ar-modes','webxr scene-viewer quick-look');mv.setAttribute('shadow-intensity','0.9');mv.setAttribute('shadow-softness','0.9');mv.setAttribute('exposure','1.05');mv.setAttribute('tone-mapping','neutral');mv.setAttribute('interaction-prompt','none');mv.style.cssText='width:100%;height:330px;background:radial-gradient(circle at 50% 40%,#142036,#0a0f1d 72%);border-radius:14px';
   var btn=document.createElement('button');btn.setAttribute('slot','ar-button');btn.className='btn btn-g';btn.style.cssText='position:absolute;bottom:14px;inset-inline-end:14px';btn.textContent=L('הצב במרחב (AR)','Place in space (AR)');mv.appendChild(btn);
-  host.replaceWith(mv);});}
-function closeAR(){document.getElementById('arModal').classList.remove('show');}
+  host.replaceWith(mv);_arMV=mv;
+  var mb=document.getElementById('arTabMol'),vb=document.getElementById('arTabVial');
+  if(mb)mb.onclick=function(){_arSetSrc('mol',p);};if(vb)vb.onclick=function(){_arSetSrc('vial',p);};
+  _arSetSrc(hasMol?'mol':'vial',p);});}
+function closeAR(){document.getElementById('arModal').classList.remove('show');_arMV=null;}
 /* QR-coded batch COA (lazy qr lib) */
 function ensureQR(cb){if(window.QRCode){cb(true);return;}var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@master/qrcode.min.js';s.onload=function(){cb(!!window.QRCode);};s.onerror=function(){cb(false);};document.head.appendChild(s);}
 function batchNo(p){var n=0,id=p.id;for(var i=0;i<id.length;i++)n=(n*31+id.charCodeAt(i))%100000;return 'IP-'+String(n).padStart(5,'0');}
