@@ -1,0 +1,18 @@
+{
+  "posts": [
+    {
+      "slug": "understanding-purity-and-coa",
+      "date": "2026-06-02",
+      "ic": "shield",
+      "title": { "he": "להבין טוהר ותעודת אנליזה (COA)", "en": "Understanding Purity and the COA" },
+      "excerpt": { "he": "מה המשמעות של טוהר ‎≥98%‎, ואיך לקרוא תעודת אנליזה.", "en": "What \u226598% purity really means, and how to read a Certificate of Analysis." }
+    },
+    {
+      "slug": "reading-peptide-research",
+      "date": "2026-05-28",
+      "ic": "book",
+      "title": { "he": "איך לקרוא מחקר פפטידים", "en": "How to Read Peptide Research" },
+      "excerpt": { "he": "מדריך קצר להערכת מקורות, מודלים ומגבלות במחקר פרה-קליני.", "en": "A short guide to evaluating sources, models and limitations in preclinical work." }
+    }
+  ]
+}

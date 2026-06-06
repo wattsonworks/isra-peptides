@@ -79,3 +79,21 @@ reference and catalog website. Single brand, static site.
 - `models/vial.glb` is the AR model. The homepage hero also renders a Three.js
   double-helix into `#heroGL` (loaded from CDN, lazy). Falls back to the hero photo
   if Three.js is unavailable. Respects prefers-reduced-motion.
+
+## Research Journal + Supabase
+- Code-login journal (no email). State in `JOURNAL`, code in localStorage `ip_jcode`.
+- Works locally by default. For cross-device sync, run `SUPABASE_SETUP.sql` in Supabase
+  and set `var SUPA_URL='https://YOUR-REF.supabase.co';` near the top of the script.
+  The publishable key (`SUPA_KEY`) is already set and is safe to be public.
+- Access is via two security-definer RPCs (journal_load / journal_save); the table has
+  RLS on with no policies, so the public key cannot read it directly or enumerate codes.
+- Strictly a research log (notes, log entries, saved stack, .txt export) — never a
+  dosing/symptom diary. Keep it that way.
+
+## Markdown articles
+- Blog merges JS `POSTS` with markdown posts listed in `posts/manifest.json`.
+- To add an article: add an entry to `posts/manifest.json` (slug, date, ic, title{he,en},
+  excerpt{he,en}) and create `posts/<slug>.en.md` (and optionally `<slug>.he.md`).
+- Rendered at runtime via marked.js (CDN, lazy). Needs the hosted site (fetch); on
+  file:// it shows a graceful "needs a connection" message. No rebuild needed to add posts.
+- FAQ JSON-LD (FAQPage) is injected from the `FAQ` array for Google rich results.

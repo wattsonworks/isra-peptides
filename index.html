@@ -122,6 +122,42 @@ nav.links a:hover,nav.links a.cur{color:var(--ink)}nav.links a:hover::after,nav.
 @keyframes tkmove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @media(max-width:820px){.hero-grid{grid-template-columns:1fr;gap:30px}.hstats{gap:22px}.sl-name{font-size:26px}}
 @media(prefers-reduced-motion:reduce){.ticker-in{animation:none}}
+.brand-banner{padding:46px 0 8px}
+.bb-frame{max-width:760px;margin:0 auto;border:1px solid var(--line2);border-radius:22px;overflow:hidden;box-shadow:0 34px 90px rgba(0,0,0,.55);position:relative}
+.bb-frame img{display:block;width:100%;height:auto}
+@media(max-width:820px){.brand-banner{padding:30px 0 0}}
+.jgate{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:760px;margin:24px auto 0}
+.jcard{background:var(--panel2);border:1px solid var(--line);border-radius:16px;padding:22px}
+.jcard h3{margin:0 0 8px;font-size:17px;color:var(--ink)}
+.jinput{width:100%;background:var(--bg2);border:1px solid var(--line2);border-radius:10px;color:var(--ink);padding:11px 13px;font-family:inherit;font-size:14px;margin:8px 0;letter-spacing:.5px}
+.jinput:focus{outline:none;border-color:var(--gold)}
+.jbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:6px 0 18px;border-bottom:1px solid var(--line);padding-bottom:14px}
+.jsync{font-size:12px;color:var(--cyan);letter-spacing:.5px}
+.btn-xs{padding:7px 13px;font-size:12.5px}
+.jnew{background:rgba(201,162,75,.08);border:1px solid var(--gold-deep);border-radius:12px;padding:14px 16px;margin-bottom:16px}
+.jnew code{color:var(--gold-2);font-size:15px;letter-spacing:1px;font-family:ui-monospace,Menlo,monospace}
+.jtext{width:100%;background:var(--bg2);border:1px solid var(--line2);border-radius:12px;color:var(--ink);padding:13px;font-family:inherit;font-size:14px;line-height:1.6;resize:vertical}
+.jtext:focus{outline:none;border-color:var(--gold)}
+.jlogadd{display:flex;gap:8px;margin-bottom:12px}.jlogadd .jinput{margin:0}
+.jlog{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.jlog-d{font-size:11px;color:var(--muted-2);font-variant-numeric:tabular-nums;flex:none}
+.jlog-t{flex:1;font-size:13.5px;color:var(--ink)}
+.jdel{background:none;border:none;color:var(--muted-2);font-size:18px;cursor:pointer;line-height:1}.jdel:hover{color:#e08}
+.jchips{display:flex;flex-wrap:wrap;gap:8px}
+.jchip{background:var(--panel2);border:1px solid var(--line);border-radius:30px;padding:7px 14px;font-size:12.5px;color:var(--gold-2);text-decoration:none;transition:.2s}
+.jchip:hover{border-color:var(--gold);transform:translateY(-2px)}
+@media(max-width:560px){.jgate{grid-template-columns:1fr}}
+.md-body{font-size:15.5px;line-height:1.8;color:var(--ink-2)}
+.md-body h2{font-family:"Frank Ruhl Libre",serif;font-size:24px;color:var(--ink);margin:28px 0 10px}
+.md-body h3{font-size:18px;color:var(--gold-2);margin:22px 0 8px}
+.md-body p{margin:0 0 14px}
+.md-body ul,.md-body ol{margin:0 0 16px;padding-inline-start:22px}
+.md-body li{margin:5px 0}
+.md-body a{color:var(--cyan)}
+.md-body blockquote{border-inline-start:3px solid var(--gold-deep);margin:16px 0;padding:6px 16px;color:var(--muted);background:rgba(201,162,75,.05);border-radius:0 10px 10px 0}
+.md-body code{background:var(--bg2);border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:.9em}
+.md-body hr{border:none;border-top:1px solid var(--line);margin:24px 0}
+.md-body strong{color:var(--ink)}
 .hero-art .glow{position:absolute;inset:-2px;border-radius:22px;background:linear-gradient(120deg,rgba(201,162,75,.35),rgba(95,168,211,.25));filter:blur(26px);z-index:-1;opacity:.6}
 
 /* trust */
@@ -519,6 +555,7 @@ table.chem .rk{width:160px;font-size:12.5px}
       <a data-go="bundles" data-he="ערכות" data-en="Bundles"></a>
       <a data-go="compare" data-he="השוואה" data-en="Compare"></a>
       <a data-go="explore" data-he="מפת ידע" data-en="Explore"></a>
+      <a data-go="journal" data-he="יומן מחקר" data-en="Journal"></a>
       <a data-go="library" data-he="ספריית פפטידים" data-en="Library"></a>
       <a data-go="quiz" data-he="מצא פפטיד" data-en="Find a peptide"></a>
       <a data-go="learn" data-he="מרכז ידע" data-en="Learn"></a>
@@ -568,6 +605,8 @@ table.chem .rk{width:160px;font-size:12.5px}
       <div><div class="k" data-he="סטנדרטים בינלאומיים" data-en="Intl. Standards"></div><div class="v" data-he="Intl. Standards" data-en="Worldwide Reach"></div></div>
     </div></div>
   </section>
+
+  <section class="brand-banner reveal"><div class="wrap"><div class="bb-frame"><img src="img/brand.jpg" alt="Isra.Peptides — Research · Science · Updates · Educational and research content only · not medical advice"></div></div></section>
 
   <section class="blk"><div class="wrap split reveal">
     <div>
@@ -813,6 +852,9 @@ table.chem .rk{width:160px;font-size:12.5px}
 <!-- ============ RESEARCH STACK ============ -->
 <div class="view" id="view-stack"><section class="blk"><div class="wrap" id="stackHost"></div></section></div>
 
+<!-- ============ RESEARCH JOURNAL ============ -->
+<div class="view" id="view-journal"><section class="blk"><div class="wrap" id="journalHost"></div></section></div>
+
 <!-- ============ PRICING ============ -->
 <div class="view" id="view-pricing">
   <div class="wrap page-head center">
@@ -908,7 +950,7 @@ table.chem .rk{width:160px;font-size:12.5px}
 
 <script>
 /* ---------- image assets ---------- */
-var IMG={logo:"img/logo.jpg",hero:"img/hero.jpg",splash:"img/splash.jpg",what:"img/what.jpg",mainstream:"img/mainstream.jpg",systems:"img/systems.jpg",bpc:"img/bpc.jpg",cjc:"img/cjc.jpg",epi:"img/epi.jpg",mots:"img/mots.jpg",tb:"img/tb.jpg",lineup:"img/lineup.jpg",banner:"img/banner.jpg",kpv:"img/kpv.jpg",ll37:"img/ll37.jpg",ghk:"img/ghk.jpg",semax:"img/semax.jpg",tesa:"img/tesa.jpg",reta:"img/reta.jpg",thy:"img/thy.jpg",mt2:"img/mt2.jpg",mt1:"img/mt1.jpg",pt141:"img/pt141.jpg",ghrp2:"img/ghrp2.jpg",ghrp6:"img/ghrp6.jpg",ipamorelin:"img/ipamorelin.jpg",hgh:"img/hgh.jpg",igf1:"img/igf1.jpg",kisspeptin:"img/kisspeptin.jpg",selank:"img/selank.jpg",glutathione:"img/glutathione.jpg",bacwater:"img/bacwater.jpg",lemonbottle:"img/lemonbottle.jpg"};
+var IMG={logo:"img/logo.jpg",hero:"img/hero.jpg",splash:"img/splash.jpg",what:"img/what.jpg",mainstream:"img/mainstream.jpg",systems:"img/systems.jpg",bpc:"img/bpc.jpg",cjc:"img/cjc.jpg",epi:"img/epi.jpg",mots:"img/mots.jpg",tb:"img/tb.jpg",lineup:"img/lineup.jpg",banner:"img/banner.jpg",kpv:"img/kpv.jpg",ll37:"img/ll37.jpg",ghk:"img/ghk.jpg",semax:"img/semax.jpg",tesa:"img/tesa.jpg",reta:"img/reta.jpg",thy:"img/thy.jpg",mt2:"img/mt2.jpg",mt1:"img/mt1.jpg",pt141:"img/pt141.jpg",ghrp2:"img/ghrp2.jpg",ghrp6:"img/ghrp6.jpg",ipamorelin:"img/ipamorelin.jpg",hgh:"img/hgh.jpg",igf1:"img/igf1.jpg",kisspeptin:"img/kisspeptin.jpg",selank:"img/selank.jpg",glutathione:"img/glutathione.jpg",bacwater:"img/bacwater.jpg",lemonbottle:"img/lemonbottle.jpg",brand:"img/brand.jpg"};
 var WA="972506787586";
 
 /* ---------- icons (gold line) ---------- */
@@ -1460,6 +1502,9 @@ var TR={
   "All products are for research use only, ≥98% purity, supplied with supporting documentation.":"Все продукты только для исследований, чистота ≥98%, с сопроводительной документацией.",
   "© <span id='yr2'></span> Isra.Peptides · Educational & research content only · not medical advice":"© <span id='yr2'></span> Isra.Peptides · Только образовательный и исследовательский контент · не медицинская консультация",
   "Search a peptide...":"Поиск пептида...","Search a term...":"Поиск термина...","Search or jump: peptide, term, page...":"Поиск или переход: пептид, термин, страница...",
+  "Research compounds":"Исследовательские соединения","Verified purity":"Подтверждённая чистота","Documentation-backed":"С документацией","Worldwide shipping":"Доставка по миру",
+  "HPLC + MS verified":"Проверено ВЭЖХ + МС","COA-backed":"С сертификатом анализа","Discreet worldwide shipping":"Дискретная доставка по миру","Research use only":"Только для исследований",
+  "Featured compound":"Избранное соединение","Purity":"Чистота","View compound":"Открыть соединение",
   "What are <span class=\"g\">peptides?</span>":"Что такое <span class=\"g\">пептиды?</span>",
   "Peptides are <strong>short chains of amino acids</strong> that act as building blocks and signaling molecules in the body. In recent years they have become one of the fastest-developing fields in life sciences.":"Пептиды — это <strong>короткие цепочки аминокислот</strong>, которые служат строительными блоками и сигнальными молекулами в организме. В последние годы они стали одной из самых быстроразвивающихся областей наук о жизни."
  },
@@ -1476,6 +1521,9 @@ var TR={
   "All products are for research use only, ≥98% purity, supplied with supporting documentation.":"جميع المنتجات للاستخدام البحثي فقط، بنقاء ≥98٪، وتُورَّد مع وثائق داعمة.",
   "© <span id='yr2'></span> Isra.Peptides · Educational & research content only · not medical advice":"© <span id='yr2'></span> Isra.Peptides · محتوى تعليمي وبحثي فقط · ليس استشارة طبية",
   "Search a peptide...":"ابحث عن ببتيد...","Search a term...":"ابحث عن مصطلح...","Search or jump: peptide, term, page...":"ابحث أو انتقل: ببتيد، مصطلح، صفحة...",
+  "Research compounds":"مركّبات بحثية","Verified purity":"نقاء موثّق","Documentation-backed":"مدعوم بالوثائق","Worldwide shipping":"شحن عالمي",
+  "HPLC + MS verified":"موثّق بـ HPLC و MS","COA-backed":"مدعوم بشهادة تحليل","Discreet worldwide shipping":"شحن عالمي سري","Research use only":"للاستخدام البحثي فقط",
+  "Featured compound":"مركّب مميّز","Purity":"النقاء","View compound":"عرض المركّب",
   "What are <span class=\"g\">peptides?</span>":"ما هي <span class=\"g\">الببتيدات؟</span>",
   "Peptides are <strong>short chains of amino acids</strong> that act as building blocks and signaling molecules in the body. In recent years they have become one of the fastest-developing fields in life sciences.":"الببتيدات هي <strong>سلاسل قصيرة من الأحماض الأمينية</strong> تعمل كوحدات بناء وجزيئات إشارة في الجسم. وقد أصبحت في السنوات الأخيرة من أسرع المجالات تطوّرًا في علوم الحياة."
  }
@@ -1689,7 +1737,7 @@ function renderPage(key){var pg=PAGES[key];if(!pg){location.hash='';return;}var 
 var CMDS=[
  {ti:{he:'מוצרים',en:'Products'},go:'products'},{ti:{he:'ערכות מחקר',en:'Bundles'},go:'bundles'},
  {ti:{he:'מצא פפטיד',en:'Find a peptide'},go:'quiz'},{ti:{he:'השוואה',en:'Compare'},go:'compare'},
- {ti:{he:'מפת ידע',en:'Knowledge map'},go:'explore'},{ti:{he:'מחסנית מחקר',en:'Research stack'},go:'stack'},{ti:{he:'ספריית פפטידים',en:'Library'},go:'library'},
+ {ti:{he:'מפת ידע',en:'Knowledge map'},go:'explore'},{ti:{he:'מחסנית מחקר',en:'Research stack'},go:'stack'},{ti:{he:'יומן מחקר',en:'Research journal'},go:'journal'},{ti:{he:'ספריית פפטידים',en:'Library'},go:'library'},
  {ti:{he:'מילון מונחים',en:'Glossary'},go:'glossary'},{ti:{he:'מרכז ידע',en:'Learn'},go:'learn'},
  {ti:{he:'מחקרים',en:'Research'},go:'blog'},{ti:{he:'תמחור',en:'Pricing'},go:'pricing'},
  {ti:{he:'אודות',en:'About'},go:'about'},{ti:{he:'צור קשר',en:'Contact'},go:'contact'}
@@ -1743,23 +1791,77 @@ function renderSocial(){var el=document.getElementById('socialRow');if(el)el.inn
 function renderHeroChips(){var el=document.getElementById('heroChips');if(!el)return;var cats=['recovery','gh','metabolic','melano','longevity'];
  el.innerHTML=cats.map(function(id){var o=PROD_CATS.filter(function(z){return z.id===id;})[0];return '<button class="hchip" data-hc="'+id+'">'+(o?(o[lang]||o.en):id)+'</button>';}).join('');
  el.querySelectorAll('[data-hc]').forEach(function(b){b.onclick=function(){prodFilter=b.getAttribute('data-hc');location.hash='products';renderProds();renderProdPills();};});}
-function renderTicker(){var el=document.getElementById('tickerIn');if(!el)return;var L=function(he,en){return lang==='he'?he:en;};
- var phrases=L(['טוהר ≥98%','מאומת ב-HPLC ו-MS','מגובה COA','משלוח עולמי דיסקרטי','למחקר בלבד'],['≥98% purity','HPLC + MS verified','COA-backed','Discreet worldwide shipping','Research use only']);
- var names=PRODUCTS.filter(function(p){return p.cat!=='ancillary';}).slice(0,12).map(function(p){return p.name;});
- var seq=phrases.concat(names);
- var run=seq.map(function(s){return '<span class="tk">'+s+'</span>';}).join('<span class="tkdot">·</span>');
+function renderTicker(){var el=document.getElementById('tickerIn');if(!el)return;
+ var hePhr=['טוהר ≥98%','מאומת ב-HPLC ו-MS','מגובה COA','משלוח עולמי דיסקרטי','למחקר בלבד'];
+ var enPhr=['≥98% purity','HPLC + MS verified','COA-backed','Discreet worldwide shipping','Research use only'];
+ var phrases=(lang==='he')?hePhr:enPhr.map(function(s){return tr(s);});
+ var feat=['tb500','bpc157','ghkcu','ll37'],names=[];
+ feat.forEach(function(id){var p=prodById(id);if(p)names.push(p.name);});
+ PRODUCTS.filter(function(p){return p.cat!=='ancillary'&&feat.indexOf(p.id)<0;}).slice(0,10).forEach(function(p){names.push(p.name);});
+ var run=phrases.concat(names).map(function(s){return '<span class="tk">'+s+'</span>';}).join('<span class="tkdot">·</span>');
  el.innerHTML=run+'<span class="tkdot">·</span>'+run;}
-var HERO_FEAT=['retatrutide','bpc157','semax','ghkcu','tesamorelin','mt2'];
+var HERO_FEAT=['retatrutide','bpc157','tb500','ghkcu','ll37','semax','tesamorelin','mt2'];
 var _spotI=0,_spotTimer=null;
-function spotCard(id){var p=prodById(id);if(!p)return '';var L=function(he,en){return lang==='he'?he:en;};var c=CHEM[p.id]||{};var o=PROD_CATS.filter(function(z){return z.id===p.cat;})[0];
- return '<div class="sl-top"><span class="sl-tag">'+L('תרכובת נבחרת','Featured compound')+'</span>'+(o?'<span class="sl-cat">'+(o[lang]||o.en)+'</span>':'')+'</div>'+
+function spotCard(id){var p=prodById(id);if(!p)return '';var LT=function(he,en){return lang==='he'?he:tr(en);};var c=CHEM[p.id]||{};var o=PROD_CATS.filter(function(z){return z.id===p.cat;})[0];
+ return '<div class="sl-top"><span class="sl-tag">'+LT('תרכובת נבחרת','Featured compound')+'</span>'+(o?'<span class="sl-cat">'+(o[lang]||o.en)+'</span>':'')+'</div>'+
   '<h3 class="sl-name">'+p.name+'</h3>'+
-  '<div class="sl-meta">'+(c.mw?'<span><b>MW</b> '+c.mw+'</span>':'')+(c.cas?'<span><b>CAS</b> '+c.cas+'</span>':'')+'<span><b>'+L('טוהר','Purity')+'</b> '+p.purity+'</span></div>'+
+  '<div class="sl-meta">'+(c.mw?'<span><b>MW</b> '+c.mw+'</span>':'')+(c.cas?'<span><b>CAS</b> '+c.cas+'</span>':'')+'<span><b>'+LT('טוהר','Purity')+'</b> '+p.purity+'</span></div>'+
   '<p class="sl-sum">'+t(p.sum)+'</p>'+
-  '<span class="btn btn-o sl-btn">'+L('לעמוד התרכובת','View compound')+' '+svg('check')+'</span>';}
+  '<span class="btn btn-o sl-btn">'+LT('לעמוד התרכובת','View compound')+' '+svg('check')+'</span>';}
 function renderSpotlight(){var el=document.getElementById('spotlight');if(!el)return;var id=HERO_FEAT[_spotI%HERO_FEAT.length];el.innerHTML=spotCard(id);el.onclick=function(){location.hash='product/'+id;};}
 function startSpotlight(){if(_spotTimer)return;_spotTimer=setInterval(function(){var el=document.getElementById('spotlight');if(!el)return;if(!document.getElementById('view-home').classList.contains('active')||document.hidden)return;_spotI++;el.classList.add('fade');setTimeout(function(){renderSpotlight();el.classList.remove('fade');},260);},4800);}
 function renderHero(){renderHeroChips();renderTicker();renderSpotlight();startSpotlight();}
+
+/* ---------- Research Journal (code login; Supabase sync + local fallback) ---------- */
+var SUPA_URL='https://brbulsywyqgwedhnhepy.supabase.co'; /* Supabase Project URL */
+var SUPA_KEY='sb_publishable_QSch_Yif0zxBSR-Xdp1Y6A_vF27GBiF';
+function supaReady(){return /^https:\/\/.+\.supabase\.co/.test(SUPA_URL);}
+function supaRPC(fn,body){return fetch(SUPA_URL.replace(/\/$/,'')+'/rest/v1/rpc/'+fn,{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':'Bearer '+SUPA_KEY},body:JSON.stringify(body)}).then(function(r){if(!r.ok)throw new Error('supa '+r.status);return r.text().then(function(x){return x?JSON.parse(x):null;});});}
+function jKey(code){return 'ipj_'+code;}
+function jLocalGet(code){try{var s=localStorage.getItem(jKey(code));return s?JSON.parse(s):null;}catch(e){return null;}}
+function jLocalSet(code,data){try{localStorage.setItem(jKey(code),JSON.stringify(data));}catch(e){}}
+function genCode(){var a='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',out=[],i,r=new Uint8Array(16);if(window.crypto&&crypto.getRandomValues)crypto.getRandomValues(r);else for(i=0;i<16;i++)r[i]=Math.floor(Math.random()*256);for(i=0;i<16;i++){out.push(a[r[i]%a.length]);if(i%4===3&&i<15)out.push('-');}return 'IPJ-'+out.join('');}
+var JOURNAL=null,JCODE=null,_jSync='local';
+function jBlank(){return {notes:'',log:[],stack:[],updated:Date.now()};}
+function journalLoad(code){var local=jLocalGet(code);if(supaReady()){return supaRPC('journal_load',{p_code:code}).then(function(d){_jSync='cloud';if(d&&d.data)return d.data;if(d&&(d.notes!==undefined||d.log!==undefined))return d;return local||jBlank();}).catch(function(){_jSync='local';return local||jBlank();});}_jSync='local';return Promise.resolve(local||jBlank());}
+function journalSave(){if(!JCODE||!JOURNAL)return;JOURNAL.updated=Date.now();jLocalSet(JCODE,JOURNAL);if(supaReady()){supaRPC('journal_save',{p_code:JCODE,p_data:JOURNAL}).then(function(){_jSync='cloud';var b=document.getElementById('jSync');if(b)b.textContent=jSyncLabel();}).catch(function(){_jSync='local';});}}
+function jSyncLabel(){var L=function(he,en){return lang==='he'?he:tr(en);};return _jSync==='cloud'?L('מסונכרן בענן','Synced to cloud'):(supaReady()?L('שמירה מקומית','Saved locally'):L('שמירה במכשיר זה','Saved on this device'));}
+function jLogin(code,cb){JCODE=code;try{localStorage.setItem('ip_jcode',code);}catch(e){}journalLoad(code).then(function(d){JOURNAL=d||jBlank();if(cb)cb();});}
+function jLogout(){JCODE=null;JOURNAL=null;try{localStorage.removeItem('ip_jcode');}catch(e){}renderJournal();}
+function jExportTxt(){var L=function(he,en){return lang==='he'?he:tr(en);};var lines=[];lines.push('ISRA.PEPTIDES — RESEARCH JOURNAL');lines.push('Code: '+JCODE);lines.push('Exported: '+new Date().toISOString().slice(0,10));lines.push('Research-use-only notes. Not medical advice.');lines.push('');
+ lines.push('== NOTES ==');lines.push(JOURNAL.notes||'(none)');lines.push('');
+ lines.push('== RESEARCH LOG ==');(JOURNAL.log||[]).forEach(function(e){lines.push('['+e.d+'] '+e.txt);});if(!(JOURNAL.log||[]).length)lines.push('(none)');lines.push('');
+ lines.push('== SAVED STACK ==');(JOURNAL.stack||[]).forEach(function(id){var p=prodById(id);if(p)lines.push('- '+p.name+' ('+p.mg+')');});if(!(JOURNAL.stack||[]).length)lines.push('(none)');
+ var blob=new Blob([lines.join('\n')],{type:'text/plain'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='isra-peptides-journal.txt';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},100);}
+function renderJournal(){var host=document.getElementById('journalHost');if(!host)return;var L=function(he,en){return lang==='he'?he:tr(en);};
+ if(!JCODE||!JOURNAL){
+  host.innerHTML='<div class="page-head center"><div class="tag">RESEARCH JOURNAL · RUO</div><h2 style="font-family:\'Playfair Display\',serif">'+L('יומן המחקר שלי','My Research Journal')+'</h2><p class="sub">'+L('שמרו הערות מחקר, מחסנית והתקדמות — עם קוד פרטי, ללא דוא״ל. למחקר וחינוך בלבד, אינו יומן שימוש או מינון.','Save research notes, your stack and progress — with a private code, no email. For research and education only; not a usage or dosing diary.')+'</p></div>'+
+  '<div class="jgate"><div class="jcard"><h3>'+L('פתיחת יומן חדש','Start a new journal')+'</h3><p style="font-size:13px;color:var(--muted)">'+L('ניצור עבורכם קוד פרטי. זו הדרך היחידה להיכנס — שמרו אותו.','We generate a private code. It is the only way back in — save it.')+'</p><button class="btn btn-g" id="jNew">'+L('צרו קוד יומן','Generate journal code')+'</button></div>'+
+  '<div class="jcard"><h3>'+L('כבר יש לי קוד','I already have a code')+'</h3><input id="jCodeIn" class="jinput" placeholder="IPJ-XXXX-XXXX-XXXX-XXXX" autocomplete="off"><button class="btn btn-o" id="jOpen">'+L('כניסה','Open journal')+'</button><p id="jErr" style="font-size:12px;color:#e08;display:none;margin-top:8px">'+L('קוד לא תקין','Invalid code')+'</p></div></div>';
+  document.getElementById('jNew').onclick=function(){var code=genCode();JCODE=code;JOURNAL=jBlank();try{localStorage.setItem('ip_jcode',code);}catch(e){}journalSave();renderJournalDash(true);};
+  document.getElementById('jOpen').onclick=function(){var v=(document.getElementById('jCodeIn').value||'').trim().toUpperCase();if(!/^IPJ-/.test(v)){document.getElementById('jErr').style.display='block';return;}jLogin(v,function(){renderJournalDash(false);});};
+  return;
+ }
+ renderJournalDash(false);
+}
+function renderJournalDash(isNew){var host=document.getElementById('journalHost');if(!host||!JOURNAL)return;var L=function(he,en){return lang==='he'?he:tr(en);};
+ var stack=(JOURNAL.stack&&JOURNAL.stack.length?JOURNAL.stack:FAVS).filter(function(id){return prodById(id);});
+ JOURNAL.stack=stack;
+ var newBanner=isNew?'<div class="jnew"><b>'+L('שמרו את הקוד שלכם','Save your code')+':</b> <code id="jCodeShow">'+JCODE+'</code> <button class="btn btn-o btn-xs" id="jCopy">'+L('העתק','Copy')+'</button><div style="font-size:12px;color:var(--muted);margin-top:6px">'+L('אין שחזור בדוא״ל. בלי הקוד לא ניתן להיכנס שוב.','There is no email recovery. Without this code you cannot get back in.')+'</div></div>':'';
+ var logHtml=(JOURNAL.log||[]).map(function(e,i){return '<div class="jlog"><span class="jlog-d">'+e.d+'</span><span class="jlog-t">'+e.txt.replace(/</g,'&lt;')+'</span><button class="jdel" data-li="'+i+'" aria-label="delete">&times;</button></div>';}).join('')||'<p style="font-size:13px;color:var(--muted-2)">'+L('אין רשומות עדיין.','No entries yet.')+'</p>';
+ var stackHtml=stack.length?stack.map(function(id){var p=prodById(id);return '<a class="jchip" href="#product/'+id+'">'+p.name+'</a>';}).join(''):'<p style="font-size:13px;color:var(--muted-2)">'+L('המחסנית ריקה — הוסיפו מועדפים.','Empty — add favorites to build a stack.')+'</p>';
+ host.innerHTML='<div class="page-head"><div class="tag">RESEARCH JOURNAL · RUO</div><h2 style="font-family:\'Playfair Display\',serif">'+L('יומן המחקר שלי','My Research Journal')+'</h2></div>'+newBanner+
+  '<div class="jbar"><span class="jsync" id="jSync">'+jSyncLabel()+'</span><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-o btn-xs" id="jExport">'+L('ייצוא TXT','Export .txt')+'</button><button class="btn btn-o btn-xs" id="jOut">'+L('יציאה','Log out')+'</button></div></div>'+
+  '<div class="sec"><h4>'+L('הערות מחקר','Research notes')+'</h4><textarea id="jNotes" class="jtext" rows="5" placeholder="'+L('תצפיות מהספרות, שאלות מחקר, מקורות...','Observations from the literature, research questions, references...')+'">'+(JOURNAL.notes||'').replace(/</g,'&lt;')+'</textarea></div>'+
+  '<div class="sec"><h4>'+L('יומן מחקר','Research log')+'</h4><div class="jlogadd"><input id="jLogIn" class="jinput" placeholder="'+L('רשומה חדשה...','New entry...')+'"><button class="btn btn-g btn-xs" id="jLogAdd">'+L('הוספה','Add')+'</button></div><div id="jLogList">'+logHtml+'</div></div>'+
+  '<div class="sec"><h4>'+L('המחסנית שלי','My stack')+'</h4><div class="jchips">'+stackHtml+'</div></div>';
+ if(isNew){var cp=document.getElementById('jCopy');if(cp)cp.onclick=function(){try{navigator.clipboard.writeText(JCODE);cp.textContent=L('הועתק','Copied');}catch(e){}};}
+ var nt=document.getElementById('jNotes');if(nt)nt.onblur=function(){JOURNAL.notes=nt.value;journalSave();};
+ document.getElementById('jExport').onclick=jExportTxt;
+ document.getElementById('jOut').onclick=function(){jLogout();};
+ document.getElementById('jLogAdd').onclick=function(){var v=(document.getElementById('jLogIn').value||'').trim();if(!v)return;JOURNAL.log=JOURNAL.log||[];JOURNAL.log.unshift({d:new Date().toISOString().slice(0,10),txt:v});journalSave();renderJournalDash(false);};
+ host.querySelectorAll('.jdel').forEach(function(b){b.onclick=function(){var i=+b.getAttribute('data-li');JOURNAL.log.splice(i,1);journalSave();renderJournalDash(false);};});
+}
 function animateStats(){document.querySelectorAll('.stat .num[data-to],.hstat .num[data-to]').forEach(function(el){if(el.dataset.done)return;el.dataset.done='1';var to=+el.getAttribute('data-to'),suf=el.getAttribute('data-suf')||'',n=0,step=Math.max(1,Math.round(to/30));var iv=setInterval(function(){n+=step;if(n>=to){n=to;clearInterval(iv);}el.textContent=n+suf;},28);});}
 
 /* ---------- 2D structure (PubChem depiction) ---------- */
@@ -1992,10 +2094,23 @@ function renderStep(){var s=LEARN[step],d=s[lang]||s.en;
  document.getElementById('stepHost').innerHTML='<div class="cnt">'+(lang==='he'?'חלק':'Part')+' '+(step+1)+' / '+LEARN.length+'</div><div class="ico" style="font-size:34px;color:var(--gold-2);margin:6px 0">'+svg(s.ic)+'</div><h3>'+d[0]+'</h3><p>'+d[1]+'</p>'+(s.img?'<img data-lb src="'+IMG[s.img]+'" alt="">':'');
  renderStepsNav();bindLb();glossify(document.getElementById('stepHost'));}
 
-function renderBlog(){document.getElementById('blogGrid').innerHTML=POSTS.map(function(p){return '<div class="post" data-post="'+p.slug+'"><div class="ico" style="color:var(--gold-2);font-size:22px;margin-bottom:8px">'+svg(p.ic)+'</div><div class="dt">'+t(p.dt)+'</div><h3>'+t(p.t)+'</h3><p>'+t(p.ex)+'</p></div>';}).join('');
+var MDPOSTS=[];
+function blogList(){
+ var js=POSTS.map(function(p){return {slug:p.slug,ic:p.ic,dt:p.dt,t:p.t,ex:p.ex,date:p.date||'',md:false};});
+ var md=MDPOSTS.map(function(p){return {slug:p.slug,ic:p.ic||'book',dt:{he:p.date,en:p.date},t:p.title,ex:p.excerpt,date:p.date||'',md:true};});
+ return md.concat(js).sort(function(a,b){return (b.date||'').localeCompare(a.date||'');});}
+function renderBlog(){document.getElementById('blogGrid').innerHTML=blogList().map(function(p){return '<div class="post" data-post="'+p.slug+'"><div class="ico" style="color:var(--gold-2);font-size:22px;margin-bottom:8px">'+svg(p.ic)+'</div><div class="dt">'+t(p.dt)+'</div><h3>'+t(p.t)+'</h3><p>'+t(p.ex)+'</p></div>';}).join('');
  document.querySelectorAll('[data-post]').forEach(function(el){el.onclick=function(){location.hash='post/'+el.getAttribute('data-post');};});}
-function renderPost(slug){var p=POSTS.filter(function(x){return x.slug===slug;})[0];if(!p){location.hash='blog';return;}
+function ensureMarked(cb){if(window.marked){cb(true);return;}var s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js';s.onload=function(){cb(!!window.marked);};s.onerror=function(){cb(false);};document.head.appendChild(s);}
+function fetchFirst(urls,cb){var i=0;(function go(){if(i>=urls.length){cb(null);return;}fetch(urls[i++]).then(function(r){if(!r.ok)throw 0;return r.text();}).then(function(t){cb(t);}).catch(function(){go();});})();}
+function renderMdPost(md){var host=document.getElementById('postHost');if(!host)return;var L=function(he,en){return lang==='he'?he:en;};
+ host.innerHTML='<div class="article"><span class="back" data-go="blog">'+svg('check')+' '+L('חזרה למחקרים','Back to research')+'</span><div class="dt">'+(md.date||'')+'</div><h1>'+t(md.title)+'</h1><div class="md-body" id="mdBody">'+L('טוען מאמר...','Loading article...')+'</div><div style="margin-top:26px"><span class="ruo">RESEARCH & EDUCATIONAL CONTENT ONLY</span></div></div>';bindGo();
+ fetchFirst(['posts/'+md.slug+'.'+lang+'.md','posts/'+md.slug+'.en.md','posts/'+md.slug+'.md'],function(txt){var b=document.getElementById('mdBody');if(!b)return;if(txt==null){b.innerHTML='<p style="color:var(--muted)">'+L('המאמר אינו זמין כעת (נדרש חיבור).','Article unavailable right now (needs a connection).')+'</p>';return;}ensureMarked(function(ok){b.innerHTML=(ok&&window.marked)?marked.parse(txt):txt.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\n/g,'<br>');glossify(b);});});}
+function renderPost(slug){var md=MDPOSTS.filter(function(x){return x.slug===slug;})[0];if(md){renderMdPost(md);return;}
+ var p=POSTS.filter(function(x){return x.slug===slug;})[0];if(!p){location.hash='blog';return;}
  document.getElementById('postHost').innerHTML='<div class="article"><span class="back" data-go="blog">'+svg('check')+' '+(lang==='he'?'חזרה למחקרים':'Back to research')+'</span><div class="dt">'+t(p.dt)+'</div><h1>'+t(p.t)+'</h1><p>'+t(p.body)+'</p><div style="margin-top:26px"><span class="ruo">RESEARCH & EDUCATIONAL CONTENT ONLY</span></div></div>';bindGo();glossify(document.getElementById('postHost'));}
+function loadMdManifest(){if(typeof fetch!=='function')return;fetch('posts/manifest.json').then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(j){MDPOSTS=(j&&j.posts)||[];var bv=document.getElementById('view-blog');if(bv&&bv.classList.contains('active'))renderBlog();}).catch(function(){});}
+function injectFaqLd(){try{var ld={"@context":"https://schema.org","@type":"FAQPage","mainEntity":FAQ.map(function(f){return {"@type":"Question","name":(f.q.en||f.q.he),"acceptedAnswer":{"@type":"Answer","text":(f.a.en||f.a.he)}};})};var old=document.getElementById('ldFaq');if(old)old.remove();var s=document.createElement('script');s.type='application/ld+json';s.id='ldFaq';s.textContent=JSON.stringify(ld);document.head.appendChild(s);}catch(e){}}
 
 function renderValues(){document.getElementById('valueCards').innerHTML=VALUES.map(function(v){var d=v[lang]||v.en;return '<div class="card"><div class="ico">'+svg(v.ic)+'</div><h3>'+d[0]+'</h3><p>'+d[1]+'</p></div>';}).join('');}
 function renderFaq(){document.getElementById('faqHost').innerHTML=FAQ.map(function(f){return '<div class="qa"><button>'+t(f.q)+'<span class="pm">+</span></button><div class="a"><p>'+t(f.a)+'</p></div></div>';}).join('');
@@ -2035,8 +2150,8 @@ function setIcons(){
 }
 
 /* ---------- router ---------- */
-var VIEWS=['home','products','bundles','quiz','compare','explore','stack','pricing','glossary','library','learn','blog','post','about','contact'];
-var TITLES={home:'Isra.Peptides',products:'Products',bundles:'Bundles',quiz:'Find a Peptide',compare:'Compare',explore:'Knowledge Map',stack:'Research Stack',pricing:'Pricing',glossary:'Glossary',library:'Library',learn:'Learn',blog:'Research',about:'About',contact:'Contact'};
+var VIEWS=['home','products','bundles','quiz','compare','explore','stack','journal','pricing','glossary','library','learn','blog','post','about','contact'];
+var TITLES={home:'Isra.Peptides',products:'Products',bundles:'Bundles',quiz:'Find a Peptide',compare:'Compare',explore:'Knowledge Map',stack:'Research Stack',journal:'Research Journal',pricing:'Pricing',glossary:'Glossary',library:'Library',learn:'Learn',blog:'Research',about:'About',contact:'Contact'};
 function showView(n){document.querySelectorAll('.view').forEach(function(v){v.classList.remove('active');});var el=document.getElementById('view-'+n);if(el)el.classList.add('active');window.scrollTo(0,0);
  document.querySelectorAll('nav.links a').forEach(function(a){a.classList.toggle('cur',a.getAttribute('data-go')===n);});
  document.title='Isra.Peptides'+(n!=='home'&&TITLES[n]?' — '+TITLES[n]:' — Research · Science · Results');
@@ -2048,6 +2163,7 @@ function route(){var h=location.hash.replace('#','');
  else if(h.indexOf('page/')===0){renderPage(h.split('/')[1]);showView('page');updateSEO('page');}
  else if(h==='stack'){renderStack(FAVS.slice());showView('stack');updateSEO('stack');}
  else if(h.indexOf('stack/')===0){renderStack(h.split('/')[1].split(','));showView('stack');updateSEO('stack');}
+ else if(h==='journal'){renderJournal();showView('journal');updateSEO('journal');}
  else if(VIEWS.indexOf(h)>-1){showView(h);updateSEO(h);}
  else{showView('home');updateSEO('home');}
  revealNow();}
@@ -2175,6 +2291,8 @@ document.addEventListener('visibilitychange',function(){if(!document.hidden)hero
 })();
 var _savedLang;try{_savedLang=localStorage.getItem('ip_lang');}catch(e){}
 applyLang(_savedLang&&LANGS.indexOf(_savedLang)>-1?_savedLang:'he');bindGo();bindLb();route();revealNow();
+(function(){try{var c=localStorage.getItem('ip_jcode');if(c){JCODE=c;journalLoad(c).then(function(d){JOURNAL=d||jBlank();});}}catch(e){}})();
+loadMdManifest();injectFaqLd();
 </script>
 </body>
 </html>
