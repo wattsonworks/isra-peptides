@@ -103,6 +103,23 @@ reference and catalog website. Single brand, static site.
 - Strictly a research log (notes, log entries, saved stack, .txt export) — never a
   dosing/symptom diary. Keep it that way.
 
+## Retention / dwell features
+- Related rail: `relatedHTML(p)` appended to each product page — related-by-pathway
+  compounds (TARGETS), same-family + a `#family/<cat>` link, head-to-head `#vs/`
+  chips, further-reading posts, and key glossary terms. All real `<a href>` links.
+- `#vs/<a>,<b>` head-to-head page (`renderVs`): comparison table + shared pathways +
+  `radarOverlaySVG` + share link; with <2 ids shows a picker. `#family/<cat>` hub
+  (`renderFamily`) uses `FAMILY_DESC` blurbs + member cards + pathway chips. Both
+  routes handled in `route()` before the generic VIEWS check.
+- Peptide of the week: `renderPOTW()` -> `#potwHost` on home, weekly index
+  (`Date.now()/6048e5 % pool`). Called in applyLang.
+- Achievements: `achievementsHTML()` injected into BOTH journal screens (login +
+  dashboard). Signals in localStorage: `ip_seen` (compounds viewed, set in
+  renderProduct), `ip_built` (builder), `ip_learn` (last Knowledge-Center step),
+  `ip_quizbest`, `ip_pdlst` streak, FAVS. Progress bar = seen/total.
+- Key papers: `pubmedFeed` now shows ~5 recent PubMed papers ("Selected research").
+- All new strings have TR.ar entries (1427 keys). Keep that parity for new copy.
+
 ## Research Games (#games)
 - One `#games` view with a tab switcher (`gameTab`: daily / build / quiz); `renderGames()`
   dispatches to `renderPeptidle` / `renderBuilder` / `renderQuizArena` into `#gameHost`.
