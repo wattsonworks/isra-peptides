@@ -74,6 +74,19 @@ reference and catalog website. Single brand, static site.
 - Content objects use `t({he,en})`; for ru/ar `t()` returns `TR[lang][en]` or English.
 - To localize more: add `"English string":"translation"` pairs to TR.ru / TR.ar.
   Untranslated strings safely fall back to English. Keep Arabic accurate (RTL).
+- ARABIC IS NOW FULLY TRANSLATED (TR.ar ~1334 keys). RU is still partial.
+- Every rendered string routes through `tr()`: all `L('he','en')` helpers return
+  `lang==='he'?he:tr(en)`, inline `lang==='he'?'..':'..'` text ternaries wrap the
+  English in `tr(...)`, and `localizeContentAr()` (called at the top of `applyLang`)
+  walks all content arrays (PRODUCTS/SYS/LEARN/POSTS/VALUES/FAQ/GLOSSARY/LIBRARY/
+  BUNDLES/PROD_CATS/LIB_CATS/REGIONS/ANALOG) injecting `obj.ar` (and `obj.nar` for
+  region notes) so array-valued and `obj[lang]||obj.en` content also localizes.
+- When you ADD any new user-facing English string (data-en, an `L('he','en')`, a
+  content `.en`, etc.), add its `"English":"العربية"` pair to TR.ar or it shows
+  English in Arabic. The `.tag` eyebrow labels (e.g. "CATALOG · RESEARCH USE ONLY")
+  are intentionally hardcoded Latin in all languages — leave them.
+- Brand ("Isra.Peptides"), peptide names (BPC-157…), units, and scientific acronyms
+  (GH, IGF, GLP-1, DNA, COA, HPLC, MS, PubChem, RUO, AR, QR…) are kept Latin in AR.
 
 ## WebGL hero
 - `models/vial.glb` is the AR model. The homepage hero also renders a Three.js
