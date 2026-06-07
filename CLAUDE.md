@@ -103,6 +103,21 @@ reference and catalog website. Single brand, static site.
 - Strictly a research log (notes, log entries, saved stack, .txt export) — never a
   dosing/symptom diary. Keep it that way.
 
+## Research Games (#games)
+- One `#games` view with a tab switcher (`gameTab`: daily / build / quiz); `renderGames()`
+  dispatches to `renderPeptidle` / `renderBuilder` / `renderQuizArena` into `#gameHost`.
+  Linked in nav + footer; rendered on showView('games') and re-rendered in applyLang if active.
+- Peptidle: deterministic daily compound (`Math.floor(Date.now()/864e5) % pool`), up to 6
+  guesses with category/MW(up-down)/length/shared-pathway hints; state in localStorage
+  `ip_pdl`, streak/best in `ip_pdlst`; monochrome (O/^/v/.) shareable grid, no emoji.
+- Build-a-Peptide: AA tile palette -> chain; live length + approx mass from `AAMASS`
+  (average residue masses + WATER, factual ExPASy values); identifies known peptides by
+  exact residue match; "recreate target" challenges from short parseable sequences.
+- Quiz Arena: 8 runtime-generated MCQs (pathway/family/analog/length/glossary) from
+  PRODUCTS/TARGETS/ANALOG/GLOSSARY; score + streak + best (`ip_quizbest`) + rank label.
+- All game strings go through `tr()` and have AR translations in TR.ar (keep that parity
+  when editing game copy). Educational/RUO-safe, no dosing, no emojis.
+
 ## Markdown articles
 - Blog merges JS `POSTS` with markdown posts listed in `posts/manifest.json`.
 - To add an article: add an entry to `posts/manifest.json` (slug, date, ic, title{he,en},
