@@ -578,6 +578,25 @@ table.chem .rk{width:160px;font-size:12.5px}
   .disc{flex-direction:column;gap:10px}.step{padding:26px 20px}
   .brand .bs{display:none}
 }
+/* compact header so it fits any phone (iPhone mini/SE .. Pro Max) without overflow */
+@media(max-width:480px){
+  .nav-in{padding:10px 12px;gap:8px;flex-wrap:nowrap}
+  .brand{gap:8px;min-width:0;flex-shrink:1}
+  .brand img{width:36px;height:36px}
+  .brand>span{min-width:0}
+  .brand .bn{font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tools{gap:6px;flex-shrink:0}
+  .lang{padding:6px 9px;font-size:12.5px;letter-spacing:.4px}
+  .menu-btn{padding:6px 10px;font-size:15px}
+  .lang .ic{width:16px;height:16px}
+}
+@media(max-width:360px){
+  .nav-in{padding:9px 10px;gap:6px}
+  .brand img{width:32px;height:32px}
+  .brand .bn{font-size:15px}
+  .tools{gap:5px}
+  .lang{padding:6px 8px}
+}
 </style>
 </head>
 <body>
