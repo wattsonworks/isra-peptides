@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Stale generated artifact — do not index
+Disallow: /standalone.html
+
+Sitemap: https://wattsonworks.github.io/isra-peptides/sitemap.xml
