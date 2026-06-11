@@ -200,6 +200,9 @@ h3{font-family:"Frank Ruhl Libre",serif}
 .prod .pimg{position:relative;overflow:hidden;min-height:210px}
 .prod .pimg img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s}
 .prod:hover .pimg img{transform:scale(1.06)}
+.prod .pimg .cstruct{position:absolute;bottom:8px;inset-inline-start:8px;z-index:2;width:56px;height:56px;border-radius:11px;background:rgba(247,249,252,.94);border:1px solid var(--line2);box-shadow:0 4px 14px rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;overflow:hidden;backdrop-filter:blur(2px)}
+.prod .pimg .cstruct img{width:auto;height:auto;max-width:88%;max-height:88%;object-fit:contain;mix-blend-mode:multiply;transition:none}
+.prod:hover .pimg .cstruct img{transform:none}
 .prod .pbody{padding:24px 22px;display:flex;flex-direction:column}
 .ruo{font-size:10px;letter-spacing:2.5px;color:var(--cyan);font-weight:700}
 .prod h3{font-family:"Playfair Display",serif;font-weight:700;font-size:25px;margin:6px 0 2px}
@@ -322,6 +325,10 @@ footer{border-top:1px solid var(--line);background:rgba(5,7,15,.7);margin-top:20
   background:linear-gradient(135deg,#25d366,#128c4a);color:#fff;font-size:30px;text-decoration:none;
   box-shadow:0 10px 28px rgba(18,140,74,.45);transition:transform .2s,box-shadow .25s;animation:waPulse 2.6s ease-in-out infinite}
 #waFloat:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 16px 38px rgba(18,140,74,.6)}
+#toTop{position:fixed;z-index:90;bottom:calc(88px + env(safe-area-inset-bottom));inset-inline-end:calc(25px + env(safe-area-inset-right));width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid var(--line2);background:rgba(13,20,36,.82);color:var(--gold-2);backdrop-filter:blur(8px);box-shadow:0 8px 22px rgba(0,0,0,.5);opacity:0;transform:translateY(10px) scale(.9);pointer-events:none;transition:opacity .25s,transform .25s,border-color .2s}
+#toTop.show{opacity:1;transform:none;pointer-events:auto}
+#toTop:hover{border-color:var(--gold)}
+#toTop svg{width:22px;height:22px}
 #waFloat .ic{stroke-width:1.4}
 @keyframes waPulse{0%,100%{box-shadow:0 10px 28px rgba(18,140,74,.45)}50%{box-shadow:0 10px 28px rgba(18,140,74,.45),0 0 0 10px rgba(37,211,102,.0)}}
 /* cart button + badge */
@@ -1128,6 +1135,7 @@ table.chem .rk{width:160px;font-size:12.5px}
 
 <div id="lightbox"><img src="" alt=""></div>
 <a id="waFloat" href="https://wa.me/972506787586" target="_blank" rel="noopener" aria-label="WhatsApp"><span id="waFloatIc"></span></a>
+<button id="toTop" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
 
 <div id="cartOverlay"></div>
 <aside id="cartDrawer">
@@ -3697,10 +3705,15 @@ function localizeContentAr(){function walk(o){if(!o||typeof o!=='object')return;
 function renderSys(){document.getElementById('sysCards').innerHTML=SYS.map(function(s){var d=s[lang]||s.en;return '<div class="card"><div class="ico">'+svg(s.ic)+'</div><h3>'+d[0]+'</h3><p>'+d[1]+'</p></div>';}).join('');}
 
 function objPos(p){return p.pos==='left'?'left center':p.pos==='right'?'right center':'center';}
+function cardStruct(p){var c2=CID[p.id]||CID2D[p.id];var src='';
+ if(c2)src='https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/'+c2+'/PNG?image_size=200x150';
+ else if(CHEM[p.id]&&CHEM[p.id].d2)src='https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/'+encodeURIComponent(CHEM[p.id].d2)+'/PNG?image_size=200x150';
+ if(!src)return '';
+ return '<span class="cstruct" aria-hidden="true" title="2D · PubChem"><img loading="lazy" decoding="async" src="'+src+'" alt="" onerror="var s=this.closest(&quot;.cstruct&quot;);if(s)s.remove();"></span>';}
 function prodCard(p){var L=function(he,en){return lang==='he'?he:tr(en);};
  var stock=p.stock==='pre'?'<span class="stock pre">'+L('בהזמנה מוקדמת','Pre-order')+'</span>':'<span class="stock in">'+L('במלאי','In stock')+'</span>';
  var tags=t(p.tags).map(function(x){return '<span class="ptag" data-tag="'+x+'" style="cursor:pointer">'+x+'</span>';}).join('');
- return '<div class="prod" data-prod="'+p.id+'"><div class="pimg"><img loading="lazy" decoding="async" src="'+IMG[p.img]+'" alt="'+p.name+'" style="object-position:'+objPos(p)+'"><button class="fav'+(isFav(p.id)?' on':'')+'" data-fav="'+p.id+'" aria-label="favorite">'+svg('heart')+'</button><button class="qview" data-qv="'+p.id+'" aria-label="quick view">'+svg('eye')+'</button></div><div class="pbody"><span class="ruo">RESEARCH USE ONLY · '+p.purity+' PURITY</span><h3>'+p.name+' <span class="mg">'+p.mg+'</span>'+stock+'</h3><p>'+t(p.sum)+'</p><div class="ptags">'+tags+'</div><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px"><span class="more">'+L('מידע מלא','Full details')+' '+svg('check')+'</span><button class="addq'+(inCart(p.id)?' added':'')+'" data-add="'+p.id+'">'+svg('wa')+' '+(inCart(p.id)?L('נוסף לפנייה','Added'):L('הוסף לפנייה','Add to inquiry'))+'</button></div></div></div>';}
+ return '<div class="prod" data-prod="'+p.id+'"><div class="pimg"><img loading="lazy" decoding="async" src="'+IMG[p.img]+'" alt="'+p.name+'" style="object-position:'+objPos(p)+'">'+cardStruct(p)+'<button class="fav'+(isFav(p.id)?' on':'')+'" data-fav="'+p.id+'" aria-label="favorite">'+svg('heart')+'</button><button class="qview" data-qv="'+p.id+'" aria-label="quick view">'+svg('eye')+'</button></div><div class="pbody"><span class="ruo">RESEARCH USE ONLY · '+p.purity+' PURITY</span><h3>'+p.name+' <span class="mg">'+p.mg+'</span>'+stock+'</h3><p>'+t(p.sum)+'</p><div class="ptags">'+tags+'</div><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px"><span class="more">'+L('מידע מלא','Full details')+' '+svg('check')+'</span><button class="addq'+(inCart(p.id)?' added':'')+'" data-add="'+p.id+'">'+svg('wa')+' '+(inCart(p.id)?L('נוסף לפנייה','Added'):L('הוסף לפנייה','Add to inquiry'))+'</button></div></div></div>';}
 var prodFilter='all',prodSort='default';
 function sortList(arr){var a=arr.slice();
  if(prodSort==='az')a.sort(function(x,y){return x.name.localeCompare(y.name);});
@@ -4914,8 +4927,9 @@ document.getElementById('sendBtn').onclick=function(){
 
 /* progress + reveal (throttled, passive) */
 function revealNow(){document.querySelectorAll('.view.active .reveal').forEach(function(el){var r=el.getBoundingClientRect();if(r.top<(window.innerHeight||document.documentElement.clientHeight)-60)el.classList.add('in');});}
-var _prog=document.getElementById('prog'),_ticking=false;
-function _onScroll(){var de=document.documentElement;var st=de.scrollTop||document.body.scrollTop;var h=de.scrollHeight-de.clientHeight;if(_prog)_prog.style.width=(h>0?(st/h*100):0)+'%';revealNow();_ticking=false;}
+var _prog=document.getElementById('prog'),_ticking=false,_toTop=document.getElementById('toTop');
+function _onScroll(){var de=document.documentElement;var st=de.scrollTop||document.body.scrollTop;var h=de.scrollHeight-de.clientHeight;if(_prog)_prog.style.width=(h>0?(st/h*100):0)+'%';if(_toTop)_toTop.classList.toggle('show',st>520);revealNow();_ticking=false;}
+if(_toTop)_toTop.onclick=function(){var rm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;window.scrollTo({top:0,behavior:rm?'auto':'smooth'});};
 window.addEventListener('scroll',function(){if(!_ticking){_ticking=true;requestAnimationFrame(_onScroll);}},{passive:true});
 window.addEventListener('resize',function(){if(!_ticking){_ticking=true;requestAnimationFrame(_onScroll);}},{passive:true});
 
