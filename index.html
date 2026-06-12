@@ -57,17 +57,18 @@ a{color:inherit}
 /* nav */
 header.nav{position:sticky;top:0;z-index:60;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);background:rgba(5,7,15,.72);border-bottom:1px solid var(--line);padding-inline:env(safe-area-inset-left) env(safe-area-inset-right)}
 .nav-in{max-width:1200px;margin:0 auto;padding:11px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.brand{display:flex;align-items:center;gap:11px;text-decoration:none;cursor:pointer}
+.brand{display:flex;align-items:center;gap:11px;text-decoration:none;cursor:pointer;flex-shrink:0}
 .brand img{width:44px;height:44px;border-radius:50%;box-shadow:0 0 0 1px var(--line),0 8px 24px rgba(0,0,0,.5)}
 .brand>span{display:flex;flex-direction:column;justify-content:center;line-height:1}
 .brand .bn{font-family:"Playfair Display",serif;font-size:20px;letter-spacing:.3px;line-height:1}
 .brand .bn b{color:var(--gold-2)}
 .brand .bs{font-size:9px;letter-spacing:3px;color:var(--muted);margin-top:3px}
-nav.links{display:flex;gap:22px;align-items:center}
+nav.links{display:flex;gap:22px;align-items:center;flex:1 1 auto;min-width:0;justify-content:center;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-ms-overflow-style:none}
+nav.links::-webkit-scrollbar{display:none}
 nav.links a{color:var(--muted);text-decoration:none;font-size:14.5px;font-weight:500;position:relative;transition:color .25s;cursor:pointer;white-space:nowrap}
 nav.links a::after{content:"";position:absolute;inset-inline-start:0;bottom:-6px;height:2px;width:0;background:linear-gradient(90deg,var(--gold-2),var(--gold-deep));transition:width .3s}
 nav.links a:hover,nav.links a.cur{color:var(--ink)}nav.links a:hover::after,nav.links a.cur::after{width:100%}
-.tools{display:flex;align-items:center;gap:10px}
+.tools{display:flex;align-items:center;gap:10px;flex-shrink:0}
 .lang{background:rgba(255,255,255,.03);border:1px solid var(--line);color:var(--gold-2);border-radius:9px;padding:7px 12px;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:1px;transition:border-color .2s}
 .lang:hover{border-color:var(--gold)}
 .menu-btn{display:none;background:none;border:1px solid var(--line);color:var(--gold-2);border-radius:10px;padding:7px 11px;font-size:16px;cursor:pointer}
@@ -331,6 +332,12 @@ footer{border-top:1px solid var(--line);background:rgba(5,7,15,.7);margin-top:20
 #toTop svg{width:22px;height:22px}
 #waFloat .ic{stroke-width:1.4}
 @keyframes waPulse{0%,100%{box-shadow:0 10px 28px rgba(18,140,74,.45)}50%{box-shadow:0 10px 28px rgba(18,140,74,.45),0 0 0 10px rgba(37,211,102,.0)}}
+/* floating cart button (always reachable, opposite corner from WhatsApp) */
+#cartFab{position:fixed;z-index:91;bottom:calc(22px + env(safe-area-inset-bottom));inset-inline-start:calc(22px + env(safe-area-inset-left));width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid var(--gold-deep);background:linear-gradient(135deg,var(--gold-2),var(--gold-deep));color:#1a1305;box-shadow:0 10px 28px rgba(0,0,0,.5);transition:transform .2s,box-shadow .25s}
+#cartFab:hover{transform:translateY(-3px) scale(1.05);box-shadow:0 16px 38px rgba(0,0,0,.6)}
+#cartFab .ic{width:25px;height:25px;stroke-width:1.6}
+#cartFab .cart-ct{position:absolute;top:-3px;inset-inline-end:-3px;border:2px solid var(--bg2);min-width:19px;height:19px}
+#cartFab .cart-ct.zero{display:none}
 /* cart button + badge */
 #cartBtn{position:relative;display:inline-flex;align-items:center;gap:6px;font-size:16px;padding:7px 11px}
 #cartBtn .ic{font-size:17px}
@@ -647,7 +654,7 @@ table.chem .rk{width:160px;font-size:12.5px}
 :focus-visible{outline:2px solid var(--gold-2);outline-offset:2px}
 /* print spec sheet */
 @media print{
-  header.nav,#waFloat,footer,#cookie,.share,.back,.btn,.addq,.qview,.fav,#prog,.hexbg,body::before{display:none!important}
+  header.nav,#waFloat,#cartFab,footer,#cookie,.share,.back,.btn,.addq,.qview,.fav,#prog,.hexbg,body::before{display:none!important}
   .view{display:none!important}.view#view-product{display:block!important}
   body{background:#fff;color:#000}
   .pd .sec h4,.pd h1{color:#000}.pd p,.body-txt{color:#222}
@@ -1177,6 +1184,7 @@ table.chem .rk{width:160px;font-size:12.5px}
 
 <div id="lightbox"><img src="" alt=""></div>
 <a id="waFloat" href="https://wa.me/972506787586" target="_blank" rel="noopener" aria-label="WhatsApp"><span id="waFloatIc"></span></a>
+<button id="cartFab" aria-label="basket" title="Inquiry basket"><span id="cartFabIc"></span><span class="cart-ct zero" id="cartFabCt">0</span></button>
 <button id="toTop" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
 
 <div id="cartOverlay"></div>
@@ -3962,6 +3970,7 @@ function clearCart(){CART=[];saveCart();updateCartUI();}
 function addBundle(items){items.forEach(function(id){if(!inCart(id))CART.push({id:id,qty:1});});saveCart();updateCartUI();openCart();}
 function updateCartUI(){
  var ct=document.getElementById('cartCt');if(ct){ct.textContent=CART.length;ct.classList.toggle('zero',CART.length===0);}
+ var cf=document.getElementById('cartFabCt');if(cf){cf.textContent=CART.length;cf.classList.toggle('zero',CART.length===0);}
  renderProds();renderCmpTable();renderBundles();renderFavs();
  var h=location.hash.replace('#','');if(h.indexOf('product/')===0)renderProduct(h.split('/')[1]);
  renderCartList();}
@@ -5045,6 +5054,7 @@ function setIcons(){
  var cg2=document.getElementById('ciGlobe2');if(cg2)cg2.innerHTML=svg('globe');
  var fw=document.getElementById('waFloatIc');if(fw)fw.innerHTML=svg('wa');
  var cic=document.getElementById('cartIc');if(cic)cic.innerHTML=svg('cart');
+ var cfi=document.getElementById('cartFabIc');if(cfi)cfi.innerHTML=svg('cart');
  var sb=document.getElementById('searchBtnIc');if(sb)sb.innerHTML=svg('search');
  var s2=document.getElementById('srchIc2');if(s2)s2.innerHTML=svg('search');
  var gi=document.getElementById('glsIc');if(gi)gi.innerHTML=svg('search');
@@ -5109,6 +5119,7 @@ window.addEventListener('resize',function(){if(!_ticking){_ticking=true;requestA
 /* init */
 document.getElementById('libSearch').oninput=function(){var on=document.querySelector('#libPills .pill.on');renderLib(on?on.getAttribute('data-cat'):'all',this.value);};
 document.getElementById('cartBtn').onclick=openCart;
+var _cfb=document.getElementById('cartFab');if(_cfb)_cfb.onclick=openCart;
 document.getElementById('cartClose').onclick=closeCart;
 document.getElementById('cartOverlay').onclick=closeCart;
 document.getElementById('cartClear').onclick=function(){clearCart();};
