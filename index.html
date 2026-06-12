@@ -344,13 +344,13 @@ footer{border-top:1px solid var(--line);background:rgba(5,7,15,.7);margin-top:20
 #cartOverlay{position:fixed;inset:0;z-index:120;background:rgba(3,5,11,.6);backdrop-filter:blur(3px);display:none}
 #cartOverlay.show{display:block}
 #cartDrawer{position:fixed;z-index:121;top:0;inset-inline-end:0;height:100%;width:360px;max-width:90vw;background:linear-gradient(180deg,var(--panel2),var(--bg2));border-inline-start:1px solid var(--line2);
-  transform:translateX(110%);transition:transform .35s;display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.5)}
+  transform:translateX(110%);transition:transform .35s;display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.5);overflow-y:auto;-webkit-overflow-scrolling:touch}
 html[dir=rtl] #cartDrawer{transform:translateX(-110%)}
 #cartDrawer.open,html[dir=rtl] #cartDrawer.open{transform:translateX(0)}
-.cart-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--line)}
+.cart-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--panel2);z-index:2}
 .cart-head b{font-family:"Frank Ruhl Libre",serif;font-size:19px;color:var(--gold-2)}
 .cart-head button{background:none;border:0;color:var(--muted);font-size:26px;cursor:pointer;line-height:1}
-#cartList{flex:1;overflow-y:auto;padding:12px 16px}
+#cartList{flex:none;padding:12px 16px}
 .cart-item{display:flex;align-items:center;gap:12px;padding:11px;border:1px solid var(--line);border-radius:12px;margin-bottom:10px;background:rgba(255,255,255,.02)}
 .cart-item img{width:46px;height:46px;border-radius:8px;object-fit:cover;flex:none}
 .cart-item .ci-n{flex:1;font-weight:600;font-size:14.5px}
@@ -701,6 +701,47 @@ table.chem .rk{width:160px;font-size:12.5px}
   .tools{gap:5px}
   .lang{padding:6px 8px}
 }
+/* ---------- shop / pricing / ordering ---------- */
+.pprice{margin-top:10px;font:800 17px/1 "Heebo",sans-serif;color:var(--gold-2);display:flex;align-items:baseline;gap:6px}
+.pprice .from{font:600 11px/1 "Heebo",sans-serif;color:var(--muted);letter-spacing:.3px}
+.pprice.quote{color:var(--muted);font-weight:700;font-size:13px}
+.cart-totals{display:flex;flex-direction:column;gap:5px;background:rgba(201,162,75,.06);border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-bottom:12px}
+.cart-totals .tr{display:flex;justify-content:space-between;align-items:center;font:600 13px/1 "Heebo",sans-serif;color:var(--muted)}
+.cart-totals .tr.disc{color:var(--cyan)}
+.cart-totals .tr.grand{font-size:16px;color:var(--ink);font-weight:800;padding-top:7px;border-top:1px solid var(--line);margin-top:3px}
+.cart-totals .tr.grand b{color:var(--gold-2)}
+.cart-totals .qn{font:600 10.5px/1.4 "Heebo",sans-serif;color:var(--muted-2)}
+.shop-f{display:flex;flex-direction:column;gap:6px;margin-bottom:11px}
+.shop-f>label{font:700 11px/1 "Heebo",sans-serif;letter-spacing:.3px;color:var(--muted)}
+.shop-f input,.shop-f textarea{background:var(--panel);border:1px solid var(--line2);color:var(--ink);border-radius:9px;padding:10px 11px;font:500 14px/1.3 "Heebo",sans-serif;width:100%}
+.shop-f input:focus,.shop-f textarea:focus{outline:none;border-color:var(--gold)}
+.coupon-wrap{display:flex;gap:7px}
+.coupon-wrap input{flex:1;text-transform:uppercase}
+.coupon-wrap .btn{flex:0 0 auto;padding:8px 16px;margin:0}
+.coupon-note{font:600 11.5px/1.4 "Heebo",sans-serif;min-height:15px}
+.coupon-note.ok{color:#5fcf8a}
+.coupon-note.bad{color:#e08585}
+.ful{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.ful label{cursor:pointer;margin:0}
+.ful input{position:absolute;opacity:0;pointer-events:none}
+.ful .fb{display:block;text-align:center;border:1px solid var(--line2);border-radius:10px;padding:10px 4px;font:700 12.5px/1 "Heebo",sans-serif;color:var(--muted);transition:border-color .14s,background .14s,color .14s}
+.ful input:checked+.fb{border-color:var(--gold);background:rgba(201,162,75,.1);color:var(--ink)}
+.deliv-badge{display:flex;align-items:center;justify-content:center;text-align:center;font:700 12.5px/1.3 "Heebo",sans-serif;color:var(--gold-2);background:rgba(201,162,75,.07);border:1px solid var(--line2);border-radius:10px;padding:9px;margin-bottom:12px}
+.ci-row2{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:7px}
+.ci-desc{display:block;color:var(--muted);font:500 11px/1.45 "Heebo",sans-serif;margin:3px 0}
+.ci-size{background:var(--panel2);border:1px solid var(--line2);color:var(--ink);border-radius:7px;padding:5px 7px;font:600 11.5px/1 "Heebo",sans-serif}
+.ci-sizeflat{font:600 11px/1 "Heebo",sans-serif;color:var(--muted)}
+.ci-price{margin-inline-start:auto;font:800 14px/1 "Heebo",sans-serif;color:var(--gold-2);white-space:nowrap}
+.ci-price.quote{color:var(--muted);font-size:12px;font-weight:700}
+.co-card{max-width:440px;position:relative}
+.co-h{font:800 20px/1.1 "Frank Ruhl Libre",serif;margin-bottom:6px}
+.co-sub{font:500 13px/1.5 "Heebo",sans-serif;color:var(--muted);margin-bottom:14px}
+.co-f{display:flex;flex-direction:column;gap:5px;margin-bottom:11px}
+.co-f label{font:700 11px/1 "Heebo",sans-serif;color:var(--muted)}
+.co-f input,.co-f textarea{background:var(--panel);border:1px solid var(--line2);color:var(--ink);border-radius:9px;padding:11px 12px;font:500 14px/1.3 "Heebo",sans-serif;width:100%}
+.co-f input:focus,.co-f textarea:focus{outline:none;border-color:var(--gold)}
+.co-err{color:#e08585;font:600 12px/1.4 "Heebo",sans-serif;min-height:15px;margin-bottom:8px}
+.qv-x{position:absolute;top:12px;inset-inline-end:12px;background:rgba(255,255,255,.06);border:1px solid var(--line2);color:var(--ink);width:32px;height:32px;border-radius:8px;font-size:20px;cursor:pointer;line-height:1}
 </style>
 </head>
 <body>
@@ -1140,12 +1181,31 @@ table.chem .rk{width:160px;font-size:12.5px}
 
 <div id="cartOverlay"></div>
 <aside id="cartDrawer">
-  <div class="cart-head"><b data-he="פניית מחקר" data-en="Research inquiry"></b><button id="cartClose" aria-label="close">&times;</button></div>
+  <div class="cart-head"><b data-he="סל ההזמנה" data-en="Your order"></b><button id="cartClose" aria-label="close">&times;</button></div>
   <div id="cartList"></div>
-  <div class="cart-empty" id="cartEmpty" data-he="לא נבחרו פפטידים עדיין. הוסיפו פריטים מהקטלוג." data-en="No peptides selected yet. Add items from the catalog."></div>
+  <div class="cart-empty" id="cartEmpty" data-he="הסל ריק. הוסיפו פפטידים מהקטלוג כדי לשלוח הזמנה." data-en="Your cart is empty. Add peptides from the catalog to place an order."></div>
   <div class="cart-foot" id="cartFoot">
-    <p data-he="שלחו את רשימת הפריטים כפניית מחקר:" data-en="Send your selected items as a research inquiry:"></p>
-    <a class="btn btn-g" id="cartWa" style="justify-content:center;width:100%"></a>
+    <div id="cartTotals" class="cart-totals"></div>
+    <div class="shop-f">
+      <label data-he="קוד קופון / הטבה" data-en="Coupon / promo code"></label>
+      <div class="coupon-wrap"><input id="couponIn" autocomplete="off" maxlength="24" data-he-ph="הקלידו קוד..." data-en-ph="Enter code..."><button class="btn btn-o" id="couponBtn" data-he="הפעלה" data-en="Apply"></button></div>
+      <div class="coupon-note" id="couponNote"></div>
+    </div>
+    <div class="shop-f">
+      <label data-he="הופניתם ע״י סוכן? שם הסוכן (לא חובה)" data-en="Referred by an agent? Agent name (optional)"></label>
+      <input id="agentIn" autocomplete="off" maxlength="40" data-he-ph="שם הסוכן המפנה..." data-en-ph="Referring agent name...">
+    </div>
+    <div class="shop-f">
+      <label data-he="אופן קבלה" data-en="Fulfillment"></label>
+      <div class="ful" id="fulWrap">
+        <label><input type="radio" name="ful" value="delivery" checked><span class="fb" data-he="משלוח" data-en="Delivery"></span></label>
+        <label><input type="radio" name="ful" value="pickup"><span class="fb" data-he="איסוף עצמי" data-en="Pickup"></span></label>
+        <label><input type="radio" name="ful" value="crypto"><span class="fb" data-he="קריפטו" data-en="Crypto"></span></label>
+      </div>
+    </div>
+    <div class="deliv-badge" data-he="כל הזמנה מגיעה תוך 24 שעות" data-en="Every order delivered within 24 hours"></div>
+    <button class="btn btn-g" id="cartBuy" style="justify-content:center;width:100%" data-he="שליחת הזמנה" data-en="Place order"></button>
+    <a class="btn btn-o" id="cartAsk" target="_blank" rel="noopener" style="justify-content:center;width:100%;margin-top:8px"></a>
     <button class="btn btn-o" id="cartMail" style="justify-content:center;width:100%;margin-top:8px" data-he="שליחה בדוא״ל" data-en="Send by email"></button>
     <button class="btn btn-o" id="cartLog" style="justify-content:center;width:100%;margin-top:8px" data-he="ייצוא יומן מחקר (PDF)" data-en="Export research log (PDF)"></button>
     <button class="cart-clear" id="cartClear" data-he="ניקוי הרשימה" data-en="Clear list"></button>
@@ -1160,6 +1220,7 @@ table.chem .rk{width:160px;font-size:12.5px}
 <div id="qvModal" class="modal"><div class="qv" id="qvBody"></div></div>
 <div id="coaModal" class="modal"><div class="qv" id="coaBody"></div></div>
 <div id="arModal" class="modal"><div class="qv" id="arBody"></div></div>
+<div id="checkoutModal" class="modal"><div class="qv co-card" id="checkoutBody"></div></div>
 
 <div id="cookie" class="cookie">
   <span data-he="האתר משתמש בעוגיות חיוניות בלבד לשמירת העדפות (שפה, רשימת פנייה). אין מעקב פרסומי." data-en="This site uses essential cookies only to remember preferences (language, inquiry list). No advertising tracking."></span>
@@ -1182,6 +1243,45 @@ var IMG={logo:"img/logo.jpg",hero:"img/hero.jpg",splash:"img/splash.jpg",what:"i
  kc_recon_he:"img/kc_recon_he.webp",kc_recon_en:"img/kc_recon_en.webp",
  kc_storage_he:"img/kc_storage_he.webp",kc_storage_en:"img/kc_storage_en.webp"};
 var WA="972506787586";
+
+/* ---------- shop: prices, coupons, lead capture (research-supply ordering) ---------- */
+var SHOP={
+ SHEET_ENDPOINT:"",            /* paste Google Apps Script /exec URL to log orders to a Sheet */
+ currency:"₪"             /* ILS shekel */
+};
+/* per-size prices in ILS. Omit p (or omit the id) -> "price on request". */
+var PRICES={
+ bpc157:[{s:"10mg",p:350}],
+ tb500:[{s:"10mg",p:450}],
+ kpv:[{s:"10mg",p:300}],
+ ghkcu:[{s:"50mg",p:100},{s:"100mg",p:200}],
+ cjc1295:[{s:"10mg",p:400}],
+ tesamorelin:[{s:"10mg",p:500}],
+ ipamorelin:[{s:"10mg",p:450}],
+ motsc:[{s:"10mg",p:300}],
+ retatrutide:[{s:"5mg",p:250},{s:"10mg",p:450},{s:"20mg",p:600}],
+ lemonbottle:[{s:"10ml",p:400}],
+ hgh:[{s:"15 IU",p:250}],
+ igf1:[{s:"0.1mg",p:300},{s:"1mg",p:1000}],
+ semax:[{s:"10mg",p:400}],
+ selank:[{s:"10mg",p:400}],
+ epitalon:[{s:"10mg",p:250}],
+ kisspeptin:[{s:"10mg",p:400}],
+ pt141:[{s:"10mg",p:250}],
+ glutathione:[{s:"600mg",p:200}],
+ mt1:[{s:"10mg",p:250}],
+ mt2:[{s:"10mg",p:300}],
+ bacwater:[{s:"3ml",p:50},{s:"10ml",p:100}]
+};
+/* coupon / referral codes. pct = discount %. agent = auto-tags the referrer. */
+var COUPONS={
+ "WELCOME10":{pct:10,he:"לקוח חדש",en:"New customer"},
+ "VIP15":{pct:15,he:"VIP",en:"VIP"},
+ "AGENT-DAVID":{pct:10,he:"הפניית סוכן",en:"Agent referral",agent:"David"}
+};
+var SHOP_STATE={coupon:"",agent:"",ful:"delivery",cust:{}};
+try{var _so=JSON.parse(localStorage.getItem('ip_shop')||'{}');if(_so){SHOP_STATE.coupon=_so.coupon||"";SHOP_STATE.agent=_so.agent||"";SHOP_STATE.ful=_so.ful||"delivery";SHOP_STATE.cust=_so.cust||{};}}catch(e){}
+function saveShop(){try{localStorage.setItem('ip_shop',JSON.stringify(SHOP_STATE));}catch(e){}}
 
 /* ---------- icons (gold line) ---------- */
 var ICON={
@@ -3714,7 +3814,7 @@ function cardStruct(p){var c2=CID[p.id]||CID2D[p.id];var src='';
 function prodCard(p){var L=function(he,en){return lang==='he'?he:tr(en);};
  var stock=p.stock==='pre'?'<span class="stock pre">'+L('בהזמנה מוקדמת','Pre-order')+'</span>':'<span class="stock in">'+L('במלאי','In stock')+'</span>';
  var tags=t(p.tags).map(function(x){return '<span class="ptag" data-tag="'+x+'" style="cursor:pointer">'+x+'</span>';}).join('');
- return '<div class="prod" data-prod="'+p.id+'"><div class="pimg"><img loading="lazy" decoding="async" src="'+IMG[p.img]+'" alt="'+p.name+'" style="object-position:'+objPos(p)+'">'+cardStruct(p)+'<button class="fav'+(isFav(p.id)?' on':'')+'" data-fav="'+p.id+'" aria-label="favorite">'+svg('heart')+'</button><button class="qview" data-qv="'+p.id+'" aria-label="quick view">'+svg('eye')+'</button></div><div class="pbody"><span class="ruo">RESEARCH USE ONLY · '+p.purity+' PURITY</span><h3>'+p.name+' <span class="mg">'+p.mg+'</span>'+stock+'</h3><p>'+t(p.sum)+'</p><div class="ptags">'+tags+'</div><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px"><span class="more">'+L('מידע מלא','Full details')+' '+svg('check')+'</span><button class="addq'+(inCart(p.id)?' added':'')+'" data-add="'+p.id+'">'+svg('wa')+' '+(inCart(p.id)?L('נוסף לפנייה','Added'):L('הוסף לפנייה','Add to inquiry'))+'</button></div></div></div>';}
+ return '<div class="prod" data-prod="'+p.id+'"><div class="pimg"><img loading="lazy" decoding="async" src="'+IMG[p.img]+'" alt="'+p.name+'" style="object-position:'+objPos(p)+'">'+cardStruct(p)+'<button class="fav'+(isFav(p.id)?' on':'')+'" data-fav="'+p.id+'" aria-label="favorite">'+svg('heart')+'</button><button class="qview" data-qv="'+p.id+'" aria-label="quick view">'+svg('eye')+'</button></div><div class="pbody"><span class="ruo">RESEARCH USE ONLY · '+p.purity+' PURITY</span><h3>'+p.name+' <span class="mg">'+p.mg+'</span>'+stock+'</h3><p>'+t(p.sum)+'</p>'+priceLineHTML(p)+'<div class="ptags">'+tags+'</div><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px"><span class="more">'+L('מידע מלא','Full details')+' '+svg('check')+'</span><button class="addq'+(inCart(p.id)?' added':'')+'" data-add="'+p.id+'">'+svg('wa')+' '+(inCart(p.id)?L('נוסף לפנייה','Added'):L('הוסף לפנייה','Add to inquiry'))+'</button></div></div></div>';}
 var prodFilter='all',prodSort='default';
 function sortList(arr){var a=arr.slice();
  if(prodSort==='az')a.sort(function(x,y){return x.name.localeCompare(y.name);});
@@ -3854,7 +3954,8 @@ var CART=[];try{var _c=localStorage.getItem('ip_cart2');if(_c)CART=JSON.parse(_c
 function saveCart(){try{localStorage.setItem('ip_cart2',JSON.stringify(CART));}catch(e){}}
 function inCart(id){return CART.some(function(x){return x.id===id;});}
 function cartItem(id){return CART.filter(function(x){return x.id===id;})[0];}
-function addToCart(id){var it=cartItem(id);if(it){CART=CART.filter(function(x){return x.id!==id;});}else{CART.push({id:id,qty:1});}saveCart();updateCartUI();}
+function addToCart(id,vi){var it=cartItem(id);if(it){CART=CART.filter(function(x){return x.id!==id;});}else{CART.push({id:id,qty:1,vi:vi||0});}saveCart();updateCartUI();}
+function setVariant(id,vi){var it=cartItem(id);if(it){it.vi=vi;saveCart();updateCartUI();}}
 function setQty(id,d){var it=cartItem(id);if(!it)return;it.qty=Math.max(1,it.qty+d);saveCart();updateCartUI();}
 function removeFromCart(id){CART=CART.filter(function(x){return x.id!==id;});saveCart();updateCartUI();}
 function clearCart(){CART=[];saveCart();updateCartUI();}
@@ -3869,13 +3970,84 @@ function renderCartList(){
  var L=function(he,en){return lang==='he'?he:tr(en);};
  if(!CART.length){list.innerHTML='';empty.style.display='block';foot.style.display='none';return;}
  empty.style.display='none';foot.style.display='block';
- list.innerHTML=CART.map(function(it){var p=PRODUCTS.filter(function(x){return x.id===it.id;})[0];if(!p)return '';return '<div class="cart-item"><img src="'+IMG[p.img]+'" alt="" style="object-position:'+objPos(p)+'"><div class="ci-n">'+p.name+'<small>'+p.mg+' · '+p.purity+'</small><div class="qty" style="margin-top:6px"><button data-q="-" data-id="'+it.id+'">'+svg('minus')+'</button><span>'+it.qty+'</span><button data-q="+" data-id="'+it.id+'">'+svg('plus')+'</button></div></div><button class="ci-x" data-rm="'+it.id+'">&times;</button></div>';}).join('');
+ list.innerHTML=CART.map(function(it){var p=PRODUCTS.filter(function(x){return x.id===it.id;})[0];if(!p)return '';
+   var vs=pVars(p),vi=it.vi||0,v=vs[vi]||vs[0];var unit=(typeof v.p==='number')?v.p:null;
+   var sizeSel=vs.length>1?('<select class="ci-size" data-sz="'+it.id+'">'+vs.map(function(x,i){return '<option value="'+i+'"'+(i===vi?' selected':'')+'>'+x.s+(typeof x.p==='number'?(' · '+ilsFmt(x.p)):'')+'</option>';}).join('')+'</select>'):('<span class="ci-sizeflat">'+v.s+'</span>');
+   var priceHTML=unit!==null?('<span class="ci-price">'+ilsFmt(unit*it.qty)+'</span>'):('<span class="ci-price quote">'+L('בהצעת מחיר','On request')+'</span>');
+   return '<div class="cart-item"><img src="'+IMG[p.img]+'" alt="" style="object-position:'+objPos(p)+'"><div class="ci-n">'+p.name+'<small class="ci-desc">'+t(p.sum)+'</small><div class="ci-row2">'+sizeSel+'<div class="qty"><button data-q="-" data-id="'+it.id+'">'+svg('minus')+'</button><span>'+it.qty+'</span><button data-q="+" data-id="'+it.id+'">'+svg('plus')+'</button></div>'+priceHTML+'</div></div><button class="ci-x" data-rm="'+it.id+'">&times;</button></div>';
+ }).join('');
  list.querySelectorAll('[data-rm]').forEach(function(b){b.onclick=function(){removeFromCart(b.getAttribute('data-rm'));};});
  list.querySelectorAll('[data-q]').forEach(function(b){b.onclick=function(){setQty(b.getAttribute('data-id'),b.getAttribute('data-q')==='+'?1:-1);};});
- var lines=CART.map(function(it){var p=PRODUCTS.filter(function(x){return x.id===it.id;})[0];return '- '+p.name+' ('+p.mg+') x'+it.qty;}).join('\n');
- var msg=L('שלום, אני מעוניין/ת בפניית מחקר עבור הפריטים הבאים:','Hello, I would like a research inquiry for the following items:')+'\n'+lines;
- var wa=document.getElementById('cartWa');wa.href='https://wa.me/'+WA+'?text='+encodeURIComponent(msg);wa.innerHTML=svg('wa')+' '+L('שליחה בוואטסאפ','Send via WhatsApp');
- var mail=document.getElementById('cartMail');mail.onclick=function(){window.location.href='mailto:info@israpeptides.com?subject='+encodeURIComponent('Isra.Peptides - Research inquiry')+'&body='+encodeURIComponent(msg);};}
+ list.querySelectorAll('[data-sz]').forEach(function(s){s.onchange=function(){setVariant(s.getAttribute('data-sz'),parseInt(s.value,10));};});
+ renderCartShop();}
+
+/* ---------- shop pricing + ordering ---------- */
+function pVars(p){return (PRICES[p.id]&&PRICES[p.id].length)?PRICES[p.id]:[{s:(p.mg||'').toString()}];}
+function pMin(p){var v=PRICES[p.id];if(!v)return null;var m=null;v.forEach(function(x){if(typeof x.p==='number')m=(m===null?x.p:Math.min(m,x.p));});return m;}
+function ilsFmt(n){return SHOP.currency+String(n).replace(/\B(?=(\d{3})+(?!\d))/g,',');}
+function priceLineHTML(p){var L=function(he,en){return lang==='he'?he:tr(en);};var v=PRICES[p.id];
+ if(!v)return '<div class="pprice quote">'+L('בהצעת מחיר','Price on request')+'</div>';
+ var m=pMin(p),multi=v.length>1;
+ return '<div class="pprice">'+(multi?('<span class="from">'+L('החל מ-','from')+'</span> '):'')+'<b>'+ilsFmt(m)+'</b></div>';}
+function variantOf(it){var p=PRODUCTS.filter(function(x){return x.id===it.id;})[0];if(!p)return null;var vs=pVars(p);return vs[it.vi||0]||vs[0];}
+function lineUnit(it){var v=variantOf(it);return (v&&typeof v.p==='number')?v.p:null;}
+function cartSub(){var s=0;CART.forEach(function(it){var u=lineUnit(it);if(u)s+=u*it.qty;});return s;}
+function cartHasQuote(){return CART.some(function(it){return lineUnit(it)===null;});}
+function activeCoupon(){var c=(SHOP_STATE.coupon||'').toUpperCase().trim();return (c&&COUPONS[c])?Object.assign({code:c},COUPONS[c]):null;}
+function cartDisc(){var c=activeCoupon(),sub=cartSub(),pct=c?c.pct:0,amt=Math.round(sub*pct/100);return {c:c,pct:pct,sub:sub,amt:amt,total:sub-amt};}
+var FUL_T={delivery:{he:'משלוח (עד 24 שעות)',en:'Delivery (within 24h)'},pickup:{he:'איסוף עצמי',en:'Pickup'},crypto:{he:'תשלום בקריפטו',en:'Pay in crypto'}};
+function fulLabel(){return lang==='he'?FUL_T[SHOP_STATE.ful].he:tr(FUL_T[SHOP_STATE.ful].en);}
+function cartLines(){return CART.map(function(it){var p=PRODUCTS.filter(function(x){return x.id===it.id;})[0];if(!p)return '';var v=variantOf(it);var u=lineUnit(it);var pr=u!==null?(' - '+ilsFmt(u*it.qty)):'';return '- '+p.name+' ('+v.s+') x'+it.qty+pr+'\n   '+t(p.sum);}).filter(Boolean).join('\n');}
+function shopMeta(){var L=function(he,en){return lang==='he'?he:tr(en);};var a=[];a.push(L('אופן קבלה: ','Fulfillment: ')+fulLabel());if(activeCoupon())a.push(L('קוד קופון: ','Coupon: ')+activeCoupon().code+' ('+activeCoupon().pct+'%)');if(SHOP_STATE.agent)a.push(L('סוכן מפנה: ','Referring agent: ')+SHOP_STATE.agent);return a.join('\n');}
+function shopTotalsTxt(){var L=function(he,en){return lang==='he'?he:tr(en);};var d=cartDisc();if(d.sub<=0)return L('מחיר: יימסר בוואטסאפ','Price: provided on WhatsApp');var s=L('סכום ביניים: ','Subtotal: ')+ilsFmt(d.sub);if(d.pct>0)s+='\n'+L('הנחה','Discount')+' ('+d.pct+'%): -'+ilsFmt(d.amt);s+='\n'+L('סה״כ לתשלום: ','Total: ')+ilsFmt(d.total);if(cartHasQuote())s+='\n'+L('(+ פריטים בהצעת מחיר)','(+ items priced on request)');return s;}
+function buyMsg(c){var L=function(he,en){return lang==='he'?he:tr(en);};
+ return L('שלום פפטידים ישראל, אשמח לבצע הזמנה:','Hello Isra.Peptides, I would like to place an order:')+'\n\n'+
+  L('פרטי המזמין:','Customer details:')+'\n'+L('שם: ','Name: ')+c.name+'\n'+L('טלפון: ','Phone: ')+c.phone+'\n'+L('אימייל: ','Email: ')+c.email+'\n'+L('כתובת: ','Address: ')+c.address+'\n\n'+
+  L('ההזמנה:','Order:')+'\n'+cartLines()+'\n\n'+shopMeta()+'\n\n'+shopTotalsTxt()+'\n\n'+L('אשמח לאישור זמינות ופרטי תשלום','Please confirm availability and payment details.');}
+function askMsg(){var L=function(he,en){return lang==='he'?he:tr(en);};var m=L('שלום פפטידים ישראל, יש לי שאלות לגבי המתחמים הבאים:','Hello Isra.Peptides, I have questions about the following compounds:')+'\n\n'+cartLines()+'\n\n';var meta=[];if(activeCoupon())meta.push(L('קוד קופון: ','Coupon: ')+activeCoupon().code);if(SHOP_STATE.agent)meta.push(L('סוכן מפנה: ','Referring agent: ')+SHOP_STATE.agent);if(meta.length)m+=meta.join('\n')+'\n\n';return m+L('אשמח לפרטים, מחירים וזמינות','Please share details, pricing and availability.');}
+function postLead(type,c){if(!SHOP.SHEET_ENDPOINT)return;var d=cartDisc();var body=new URLSearchParams({type:type,source:'isra-peptides',name:(c&&c.name)||'',phone:(c&&c.phone)||'',email:(c&&c.email)||'',address:(c&&c.address)||'',coupon:activeCoupon()?activeCoupon().code:'',agent:SHOP_STATE.agent||'',fulfillment:SHOP_STATE.ful||'',discountPct:String(d.pct||''),subtotal:String(d.sub||''),total:String(d.sub>0?d.total:''),items:cartLines()});try{fetch(SHOP.SHEET_ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()});}catch(e){}}
+function renderCartShop(){var L=function(he,en){return lang==='he'?he:tr(en);};
+ var tot=document.getElementById('cartTotals');var d=cartDisc();
+ if(tot){var h='';if(d.sub>0){h+='<div class="tr"><span>'+L('סכום ביניים','Subtotal')+'</span><span>'+ilsFmt(d.sub)+'</span></div>';if(d.pct>0)h+='<div class="tr disc"><span>'+L('הנחה','Discount')+' ('+d.pct+'%)</span><span>-'+ilsFmt(d.amt)+'</span></div>';h+='<div class="tr grand"><span>'+L('סה״כ','Total')+'</span><b>'+ilsFmt(d.total)+'</b></div>';if(cartHasQuote())h+='<div class="qn">'+L('+ פריטים בהצעת מחיר בוואטסאפ','+ items priced on request via WhatsApp')+'</div>';}else{h+='<div class="tr"><span>'+L('מחיר','Price')+'</span><span>'+L('בהצעת מחיר','On request')+'</span></div>';}tot.innerHTML=h;}
+ var ci=document.getElementById('couponIn');if(ci&&document.activeElement!==ci&&ci.value!==(SHOP_STATE.coupon||''))ci.value=SHOP_STATE.coupon||'';
+ var ai=document.getElementById('agentIn');if(ai&&document.activeElement!==ai&&ai.value!==(SHOP_STATE.agent||''))ai.value=SHOP_STATE.agent||'';
+ var fr=document.querySelector('input[name="ful"][value="'+SHOP_STATE.ful+'"]');if(fr)fr.checked=true;
+ var note=document.getElementById('couponNote');if(note){var c=activeCoupon();if(!SHOP_STATE.coupon){note.textContent='';note.className='coupon-note';}else if(c){note.textContent=L('הקוד הופעל','Code applied')+' - '+c.pct+'% '+(lang==='he'?c.he:tr(c.en));note.className='coupon-note ok';}else{note.textContent=L('הקוד לא זוהה - בדקו שוב','Code not recognized - please check');note.className='coupon-note bad';}}
+ var ask=document.getElementById('cartAsk');if(ask){ask.href='https://wa.me/'+WA+'?text='+encodeURIComponent(askMsg());ask.innerHTML=svg('wa')+' '+L('שאלה / ייעוץ','Ask a question');}
+ var mail=document.getElementById('cartMail');if(mail)mail.onclick=function(){window.location.href='mailto:info@israpeptides.com?subject='+encodeURIComponent('Isra.Peptides - Order')+'&body='+encodeURIComponent(askMsg());};}
+function applyCoupon(){var ci=document.getElementById('couponIn');SHOP_STATE.coupon=(ci.value||'').toUpperCase().trim();saveShop();renderCartShop();}
+function openCheckout(){if(!CART.length)return;var L=function(he,en){return lang==='he'?he:tr(en);};var c=SHOP_STATE.cust||{};
+ var esc=function(s){return (s||'').replace(/"/g,'&quot;');};
+ var html='<button class="qv-x" id="coClose" aria-label="close">&times;</button>'+
+  '<h3 class="co-h">'+L('פרטי המזמין','Customer details')+'</h3>'+
+  '<p class="co-sub">'+L('נשמור את הפרטים כדי לאשר זמינות ולתאם משלוח/איסוף. שדות עם * הם חובה.','We keep your details to confirm availability and arrange delivery/pickup. Fields marked * are required.')+'</p>'+
+  '<div class="co-f"><label>'+L('שם מלא','Full name')+' *</label><input id="coName" value="'+esc(c.name)+'"></div>'+
+  '<div class="co-f"><label>'+L('טלפון','Phone')+' *</label><input id="coPhone" type="tel" value="'+esc(c.phone)+'"></div>'+
+  '<div class="co-f"><label>'+L('אימייל','Email')+' *</label><input id="coEmail" type="email" value="'+esc(c.email)+'"></div>'+
+  '<div class="co-f"><label>'+L('כתובת מגורים מלאה','Full home address')+' *</label><textarea id="coAddr" rows="2">'+esc(c.address)+'</textarea></div>'+
+  '<div class="co-err" id="coErr"></div>'+
+  '<button class="btn btn-g" id="coSend" style="width:100%;justify-content:center">'+svg('wa')+' '+L('שליחת ההזמנה בוואטסאפ','Send order via WhatsApp')+'</button>';
+ document.getElementById('checkoutBody').innerHTML=html;
+ document.getElementById('checkoutModal').classList.add('show');
+ document.getElementById('coClose').onclick=closeCheckout;
+ document.getElementById('coSend').onclick=submitCheckout;}
+function closeCheckout(){document.getElementById('checkoutModal').classList.remove('show');}
+function submitCheckout(){var L=function(he,en){return lang==='he'?he:tr(en);};
+ var name=(document.getElementById('coName').value||'').trim(),phone=(document.getElementById('coPhone').value||'').trim(),email=(document.getElementById('coEmail').value||'').trim(),address=(document.getElementById('coAddr').value||'').trim();
+ var err=document.getElementById('coErr');
+ if(!name||!phone||!email||!address){err.textContent=L('נא למלא את כל השדות המסומנים ב-*','Please fill all fields marked *');return;}
+ if(phone.replace(/[^\d]/g,'').length<9){err.textContent=L('מספר טלפון לא תקין','Invalid phone number');return;}
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent=L('כתובת אימייל לא תקינה','Invalid email address');return;}
+ var c={name:name,phone:phone,email:email,address:address};SHOP_STATE.cust=c;saveShop();postLead('buy',c);closeCheckout();
+ window.open('https://wa.me/'+WA+'?text='+encodeURIComponent(buyMsg(c)),'_blank','noopener');}
+function bindShop(){
+ var cb=document.getElementById('couponBtn');if(cb)cb.onclick=applyCoupon;
+ var ci=document.getElementById('couponIn');if(ci){ci.addEventListener('input',function(){this.value=this.value.toUpperCase();});ci.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();applyCoupon();}});}
+ var ai=document.getElementById('agentIn');if(ai)ai.addEventListener('input',function(){SHOP_STATE.agent=this.value.trim();saveShop();var ask=document.getElementById('cartAsk');if(ask)ask.href='https://wa.me/'+WA+'?text='+encodeURIComponent(askMsg());});
+ var fw=document.getElementById('fulWrap');if(fw)fw.addEventListener('change',function(e){if(e.target.name==='ful'){SHOP_STATE.ful=e.target.value;saveShop();renderCartShop();}});
+ var buy=document.getElementById('cartBuy');if(buy)buy.onclick=openCheckout;
+ var cm=document.getElementById('checkoutModal');if(cm)cm.onclick=function(e){if(e.target===this)closeCheckout();};}
+bindShop();
 function openCart(){document.getElementById('cartDrawer').classList.add('open');document.getElementById('cartOverlay').classList.add('show');renderCartList();}
 function closeCart(){document.getElementById('cartDrawer').classList.remove('open');document.getElementById('cartOverlay').classList.remove('show');}
 function bindGoProd(){document.querySelectorAll('[data-go-prod]').forEach(function(el){el.onclick=function(){location.hash='product/'+el.getAttribute('data-go-prod');};});}
@@ -4956,7 +5128,7 @@ document.getElementById('qvModal').onclick=function(e){if(e.target===this)closeQ
 document.getElementById('coaModal').onclick=function(e){if(e.target===this)closeCOA();};
 document.getElementById('arModal').onclick=function(e){if(e.target===this)closeAR();};
 document.getElementById('shopSort').onchange=function(){prodSort=this.value;renderProds();};
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeSearch();closeQv();closeCart();closeCOA();closeAR();var lb=document.getElementById('lightbox');lb.classList.remove('show');}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeSearch();closeQv();closeCart();closeCOA();closeAR();closeCheckout();var lb=document.getElementById('lightbox');lb.classList.remove('show');}
  if((e.metaKey||e.ctrlKey)&&(e.key==='k'||e.key==='K')){e.preventDefault();openSearch();}});
 var _exrt;window.addEventListener('resize',function(){if(document.getElementById('view-explore').classList.contains('active')){clearTimeout(_exrt);_exrt=setTimeout(renderExplore,250);}},{passive:true});
 document.addEventListener('click',function(e){

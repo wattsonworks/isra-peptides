@@ -235,6 +235,34 @@ reference and catalog website. Single brand, static site.
   on release `_Gheat=0` leaves nodes where dropped. A no-move tap (<500ms) opens the
   product; a drag does not navigate.
 
+## Shop / ordering (prices, coupons, agent codes, checkout)
+- The cart (`CART`, `ip_cart2`) is now a priced order cart. Item shape is
+  `{id, qty, vi}` where `vi` = chosen variant index (default 0). Backward compatible:
+  `addToCart(id[,vi])` and old `{id,qty}` items still work.
+- `PRICES` (near `var WA`) maps id -> `[{s:size, p:priceILS}]` (per the owner's pricelist;
+  ILS). Omit `p` (or omit the id) -> shows "price on request" and the line is excluded
+  from the numeric total. `GHRP-2`/`GHRP-6` are quote-only (price hidden in the source
+  pricelist image). Multi-variant products (retatrutide, igf1, ghkcu, bacwater) get a
+  size dropdown in the cart.
+- `COUPONS` = `{CODE:{pct,he,en[,agent]}}`. `WELCOME10`/`VIP15`/`AGENT-DAVID`. A coupon
+  with `agent` auto-tags the referrer. Plus a free-text "agent name" field in the cart.
+- Cart foot has: live totals (subtotal/discount/total), coupon field, agent field,
+  fulfillment radios (delivery/pickup/crypto) + "delivered within 24h" badge, and TWO
+  actions: `cartBuy` (opens the checkout modal) and `cartAsk` (straight to WhatsApp).
+- Checkout modal (`#checkoutModal`) captures mandatory name/phone/email/address
+  (`openCheckout`/`submitCheckout`, saved to `ip_shop`), then opens WhatsApp with a full
+  order message and optionally logs to a Google Sheet.
+- Both WhatsApp messages embed each peptide's bilingual `sum` description, size, price,
+  coupon, agent, fulfillment and totals (`buyMsg`/`askMsg`/`cartLines`).
+- Optional Google Sheet logging: `SHOP.SHEET_ENDPOINT` + `postLead()`; deploy
+  `google-apps-script.gs`. Empty endpoint = WhatsApp-only (no logging).
+- State persisted in localStorage `ip_shop` (coupon/agent/fulfillment/customer).
+- Product cards show a price line via `priceLineHTML(p)`. Cart foot labels are
+  bilingual (data-he/data-en); dynamic strings use `L(he,en)`/`tr()`. No emojis. RUO
+  framing preserved (descriptions are research-framed; the cart is an order for
+  research-use-only supply, no dosing/usage copy). AR strings fall back to English until
+  TR.ar pairs are added for the new copy.
+
 ## NOTE on the service worker while developing
 - `sw.js` cache-first means a hosted/preview client keeps serving the OLD cached
   `index.html` until cache `C` is bumped (currently `isra-peptides-v6`). ALWAYS bump `C`
