@@ -3814,6 +3814,43 @@ function localizeContentAr(){function walk(o){if(!o||typeof o!=='object')return;
 function renderSys(){document.getElementById('sysCards').innerHTML=SYS.map(function(s){var d=s[lang]||s.en;return '<div class="card"><div class="ico">'+svg(s.ic)+'</div><h3>'+d[0]+'</h3><p>'+d[1]+'</p></div>';}).join('');}
 
 function objPos(p){return p.pos==='left'?'left center':p.pos==='right'?'right center':'center';}
+/* ---- parametric vial image (language-neutral: Latin name + RUO + size) ---- */
+function _xesc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function vialSVG(p){
+ var nm=_xesc((p.name||'').replace(/\s*\(.*\)/,'').trim());
+ var mg=_xesc((p.mg||'').toString());
+ var fs=nm.length<=7?34:nm.length<=10?28:nm.length<=13?22:18;
+ var mgfs=mg.length>11?9:11,pw=Math.min(152,Math.max(64,mg.length*8+24)),px=Math.round(340-pw/2);
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 520" font-family="Heebo,Arial,sans-serif">'
+ +'<defs>'
+ +'<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c1526"/><stop offset="1" stop-color="#070b14"/></linearGradient>'
+ +'<radialGradient id="gl" cx="50%" cy="44%" r="56%"><stop offset="0" stop-color="#e6c977" stop-opacity="0.15"/><stop offset="1" stop-color="#e6c977" stop-opacity="0"/></radialGradient>'
+ +'<linearGradient id="gs" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#cfe0f2" stop-opacity="0.07"/><stop offset="0.5" stop-color="#dcebfb" stop-opacity="0.22"/><stop offset="1" stop-color="#cfe0f2" stop-opacity="0.05"/></linearGradient>'
+ +'<linearGradient id="lq" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#86c6e6" stop-opacity="0.6"/><stop offset="1" stop-color="#2b7ba6" stop-opacity="0.8"/></linearGradient>'
+ +'<linearGradient id="cp" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f1d892"/><stop offset="0.5" stop-color="#c9a24b"/><stop offset="1" stop-color="#9a7730"/></linearGradient>'
+ +'<linearGradient id="lb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fbfaf6"/><stop offset="1" stop-color="#ebe4d5"/></linearGradient>'
+ +'<pattern id="gd" width="34" height="34" patternUnits="userSpaceOnUse"><path d="M34 0H0V34" fill="none" stroke="#5fa8d3" stroke-opacity="0.05"/></pattern>'
+ +'</defs>'
+ +'<rect width="680" height="520" fill="url(#bg)"/><rect width="680" height="520" fill="url(#gd)"/><rect width="680" height="520" fill="url(#gl)"/>'
+ +'<text x="42" y="50" font-size="19" font-weight="700" fill="#e6c977">Isra<tspan fill="#cfd8e6">.Peptides</tspan></text>'
+ +'<text x="43" y="68" font-size="9" letter-spacing="2.4" fill="#7d8aa0">RESEARCH | SCIENCE | RESULTS</text>'
+ +'<ellipse cx="340" cy="454" rx="98" ry="15" fill="#000" opacity="0.45"/>'
+ +'<rect x="294" y="82" width="92" height="40" rx="9" fill="url(#cp)" stroke="#7d5f25"/>'
+ +'<rect x="294" y="94" width="92" height="4" fill="#000" opacity="0.12"/>'
+ +'<rect x="302" y="120" width="76" height="13" fill="#aebccd" opacity="0.5"/>'
+ +'<path d="M266 145 q0 -12 12 -12 h124 q12 0 12 12 v253 q0 34 -34 34 h-80 q-34 0 -34 -34 z" fill="url(#gs)" stroke="#cdd9e8" stroke-opacity="0.5" stroke-width="1.5"/>'
+ +'<path d="M266 322 h148 v76 q0 34 -34 34 h-80 q-34 0 -34 -34 z" fill="url(#lq)"/>'
+ +'<ellipse cx="340" cy="322" rx="74" ry="6" fill="#bfe6f2" opacity="0.5"/>'
+ +'<rect x="284" y="152" width="8" height="150" rx="4" fill="#ffffff" opacity="0.16"/>'
+ +'<rect x="258" y="250" width="164" height="120" rx="10" fill="url(#lb)" stroke="#c8b585"/>'
+ +'<text x="340" y="272" text-anchor="middle" font-size="11" font-weight="700" letter-spacing="0.5" fill="#9a7730">Isra.Peptides</text>'
+ +'<line x1="284" y1="279" x2="396" y2="279" stroke="#c8b585" stroke-opacity="0.7"/>'
+ +'<text x="340" y="316" text-anchor="middle" font-size="'+fs+'" font-weight="800" fill="#14233a">'+nm+'</text>'
+ +'<text x="340" y="340" text-anchor="middle" font-size="9" letter-spacing="1.8" fill="#6a7587">RESEARCH USE ONLY</text>'
+ +(mg?'<rect x="'+px+'" y="350" width="'+pw+'" height="20" rx="10" fill="#102036"/><text x="340" y="364" text-anchor="middle" font-size="'+mgfs+'" font-weight="700" fill="#e6c977">'+mg+'</text>':'')
+ +'</svg>';
+}
+function vialURI(p){return 'data:image/svg+xml,'+encodeURIComponent(vialSVG(p));}
 function cardStruct(p){var c2=CID[p.id]||CID2D[p.id];var src='';
  if(c2)src='https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/'+c2+'/PNG?image_size=200x150';
  else if(CHEM[p.id]&&CHEM[p.id].d2)src='https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/'+encodeURIComponent(CHEM[p.id].d2)+'/PNG?image_size=200x150';
@@ -3822,7 +3859,7 @@ function cardStruct(p){var c2=CID[p.id]||CID2D[p.id];var src='';
 function prodCard(p){var L=function(he,en){return lang==='he'?he:tr(en);};
  var stock=p.stock==='pre'?'<span class="stock pre">'+L('בהזמנה מוקדמת','Pre-order')+'</span>':'<span class="stock in">'+L('במלאי','In stock')+'</span>';
  var tags=t(p.tags).map(function(x){return '<span class="ptag" data-tag="'+x+'" style="cursor:pointer">'+x+'</span>';}).join('');
- return '<div class="prod" data-prod="'+p.id+'"><div class="pimg"><img loading="lazy" decoding="async" src="'+IMG[p.img]+'" alt="'+p.name+'" style="object-position:'+objPos(p)+'">'+cardStruct(p)+'<button class="fav'+(isFav(p.id)?' on':'')+'" data-fav="'+p.id+'" aria-label="favorite">'+svg('heart')+'</button><button class="qview" data-qv="'+p.id+'" aria-label="quick view">'+svg('eye')+'</button></div><div class="pbody"><span class="ruo">RESEARCH USE ONLY · '+p.purity+' PURITY</span><h3>'+p.name+' <span class="mg">'+p.mg+'</span>'+stock+'</h3><p>'+t(p.sum)+'</p>'+priceLineHTML(p)+'<div class="ptags">'+tags+'</div><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px"><span class="more">'+L('מידע מלא','Full details')+' '+svg('check')+'</span><button class="addq'+(inCart(p.id)?' added':'')+'" data-add="'+p.id+'">'+svg('wa')+' '+(inCart(p.id)?L('נוסף לפנייה','Added'):L('הוסף לפנייה','Add to inquiry'))+'</button></div></div></div>';}
+ return '<div class="prod" data-prod="'+p.id+'"><div class="pimg"><img loading="lazy" decoding="async" src="'+vialURI(p)+'" alt="'+p.name+'" style="object-position:'+objPos(p)+'">'+cardStruct(p)+'<button class="fav'+(isFav(p.id)?' on':'')+'" data-fav="'+p.id+'" aria-label="favorite">'+svg('heart')+'</button><button class="qview" data-qv="'+p.id+'" aria-label="quick view">'+svg('eye')+'</button></div><div class="pbody"><span class="ruo">RESEARCH USE ONLY · '+p.purity+' PURITY</span><h3>'+p.name+' <span class="mg">'+p.mg+'</span>'+stock+'</h3><p>'+t(p.sum)+'</p>'+priceLineHTML(p)+'<div class="ptags">'+tags+'</div><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px"><span class="more">'+L('מידע מלא','Full details')+' '+svg('check')+'</span><button class="addq'+(inCart(p.id)?' added':'')+'" data-add="'+p.id+'">'+svg('wa')+' '+(inCart(p.id)?L('נוסף לפנייה','Added'):L('הוסף לפנייה','Add to inquiry'))+'</button></div></div></div>';}
 var prodFilter='all',prodSort='default';
 function sortList(arr){var a=arr.slice();
  if(prodSort==='az')a.sort(function(x,y){return x.name.localeCompare(y.name);});
@@ -3854,7 +3891,7 @@ function relatedHTML(p){var L=function(he,en){return lang==='he'?he:tr(en);};
  var nm=p.name.split(/[\s(]/)[0].toLowerCase(),fl=gCatLabel(p.cat).toLowerCase();
  var arts=POSTS.filter(function(po){var b=(t(po.t)+' '+t(po.ex)+' '+t(po.body)).toLowerCase();return b.indexOf(nm)>-1||b.indexOf(fl)>-1;}).slice(0,3);
  if(!arts.length)arts=POSTS.slice(0,2);
- function card(q){return '<a class="rel-card" href="#product/'+q.id+'"><img src="'+IMG[q.img]+'" alt="" loading="lazy" style="object-position:'+objPos(q)+'"><div><b>'+q.name.replace(/\s*\(.*\)/,'')+'</b><span>'+q.mg+' · '+gCatLabel(q.cat)+'</span></div></a>';}
+ function card(q){return '<a class="rel-card" href="#product/'+q.id+'"><img src="'+vialURI(q)+'" alt="" loading="lazy" style="object-position:'+objPos(q)+'"><div><b>'+q.name.replace(/\s*\(.*\)/,'')+'</b><span>'+q.mg+' · '+gCatLabel(q.cat)+'</span></div></a>';}
  var h='<div class="sec rel-sec"><h4>'+L('להמשך עיון','Explore next')+'</h4>';
  if(rel.length)h+='<div class="rel-grp"><div class="rel-lbl">'+L('חוקרים מתעניינים גם ב','Researchers also explore')+'</div><div class="rel-row">'+rel.map(card).join('')+'</div></div>';
  if(fam.length)h+='<div class="rel-grp"><div class="rel-lbl">'+L('מאותה משפחה','Same family')+' · <a class="rel-more" href="#family/'+p.cat+'">'+L('כל המשפחה','view family')+'</a></div><div class="rel-row">'+fam.map(card).join('')+'</div></div>';
@@ -3871,7 +3908,7 @@ function renderProduct(id){var p=PRODUCTS.filter(function(x){return x.id===id;})
  var waMsg=encodeURIComponent(L('שלום, מעוניין/ת בפניית מחקר על ','Hello, interested in a research inquiry on ')+p.name+' ('+p.mg+')');
  document.getElementById('pdHost').innerHTML=
  '<span class="back" data-go="products">'+svg('check')+' '+L('חזרה למוצרים','Back to products')+'</span>'+
- '<div class="pd"><div class="pdimg"><img data-lb src="'+IMG[p.img]+'" alt="'+p.name+'">'+shareHTML(p.name)+'</div><div>'+
+ '<div class="pd"><div class="pdimg"><img data-lb src="'+vialURI(p)+'" alt="'+p.name+'">'+shareHTML(p.name)+'</div><div>'+
  '<span class="ruo">RESEARCH USE ONLY · '+p.purity+' PURITY</span><h1>'+p.name+' <span class="mg">'+p.mg+'</span>'+(p.stock==='pre'?'<span class="stock pre">'+L('בהזמנה מוקדמת','Pre-order')+'</span>':'<span class="stock in">'+L('במלאי','In stock')+'</span>')+'</h1>'+
  ((p.cat!=='ancillary')?'<div class="pmbadge" id="pmBadge"></div>':'')+
  '<p class="body-txt">'+t(p.over)+'</p>'+
@@ -3983,7 +4020,7 @@ function renderCartList(){
    var vs=pVars(p),vi=it.vi||0,v=vs[vi]||vs[0];var unit=(typeof v.p==='number')?v.p:null;
    var sizeSel=vs.length>1?('<select class="ci-size" data-sz="'+it.id+'">'+vs.map(function(x,i){return '<option value="'+i+'"'+(i===vi?' selected':'')+'>'+x.s+(typeof x.p==='number'?(' · '+ilsFmt(x.p)):'')+'</option>';}).join('')+'</select>'):('<span class="ci-sizeflat">'+v.s+'</span>');
    var priceHTML=unit!==null?('<span class="ci-price">'+ilsFmt(unit*it.qty)+'</span>'):('<span class="ci-price quote">'+L('בהצעת מחיר','On request')+'</span>');
-   return '<div class="cart-item"><img src="'+IMG[p.img]+'" alt="" style="object-position:'+objPos(p)+'"><div class="ci-n">'+p.name+'<small class="ci-desc">'+t(p.sum)+'</small><div class="ci-row2">'+sizeSel+'<div class="qty"><button data-q="-" data-id="'+it.id+'">'+svg('minus')+'</button><span>'+it.qty+'</span><button data-q="+" data-id="'+it.id+'">'+svg('plus')+'</button></div>'+priceHTML+'</div></div><button class="ci-x" data-rm="'+it.id+'">&times;</button></div>';
+   return '<div class="cart-item"><img src="'+vialURI(p)+'" alt="" style="object-position:'+objPos(p)+'"><div class="ci-n">'+p.name+'<small class="ci-desc">'+t(p.sum)+'</small><div class="ci-row2">'+sizeSel+'<div class="qty"><button data-q="-" data-id="'+it.id+'">'+svg('minus')+'</button><span>'+it.qty+'</span><button data-q="+" data-id="'+it.id+'">'+svg('plus')+'</button></div>'+priceHTML+'</div></div><button class="ci-x" data-rm="'+it.id+'">&times;</button></div>';
  }).join('');
  list.querySelectorAll('[data-rm]').forEach(function(b){b.onclick=function(){removeFromCart(b.getAttribute('data-rm'));};});
  list.querySelectorAll('[data-q]').forEach(function(b){b.onclick=function(){setQty(b.getAttribute('data-id'),b.getAttribute('data-q')==='+'?1:-1);};});
@@ -4175,7 +4212,7 @@ function closeSearch(){document.getElementById('searchModal').classList.remove('
 
 /* ---------- quick view ---------- */
 function quickView(id){var p=PRODUCTS.filter(function(x){return x.id===id;})[0];if(!p)return;var L=function(he,en){return lang==='he'?he:tr(en);};
- document.getElementById('qvBody').innerHTML='<button class="qx" id="qvClose">&times;</button><img class="qvimg" src="'+IMG[p.img]+'" style="object-position:'+objPos(p)+'" alt=""><div class="qvb"><span class="ruo">RESEARCH USE ONLY · '+p.purity+'</span><h3>'+p.name+' <span class="mg">'+p.mg+'</span></h3><p>'+t(p.sum)+'</p><div class="ptags">'+t(p.tags).map(function(x){return '<span class="ptag">'+x+'</span>';}).join('')+'</div><div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap"><button class="btn btn-g" data-add="'+p.id+'">'+svg('wa')+' '+(inCart(p.id)?L('נוסף','Added'):L('הוסף לפנייה','Add to inquiry'))+'</button><button class="btn btn-o" data-go-prod="'+p.id+'">'+L('עמוד מלא','Full page')+'</button></div></div>';
+ document.getElementById('qvBody').innerHTML='<button class="qx" id="qvClose">&times;</button><img class="qvimg" src="'+vialURI(p)+'" style="object-position:'+objPos(p)+'" alt=""><div class="qvb"><span class="ruo">RESEARCH USE ONLY · '+p.purity+'</span><h3>'+p.name+' <span class="mg">'+p.mg+'</span></h3><p>'+t(p.sum)+'</p><div class="ptags">'+t(p.tags).map(function(x){return '<span class="ptag">'+x+'</span>';}).join('')+'</div><div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap"><button class="btn btn-g" data-add="'+p.id+'">'+svg('wa')+' '+(inCart(p.id)?L('נוסף','Added'):L('הוסף לפנייה','Add to inquiry'))+'</button><button class="btn btn-o" data-go-prod="'+p.id+'">'+L('עמוד מלא','Full page')+'</button></div></div>';
  document.getElementById('qvModal').classList.add('show');
  document.getElementById('qvClose').onclick=closeQv;
  bindProds();document.querySelectorAll('#qvBody [data-go-prod]').forEach(function(b){b.onclick=function(){closeQv();location.hash='product/'+b.getAttribute('data-go-prod');};});}
@@ -4727,7 +4764,7 @@ function renderRegmap(){var host=document.getElementById('rmapSvg');if(!host)ret
 /* ================= PEPTIDE OF THE WEEK + ACHIEVEMENTS ================= */
 function renderPOTW(){var host=document.getElementById('potwHost');if(!host)return;var L=function(he,en){return lang==='he'?he:tr(en);};
  var pool=PRODUCTS.filter(function(p){return p.cat!=='ancillary';});var wk=Math.floor(Date.now()/6048e5);var p=pool[wk%pool.length];if(!p)return;
- host.innerHTML='<a class="potw" href="#product/'+p.id+'"><div class="potw-img"><img src="'+IMG[p.img]+'" alt="'+p.name+'" style="object-position:'+objPos(p)+'"></div>'+
+ host.innerHTML='<a class="potw" href="#product/'+p.id+'"><div class="potw-img"><img src="'+vialURI(p)+'" alt="'+p.name+'" style="object-position:'+objPos(p)+'"></div>'+
   '<div class="potw-body"><div class="tag">'+L('הפפטיד השבועי','Peptide of the week')+'</div><h3>'+p.name.replace(/\s*\(.*\)/,'')+' <span class="potw-mg">'+p.mg+'</span></h3><p>'+t(p.sum)+'</p>'+
   '<div class="potw-tags">'+t(p.tags).slice(0,3).map(function(x){return '<span>'+x+'</span>';}).join('')+'</div>'+
   '<span class="potw-cta">'+L('הכירו את המתחם','Discover the compound')+' '+svg('check')+'</span></div></a>';}
@@ -4762,7 +4799,7 @@ var FAMILY_DESC={
  skin:{he:'פפטידי עור נחקרים בהקשר של קולגן, אלסטין, מרקם וגמישות העור והתחדשות — כולל פפטידי נחושת ופפטידים קוסמטיים.',en:'Skin peptides are researched in collagen, elastin, texture, elasticity and renewal — including copper peptides and cosmetic peptides.'},
  melano:{he:'משפחת המלנוקורטין פועלת על קולטני MC1R–MC4R, ונחקרת בהקשר של פיגמנטציה, הגנת עור ומסלולים מרכזיים.',en:'The melanocortin family acts on MC1R–MC4R receptors and is researched in pigmentation, skin protection and central pathways.'}
 };
-function _famCard(p){return '<a class="rel-card" href="#product/'+p.id+'"><img src="'+IMG[p.img]+'" alt="" loading="lazy" style="object-position:'+objPos(p)+'"><div><b>'+p.name.replace(/\s*\(.*\)/,'')+'</b><span>'+p.mg+' · '+p.purity+'</span></div></a>';}
+function _famCard(p){return '<a class="rel-card" href="#product/'+p.id+'"><img src="'+vialURI(p)+'" alt="" loading="lazy" style="object-position:'+objPos(p)+'"><div><b>'+p.name.replace(/\s*\(.*\)/,'')+'</b><span>'+p.mg+' · '+p.purity+'</span></div></a>';}
 function renderFamily(cat){var host=document.getElementById('familyHost');if(!host)return;var L=function(he,en){return lang==='he'?he:tr(en);};
  var o=PROD_CATS.filter(function(z){return z.id===cat;})[0];if(!o){location.hash='products';return;}
  var members=PRODUCTS.filter(function(p){return p.cat===cat;});var memIds=members.map(function(p){return p.id;});
@@ -4784,7 +4821,7 @@ function renderVs(ids){var host=document.getElementById('vsHost');if(!host)retur
  var row=function(k,va,vb){return '<tr><td class="rk">'+k+'</td><td>'+(va||'—')+'</td><td>'+(vb||'—')+'</td></tr>';};
  var shared=gPaths(a.id).filter(function(k){return gPaths(b.id).indexOf(k)>-1;});
  host.innerHTML='<div class="page-head center"><div class="tag">HEAD-TO-HEAD · RESEARCH USE ONLY</div><h2 style="font-family:\'Playfair Display\',serif">'+a.name.replace(/\s*\(.*\)/,'')+' <span class="g">vs</span> '+b.name.replace(/\s*\(.*\)/,'')+'</h2></div>'+
-  '<div class="vs-imgs"><a href="#product/'+a.id+'"><img src="'+IMG[a.img]+'" alt="'+a.name+'" style="object-position:'+objPos(a)+'"><b>'+a.name.replace(/\s*\(.*\)/,'')+'</b></a><span class="vs-x">vs</span><a href="#product/'+b.id+'"><img src="'+IMG[b.img]+'" alt="'+b.name+'" style="object-position:'+objPos(b)+'"><b>'+b.name.replace(/\s*\(.*\)/,'')+'</b></a></div>'+
+  '<div class="vs-imgs"><a href="#product/'+a.id+'"><img src="'+vialURI(a)+'" alt="'+a.name+'" style="object-position:'+objPos(a)+'"><b>'+a.name.replace(/\s*\(.*\)/,'')+'</b></a><span class="vs-x">vs</span><a href="#product/'+b.id+'"><img src="'+vialURI(b)+'" alt="'+b.name+'" style="object-position:'+objPos(b)+'"><b>'+b.name.replace(/\s*\(.*\)/,'')+'</b></a></div>'+
   '<div class="cmp-wrap"><table class="cmp chem"><tr><td class="rk"></td><td><b>'+a.name.replace(/\s*\(.*\)/,'')+'</b></td><td><b>'+b.name.replace(/\s*\(.*\)/,'')+'</b></td></tr>'+
    row(L('קטגוריה','Category'),gCatLabel(a.cat),gCatLabel(b.cat))+row(L('כמות','Size'),a.mg,b.mg)+row(L('טוהר','Purity'),a.purity,b.purity)+
    row(L('משקל מולקולרי','Molecular weight'),ca.mw?ca.mw+' g/mol':'',cb.mw?cb.mw+' g/mol':'')+row(L('נוסחה','Formula'),ca.formula,cb.formula)+row('CAS',ca.cas,cb.cas)+row(L('אורך רצף','Sequence length'),gLen(a),gLen(b))+
